@@ -473,99 +473,99 @@
     "งานเลี้ยงกิลด์ / Guild Banquet": [
       {
         "question": "เปียโนมีทั้งหมดกี่คีย์?",
-        "answer": "⧉"
+        "answer": "88\n⧉"
       },
       {
         "question": "น้ำมีจุดเดือดที่กี่องศาเซลเซียส?",
-        "answer": "⧉"
+        "answer": "100\n⧉"
       },
       {
         "question": "รุ้งกินน้ำมีกี่สี?",
-        "answer": "⧉"
+        "answer": "7\n⧉"
       },
       {
         "question": "สัปดาห์หนึ่งมีกี่วัน?",
-        "answer": "⧉"
+        "answer": "7\n⧉"
       },
       {
         "question": "น้ำที่อุณหภูมิห้องมีสถานะเป็นอะไร?",
-        "answer": "液态"
+        "answer": "液态\n⧉"
       },
       {
         "question": "ประเทศที่มีพื้นที่เล็กที่สุดในโลกคือประเทศอะไร?",
-        "answer": "梵蒂冈"
+        "answer": "梵蒂冈\n⧉"
       },
       {
         "question": "เราใช้อวัยวะส่วนใดในการดมกลิ่น?",
-        "answer": "鼻子"
+        "answer": "鼻子\n⧉"
       },
       {
         "question": "สีของรุ้งที่อยู่วงนอกสุดคือสีอะไร",
-        "answer": "红"
+        "answer": "红\n⧉"
       },
       {
         "question": "สัตว์ทะเลชนิดใดคือสัตว์เลี้ยงลูกด้วยนมที่ใหญ่ที่สุด?",
-        "answer": "蓝鲸"
+        "answer": "蓝鲸\n⧉"
       },
       {
         "question": "ยอดเขาที่สูงที่สุดในโลกชื่ออะไร",
-        "answer": "珠穆朗玛峰"
+        "answer": "珠穆朗玛峰\n⧉"
       },
       {
         "question": "มหาสมุทรที่ใหญ่ที่สุดในโลกคือที่ไหน?",
-        "answer": "太平洋"
+        "answer": "太平洋\n⧉"
       },
       {
         "question": "ส่วนที่แข็งที่สุดในร่างกายคืออะไร?",
-        "answer": "牙齿"
+        "answer": "牙齿\n⧉"
       },
       {
         "question": "ประเทศที่ใหญ่ที่สุดในโลกคือประเทศอะไร",
-        "answer": "俄罗斯"
+        "answer": "俄罗斯\n⧉"
       },
       {
         "question": "เสียงไม่สามารถเดินทางในสภาวะใด?",
-        "answer": "真空"
+        "answer": "真空\n⧉"
       },
       {
         "question": "ลูกกบเรียกว่าอะไร?",
-        "answer": "蝌蚪"
+        "answer": "蝌蚪\n⧉"
       },
       {
         "question": "โอลิมปิกมีต้นกำเนิดมาจากประเทศอะไร",
-        "answer": "希腊"
+        "answer": "希腊\n⧉"
       },
       {
         "question": "เต่าน้อยใช้อะไรหายใจ",
-        "answer": "肺"
+        "answer": "肺\n⧉"
       },
       {
         "question": "ดาวเคราะห์เพียงดวงเดียวในระบบสุริยะที่มีสิ่งมีชีวิตคือดาวอะไร?",
-        "answer": "地球"
+        "answer": "地球\n⧉"
       },
       {
         "question": "ในสัญลักษณ์ห่วงโอลิมปิก สีฟ้าเป็นตัวแทนของทวีปใด?",
-        "answer": "欧洲"
+        "answer": "欧洲\n⧉"
       },
       {
         "question": "ดอกทานตะวันจะหันหน้าตามสิ่งใด?",
-        "answer": "太阳"
+        "answer": "太阳\n⧉"
       },
       {
         "question": "ธาตุที่มีปริมาณมากที่สุดในร่างกายมนุษย์คืออะไร?",
-        "answer": "氧"
+        "answer": "氧\n⧉"
       },
       {
         "question": "พืชสังเคราะห์ด้วยแสงที่ส่วนไหนเป็นหลัก?",
-        "answer": "叶绿体"
+        "answer": "叶绿体\n⧉"
       },
       {
         "question": "อวัยวะใดที่ทำหน้าที่สูบฉีดเลือดในระบบไหลเวียนโลหิต?",
-        "answer": "心脏"
+        "answer": "心脏\n⧉"
       },
       {
         "question": "ดาวเคราะห์ที่ใหญ่ที่สุดในระบบสุริยะคือดาวอะไร?",
-        "answer": "木星"
+        "answer": "木星\n⧉"
       },
       {
         "question": "Morroc มีภูมิอากาศแบบใด?",
@@ -581,7 +581,7 @@
       },
       {
         "question": "จัดทีมได้สูงสุดกี่คน",
-        "answer": "5 คน"
+        "answer": "คน"
       },
       {
         "question": "สร้าง Guild ต้องใช้อะไรบ้าง?",
@@ -629,15 +629,15 @@
       },
       {
         "question": "ปัจจุบัน Guild มีทั้งหมดกี่ประเภท",
-        "answer": "2 ชนิด"
+        "answer": "ชนิด"
       },
       {
         "question": "เมื่อสร้าง Guild ใหม่ สามารถรองรับสมาชิกได้สูงสุดกี่คน",
-        "answer": "100 คน"
+        "answer": "คน"
       },
       {
         "question": "ต้องส่งสินค้าให้ Cat Cargo อย่างน้อยกี่ชนิด?",
-        "answer": "5 ชนิด"
+        "answer": "ชนิด"
       },
       {
         "question": "ข้อใดคือการเช็คอิน Guild",
@@ -661,11 +661,11 @@
       },
       {
         "question": "Royal Jelly ใช้ได้วันละกี่ครั้ง?",
-        "answer": "1 ครั้ง"
+        "answer": "ครั้ง"
       },
       {
         "question": "ภารกิจรายวันของ Guild สามารถทำสำเร็จได้สูงสุดวันละกี่ภารกิจ?",
-        "answer": "10 ตัว"
+        "answer": "ตัว"
       },
       {
         "question": "ตำแหน่งใดใน Guild ที่ไม่สามารถปรับแต่งชื่อได้",
@@ -685,7 +685,7 @@
       },
       {
         "question": "สามารถส่งสัตว์เลี้ยงลงต่อสู้ได้สูงสุดกี่ตัว?",
-        "answer": "4 ตัว"
+        "answer": "ตัว"
       },
       {
         "question": "ตำแหน่งใดใน Guild ที่มีได้เฉพาะผู้หญิงเท่านั้น?",
@@ -713,7 +713,7 @@
       },
       {
         "question": "Cat Cargo สามารถส่งสินค้าได้สูงสุดกี่ชนิด?",
-        "answer": "8 ชนิด"
+        "answer": "ชนิด"
       }
     ],
     "Scholar Exam + Sage Selection": [
@@ -731,7 +731,7 @@
       },
       {
         "question": "จัดทีมได้สูงสุดกี่คน",
-        "answer": "5 คน"
+        "answer": "คน"
       },
       {
         "question": "สร้าง Guild ต้องใช้อะไรบ้าง?",
@@ -779,15 +779,15 @@
       },
       {
         "question": "ปัจจุบัน Guild มีทั้งหมดกี่ประเภท",
-        "answer": "2 ชนิด"
+        "answer": "ชนิด"
       },
       {
         "question": "เมื่อสร้าง Guild ใหม่ สามารถรองรับสมาชิกได้สูงสุดกี่คน",
-        "answer": "100 คน"
+        "answer": "คน"
       },
       {
         "question": "ต้องส่งสินค้าให้ Cat Cargo อย่างน้อยกี่ชนิด?",
-        "answer": "5 ชนิด"
+        "answer": "ชนิด"
       },
       {
         "question": "ข้อใดคือการเช็คอิน Guild",
@@ -803,7 +803,7 @@
       },
       {
         "question": "ในเวอร์ชันปัจจุบันมีอาชีพสายการผลิตทั้งหมดกี่ประเภท?",
-        "answer": "7 ชนิด"
+        "answer": "ชนิด"
       },
       {
         "question": "ข้อใดไม่ใช่อาชีพใน Life Jobs?",
@@ -815,11 +815,11 @@
       },
       {
         "question": "Royal Jelly ใช้ได้วันละกี่ครั้ง?",
-        "answer": "1 ครั้ง"
+        "answer": "ครั้ง"
       },
       {
         "question": "ภารกิจรายวันของ Guild สามารถทำสำเร็จได้สูงสุดวันละกี่ภารกิจ?",
-        "answer": "10 ตัว"
+        "answer": "ตัว"
       },
       {
         "question": "ตำแหน่งใดใน Guild ที่ไม่สามารถปรับแต่งชื่อได้",
@@ -839,7 +839,7 @@
       },
       {
         "question": "สามารถส่งสัตว์เลี้ยงลงต่อสู้ได้สูงสุดกี่ตัว?",
-        "answer": "4 ตัว"
+        "answer": "ตัว"
       },
       {
         "question": "ตำแหน่งใดใน Guild ที่มีได้เฉพาะผู้หญิงเท่านั้น?",
@@ -867,7 +867,7 @@
       },
       {
         "question": "Cat Cargo สามารถส่งสินค้าได้สูงสุดกี่ชนิด?",
-        "answer": "8 ชนิด"
+        "answer": "ชนิด"
       },
       {
         "question": "เกมนี้สร้างดีไซน์ใดเป็นครั้งแรกในประวัติศาสตร์ซีรีส์ RO?",
@@ -954,10 +954,6 @@
         "answer": "ยุติธรรมและเปิดกว้าง"
       },
       {
-        "question": "ในเกม \"ผู้เล่นสายฟรีก็ฟาร์มของได้สบายๆ\" หมายความว่าอะไร",
-        "answer": "⧉"
-      },
-      {
         "question": "ไอเทมแรร์ที่ดรอปจาก Guild Polarity Zone จัดการกันอย่างไร?",
         "answer": "ประมูลและแบ่งเงินให้สมาชิก Guild"
       },
@@ -1004,22 +1000,6 @@
       {
         "question": "Pet ตัวใดต่อไปนี้ไม่ใช่ระดับ SSR?",
         "answer": "Sohee"
-      },
-      {
-        "question": "Peer Arena สามารถเข้าร่วมได้วันละกี่ครั้ง?",
-        "answer": "⧉"
-      },
-      {
-        "question": "อาหารแห่งรักรายวันฟื้นฟู HP 300 และ SP 50 ทุกกี่วินาที?",
-        "answer": "⧉"
-      },
-      {
-        "question": "แลกหีบอุปกรณ์ราชันย์ Lv.40 1 ใบ ต้องใช้เศษวิญญาณอุปกรณ์ราชันย์ Lv.40?",
-        "answer": "⧉"
-      },
-      {
-        "question": "ต้องใช้ Elunium กี่ชิ้นเพื่อผสมเป็น Enriched Elunium 1 ชิ้น?",
-        "answer": "⧉"
       },
       {
         "question": "เมืองใดคือเมืองหลวงของอาณาจักรรูน?",
@@ -1398,140 +1378,28 @@
         "answer": "รวบรวมมณีอนันต์ให้ครบ"
       },
       {
-        "question": "15 + 27 =?",
-        "answer": "⧉"
-      },
-      {
-        "question": "56 - 38 =?",
-        "answer": "⧉"
-      },
-      {
-        "question": "18 × 4 =?",
-        "answer": "⧉"
-      },
-      {
-        "question": "72 ÷ 8 =?",
-        "answer": "⧉"
-      },
-      {
-        "question": "33 + 49 =?",
-        "answer": "⧉"
-      },
-      {
-        "question": "90 - 56 =?",
-        "answer": "⧉"
-      },
-      {
-        "question": "25 × 6 =?",
-        "answer": "⧉"
-      },
-      {
-        "question": "84 ÷ 12 =?",
-        "answer": "⧉"
-      },
-      {
-        "question": "47 + 35 =?",
-        "answer": "⧉"
-      },
-      {
-        "question": "100 − 63 =?",
-        "answer": "⧉"
-      },
-      {
-        "question": "สี่เหลี่ยมผืนผ้ายาว 7 ซม. กว้าง 4 ซม. มีพื้นที่กี่ตารางเซนติเมตร?",
-        "answer": "⧉"
-      },
-      {
-        "question": "สี่เหลี่ยมจัตุรัสมีด้านยาวด้านละ 6 ซม. จะมีความยาวรอบรูปกี่เซนติเมตร?",
-        "answer": "⧉"
-      },
-      {
         "question": "ผลรวมมุมภายในของรูปสามเหลี่ยมมีกี่องศา?",
         "answer": "180°"
-      },
-      {
-        "question": "วงกลมมีเส้นผ่านศูนย์กลาง 10 ซม. รัศมียาวกี่เซนติเมตร?",
-        "answer": "⧉"
-      },
-      {
-        "question": "ทรงสี่เหลี่ยมมุมฉากยาว 3 ซม. กว้าง 4 ซม. สูง 5 ซม. มีปริมาตรกี่ cm³?",
-        "answer": "⧉"
       },
       {
         "question": "สามเหลี่ยมหน้าจั่วมีมุมยอด 80° มุมที่ฐานจะมีขนาดเท่าใด",
         "answer": "50°"
       },
       {
-        "question": "สูตรเส้นรอบวงของวงกลมคือ C=2πr เมื่อรัศมี r=4 ซม. เส้นรอบวงจะยาวประมาณกี่เซนติเมตร (π≈3.14)?",
-        "answer": "25.12"
-      },
-      {
-        "question": "สี่เหลี่ยมจัตุรัสมีพื้นที่ 49 ตารางเซนติเมตร ด้านยาวกี่เซนติเมตร?",
-        "answer": "⧉"
-      },
-      {
-        "question": "สี่เหลี่ยมผืนผ้ามีเส้นรอบรูป 30 ซม. และยาว 9 ซม. กว้างกี่เซนติเมตร?",
-        "answer": "⧉"
-      },
-      {
-        "question": "ลูกบาศก์มีความยาวด้าน 5 ซม. มีปริมาตรกี่ลูกบาศก์เซนติเมตร?",
-        "answer": "⧉"
-      },
-      {
-        "question": "พื้นที่วงกลมใช้สูตร S=πr² หากรัศมี r=5 ซม. พื้นที่ประมาณเท่าไร (ใช้ π=3.14)?",
-        "answer": "78.5"
-      },
-      {
         "question": "สามเหลี่ยมที่มีด้านยาว 5 ซม., 12 ซม. และ 13 ซม. เป็นสามเหลี่ยมชนิดใด?",
         "answer": "สามเหลี่ยมมุมฉาก"
-      },
-      {
-        "question": "ทรงสี่เหลี่ยมมุมฉากยาว 8 ซม. กว้าง 6 ซม. สูง 5 ซม. มีพื้นที่ผิวกี่ cm²?",
-        "answer": "⧉"
       },
       {
         "question": "มุมแต่ละมุมของสามเหลี่ยมด้านเท่ามีขนาดกี่องศา?",
         "answer": "60°"
       },
       {
-        "question": "วงกลมมีเส้นผ่านศูนย์กลาง 8 ซม. เส้นรอบวงประมาณเท่าไร (ใช้ π=3.14)?",
-        "answer": "25.12"
-      },
-      {
-        "question": "ลูกบาศก์มีพื้นที่ผิว 150 ตารางเซนติเมตร ด้านยาวกี่เซนติเมตร?",
-        "answer": "⧉"
-      },
-      {
-        "question": "สี่เหลี่ยมผืนผ้ามีพื้นที่ 60 ตารางเซนติเมตร กว้าง 5 ซม. ยาวกี่เซนติเมตร?",
-        "answer": "⧉"
-      },
-      {
         "question": "รูปสามเหลี่ยมมีมุมหนึ่ง 90° เป็นสามเหลี่ยมชนิดใด?",
         "answer": "สามเหลี่ยมมุมฉาก"
       },
       {
-        "question": "ผลรวมความยาวขอบของทรงสี่เหลี่ยมมุมฉากคือ 48 ซม. อัตราส่วนยาว:กว้าง:สูง = 3:2:1 ด้านยาวกี่เซนติเมตร?",
-        "answer": "⧉"
-      },
-      {
         "question": "เมื่อขยายรัศมีวงกลมเป็น 2 เท่า เส้นรอบวงจะเพิ่มเป็นกี่เท่า?",
-        "answer": "2 เท่า"
-      },
-      {
-        "question": "4.6 + 3.8 =?",
-        "answer": "8.4"
-      },
-      {
-        "question": "7.2 − 2.5 =?",
-        "answer": "4.7"
-      },
-      {
-        "question": "2.5 × 3.6 =?",
-        "answer": "⧉"
-      },
-      {
-        "question": "9.6 ÷ 1.6 =?",
-        "answer": "⧉"
+        "answer": "เท่า"
       },
       {
         "question": "3/4 + 1/6 =?",
@@ -1554,18 +1422,6 @@
         "answer": "3/8"
       },
       {
-        "question": "5/6 แปลงเป็นทศนิยมมีค่าประมาณเท่าไร?",
-        "answer": "0.83"
-      },
-      {
-        "question": "6.3 × 0.4 =?",
-        "answer": "2.52"
-      },
-      {
-        "question": "8.4 ÷ 0.7 =?",
-        "answer": "⧉"
-      },
-      {
         "question": "7/9 + 2/3 =?",
         "answer": "13/9"
       },
@@ -1578,224 +1434,8 @@
         "answer": "1/2"
       },
       {
-        "question": "3/4 ÷ 3/8 =?",
-        "answer": "⧉"
-      },
-      {
         "question": "0.625 ในรูปของเศษส่วนคือ?",
         "answer": "5/8"
-      },
-      {
-        "question": "7/10 ในรูปของทศนิยมคือ?",
-        "answer": "0.7"
-      },
-      {
-        "question": "9.8 + 2.05 =?",
-        "answer": "11.85"
-      },
-      {
-        "question": "10 − 3.78 =?",
-        "answer": "6.22"
-      },
-      {
-        "question": "ตัวหารร่วมมากของ 18 และ 24 คืออะไร?",
-        "answer": "⧉"
-      },
-      {
-        "question": "ค.ร.น. ของ 24 และ 36 คือ?",
-        "answer": "⧉"
-      },
-      {
-        "question": "ข้อใดเป็นจำนวนเฉพาะ?",
-        "answer": "⧉"
-      },
-      {
-        "question": "ข้อใดเป็นจำนวนประกอบ?",
-        "answer": "⧉"
-      },
-      {
-        "question": "1 เมตรเท่ากับกี่เซนติเมตร?",
-        "answer": "⧉"
-      },
-      {
-        "question": "1 ตันเท่ากับกี่กิโลกรัม?",
-        "answer": "⧉"
-      },
-      {
-        "question": "1 ลิตรเท่ากับกี่มิลลิลิตร?",
-        "answer": "⧉"
-      },
-      {
-        "question": "3 เมตร 5 เดซิเมตรเท่ากับกี่เมตร?",
-        "answer": "3.5"
-      },
-      {
-        "question": "2 กิโลกรัม 300 กรัม เท่ากับกี่กิโลกรัม?",
-        "answer": "2.3"
-      },
-      {
-        "question": "5 ลิตร 200 มิลลิลิตร เท่ากับกี่ลิตร?",
-        "answer": "5.2"
-      },
-      {
-        "question": "ตัวหารร่วมมากของ 36 และ 48 คือ?",
-        "answer": "⧉"
-      },
-      {
-        "question": "ตัวคูณร่วมน้อยของ 15 และ 25 คือ?",
-        "answer": "⧉"
-      },
-      {
-        "question": "จำนวนใดต่อไปนี้ที่หารด้วย 3 ลงตัว?",
-        "answer": "⧉"
-      },
-      {
-        "question": "จำนวนใดต่อไปนี้ที่หารด้วย 5 ลงตัว?",
-        "answer": "⧉"
-      },
-      {
-        "question": "4 เดซิเมตรเท่ากับกี่เมตร?",
-        "answer": "0.4"
-      },
-      {
-        "question": "8 ตัน 50 กิโลกรัม เท่ากับกี่ตัน?",
-        "answer": "8.05"
-      },
-      {
-        "question": "3 ลูกบาศก์เมตร เท่ากับกี่ลูกบาศก์เดซิเมตร?",
-        "answer": "⧉"
-      },
-      {
-        "question": "6 เซนติเมตรเท่ากับกี่มิลลิเมตร?",
-        "answer": "⧉"
-      },
-      {
-        "question": "1 ชั่วโมงเท่ากับกี่นาที?",
-        "answer": "⧉"
-      },
-      {
-        "question": "1 วันเท่ากับกี่ชั่วโมง?",
-        "answer": "⧉"
-      },
-      {
-        "question": "จำนวนอะไรคูณ 3 ได้ 27?",
-        "answer": "⧉"
-      },
-      {
-        "question": "จำนวนที่มากกว่า 4.8 อยู่ 2.7 คืออะไร?",
-        "answer": "7.5"
-      },
-      {
-        "question": "10 ลบ 3.5 ได้เท่าไหร่?",
-        "answer": "6.5"
-      },
-      {
-        "question": "จำนวนอะไรที่หารด้วย 6 แล้วได้ 8 เศษ 3?",
-        "answer": "⧉"
-      },
-      {
-        "question": "จำนวนใดที่เมื่อคูณด้วย 5 แล้วมีค่ามากกว่า 30 อยู่ 5?",
-        "answer": "⧉"
-      },
-      {
-        "question": "มีเงินอยู่ 25 ซื้อสมุดโน้ตไป 8.5 จะเหลือเงินเท่าไร?",
-        "answer": "16.5"
-      },
-      {
-        "question": "ปากกาด้ามละ 12.8 ซื้อ 3 ด้ามต้องจ่ายเท่าไหร่?",
-        "answer": "38.4"
-      },
-      {
-        "question": "สินค้าหนัก 4.5 ตัน ขนส่งครั้งละ 0.5 ตัน ต้องขนส่งทั้งหมดกี่รอบ?",
-        "answer": "⧉"
-      },
-      {
-        "question": "แปลงผักสี่เหลี่ยมผืนผ้ายาว 12 เมตร กว้าง 8 เมตร จะมีพื้นที่กี่ตารางเมตร?",
-        "answer": "⧉"
-      },
-      {
-        "question": "ลูกบาศก์ที่มีขอบยาว 4 ซม. จะมีพื้นที่ผิวกี่ตารางเซนติเมตร?",
-        "answer": "⧉"
-      },
-      {
-        "question": "เชือกเส้นหนึ่งยาว 20 เมตร ใช้ไปแล้ว 3/5 ของความยาวทั้งหมด เหลือเชือกอีกกี่เมตร?",
-        "answer": "⧉"
-      },
-      {
-        "question": "สี่เหลี่ยมผืนผ้ามีเส้นรอบรูป 28 ซม. ด้านยาวเป็น 3 เท่าของด้านกว้าง ด้านกว้างยาวกี่เซนติเมตร?",
-        "answer": "3.5"
-      },
-      {
-        "question": "เสี่ยวหมิงเดินนาทีละ 60 เมตร ใน 15 นาทีจะเดินได้กี่เมตร?",
-        "answer": "⧉"
-      },
-      {
-        "question": "วงกลมมีรัศมี 3 ซม. มีพื้นที่ประมาณกี่ตารางเซนติเมตร (ใช้ π=3.14)?",
-        "answer": "28.26"
-      },
-      {
-        "question": "เครื่องดื่มขวดหนึ่งจุ 1.2 ลิตร เทออกไป 0.3 ลิตร จะเหลือกี่ลิตร?",
-        "answer": "0.9"
-      },
-      {
-        "question": "หาก 4 เท่าของจำนวนหนึ่งคือ 36 แล้ว 5 เท่าของจำนวนนั้นคือเท่าใด?",
-        "answer": "⧉"
-      },
-      {
-        "question": "แปลงผักรูปสามเหลี่ยมมีฐานยาว 10 เมตร และสูง 6 เมตร จะมีพื้นที่เท่าใด?",
-        "answer": "⧉"
-      },
-      {
-        "question": "เสี่ยวหมิงซื้อแอปเปิ้ล 4 กก. ราคา กก. ละ 5.8 หยวน ต้องจ่ายเงินทั้งหมดกี่หยวน?",
-        "answer": "23.2"
-      },
-      {
-        "question": "กล่องสี่เหลี่ยมมุมฉากยาว 5 ซม. กว้าง 4 ซม. สูง 3 ซม. ผลรวมความยาวของขอบทั้งหมดเป็นกี่ซม.?",
-        "answer": "⧉"
-      },
-      {
-        "question": "นำลวดเหล็กยาว 48 ซม. มาดัดเป็นรูปสี่เหลี่ยมจัตุรัส ด้านแต่ละด้านจะยาวกี่ซม.?",
-        "answer": "⧉"
-      },
-      {
-        "question": "จำนวนที่มากกว่า 7.2 อยู่ 1.8 คืออะไร?",
-        "answer": "9.0"
-      },
-      {
-        "question": "จำนวนใดที่หารด้วย 8 แล้วได้ 7 เหลือเศษ 4?",
-        "answer": "⧉"
-      },
-      {
-        "question": "ถ่านหินหนัก 10 ตัน ใช้ไป 4.5 ตัน จะเหลืออยู่กี่ตัน?",
-        "answer": "5.5"
-      },
-      {
-        "question": "วงกลมที่มีเส้นผ่านศูนย์กลาง 6 ซม. จะมีเส้นรอบวงยาวประมาณกี่ซม. (กำหนดให้ π ≈ 3.14)?",
-        "answer": "18.84"
-      },
-      {
-        "question": "6 เท่าของจำนวนหนึ่งน้อยกว่า 40 อยู่ 4 จำนวนนั้นคืออะไร?",
-        "answer": "⧉"
-      },
-      {
-        "question": "สี่เหลี่ยมผืนผ้ามีความยาว 15 เมตร และความกว้างเป็น 2/3 ของความยาว ความกว้างของสี่เหลี่ยมผืนผ้านี้คือเท่าไร?",
-        "answer": "⧉"
-      },
-      {
-        "question": "ลูกบาศก์ที่มีปริมาตร 64 ลูกบาศก์เซนติเมตร จะมีความยาวด้านละกี่เซนติเมตร?",
-        "answer": "⧉"
-      },
-      {
-        "question": "มานะเดินได้นาทีละ 55 เมตร หากต้องการเดินเป็นระยะทาง 1320 เมตร เขาจะต้องใช้เวลากี่นาที?",
-        "answer": "⧉"
-      },
-      {
-        "question": "สามเหลี่ยมฐานยาว 8 ซม. สูง 6 ซม. มีพื้นที่กี่ตารางเซนติเมตร?",
-        "answer": "⧉"
-      },
-      {
-        "question": "สมชายมีเงิน 36 บาท จะซื้อสมุดโน้ตเล่มละ 4.5 บาทได้มากที่สุดกี่เล่ม?",
-        "answer": "⧉"
       },
       {
         "question": "จุดเดือดของน้ำที่ความดันบรรยากาศมาตรฐานอยู่ที่ประมาณเท่าใด?",
@@ -1835,7 +1475,7 @@
       },
       {
         "question": "โดยปกติแล้วหัวใจของผู้ใหญ่จะเต้นประมาณกี่ครั้งต่อนาทีขณะพัก?",
-        "answer": "70 ครั้ง"
+        "answer": "ครั้ง"
       },
       {
         "question": "ในหนึ่งวัน ดวงอาทิตย์ขึ้นทางทิศใด?",
@@ -1916,10 +1556,6 @@
       {
         "question": "น้ำค้างแข็งมักเกิดขึ้นเมื่อใด?",
         "answer": "ยามเช้าอันหนาวเหน็บ"
-      },
-      {
-        "question": "สัญลักษณ์ขั้วบวกของแบตเตอรี่คืออะไร?",
-        "answer": "+"
       },
       {
         "question": "หากถูกแมวหรือสุนัขข่วนหรือกัด ควรรีบทำอะไร?",
@@ -2134,10 +1770,6 @@
         "answer": "การกระเจิงของแสง"
       },
       {
-        "question": "เปียโนมาตรฐานมีกี่คีย์?",
-        "answer": "⧉"
-      },
-      {
         "question": "สีใดไม่ใช่หนึ่งในแม่สี?",
         "answer": "สีเขียว"
       },
@@ -2229,7 +1861,7 @@
       },
       {
         "question": "ปลาหมึกยักษ์มีหัวใจกี่ดวง?",
-        "answer": "3 ดวง"
+        "answer": "ดวง"
       },
       {
         "question": "สัตว์ชนิดใดสามารถเปลี่ยนสีลำตัวได้?",
@@ -2727,99 +2359,99 @@
     "งานเลี้ยงกิลด์ / Guild Banquet": [
       {
         "question": "How many keys does a standard piano have?",
-        "answer": "⧉"
+        "answer": "88\n⧉"
       },
       {
         "question": "What is the boiling point of water in Degree Celsius?",
-        "answer": "⧉"
+        "answer": "100\n⧉"
       },
       {
         "question": "How many colors are there in a rainbow?",
-        "answer": "⧉"
+        "answer": "7\n⧉"
       },
       {
         "question": "How many days are there in a week?",
-        "answer": "⧉"
+        "answer": "7\n⧉"
       },
       {
         "question": "What state is water in at room temperature?",
-        "answer": "液态"
+        "answer": "液态\n⧉"
       },
       {
         "question": "What is the smallest country in the world by land area?",
-        "answer": "梵蒂冈"
+        "answer": "梵蒂冈\n⧉"
       },
       {
         "question": "Which organ do we use to smell scents?",
-        "answer": "鼻子"
+        "answer": "鼻子\n⧉"
       },
       {
         "question": "In the color sequence of a rainbow, what color is on the outermost edge?",
-        "answer": "红"
+        "answer": "红\n⧉"
       },
       {
         "question": "Which marine animal is the largest mammal?",
-        "answer": "蓝鲸"
+        "answer": "蓝鲸\n⧉"
       },
       {
         "question": "What is the name of the highest mountain peak in the world?",
-        "answer": "珠穆朗玛峰"
+        "answer": "珠穆朗玛峰\n⧉"
       },
       {
         "question": "Which is the largest ocean in the world by surface area?",
-        "answer": "太平洋"
+        "answer": "太平洋\n⧉"
       },
       {
         "question": "What is the hardest part of the human body?",
-        "answer": "牙齿"
+        "answer": "牙齿\n⧉"
       },
       {
         "question": "What is the largest country in the world by land area?",
-        "answer": "俄罗斯"
+        "answer": "俄罗斯\n⧉"
       },
       {
         "question": "In what environment can sound not travel?",
-        "answer": "真空"
+        "answer": "真空\n⧉"
       },
       {
         "question": "What is the name for a frog when it is young?",
-        "answer": "蝌蚪"
+        "answer": "蝌蚪\n⧉"
       },
       {
         "question": "In which country did the Olympic Games originate?",
-        "answer": "希腊"
+        "answer": "希腊\n⧉"
       },
       {
         "question": "What do turtles use to breathe?",
-        "answer": "肺"
+        "answer": "肺\n⧉"
       },
       {
         "question": "Which is the only planet in the solar system known to host life?",
-        "answer": "地球"
+        "answer": "地球\n⧉"
       },
       {
         "question": "In the Olympic Rings, which continent does the blue ring represent?",
-        "answer": "欧洲"
+        "answer": "欧洲\n⧉"
       },
       {
         "question": "What does the head of a sunflower follow as it turns?",
-        "answer": "太阳"
+        "answer": "太阳\n⧉"
       },
       {
         "question": "What is the most abundant element in the human body?",
-        "answer": "氧"
+        "answer": "氧\n⧉"
       },
       {
         "question": "What is the main site of photosynthesis in plants?",
-        "answer": "叶绿体"
+        "answer": "叶绿体\n⧉"
       },
       {
         "question": "Which organ is responsible for pumping blood in the circulatory system?",
-        "answer": "心脏"
+        "answer": "心脏\n⧉"
       },
       {
         "question": "What is the largest planet in the solar system by volume?",
-        "answer": "木星"
+        "answer": "木星\n⧉"
       },
       {
         "question": "What type of climate does Morroc have?",
@@ -2835,7 +2467,7 @@
       },
       {
         "question": "What is the maximum party size?",
-        "answer": "5 Players"
+        "answer": "Players"
       },
       {
         "question": "What is required to create a Guild?",
@@ -2882,18 +2514,6 @@
         "answer": "Eddga"
       },
       {
-        "question": "How many types of Guilds are currently available?",
-        "answer": "⧉"
-      },
-      {
-        "question": "What is the maximum member capacity for a newly created Guild?",
-        "answer": "⧉"
-      },
-      {
-        "question": "How many types of cargo must be submitted at least in Cat Cargo?",
-        "answer": "⧉"
-      },
-      {
         "question": "Which of the following is a Guild Sign-In?",
         "answer": "Voice Sign-In"
       },
@@ -2915,11 +2535,7 @@
       },
       {
         "question": "How many times per day can you use Ginseng Royal Jelly?",
-        "answer": "1 time"
-      },
-      {
-        "question": "What is the daily limit for completing Guild Daily Quests?",
-        "answer": "⧉"
+        "answer": "time"
       },
       {
         "question": "Which Guild role name cannot be customized?",
@@ -2936,10 +2552,6 @@
       {
         "question": "Which item is consumed when performing a Piety Wish?",
         "answer": "Kind Pet Tag"
-      },
-      {
-        "question": "How many pets can you deploy at most?",
-        "answer": "⧉"
       },
       {
         "question": "Which Guild position can only be held by female characters?",
@@ -2964,10 +2576,6 @@
       {
         "question": "What is the name of the feature that allows you to plant vegetables?",
         "answer": "Home"
-      },
-      {
-        "question": "How many types of cargo can be submitted at most in Cat Cargo?",
-        "answer": "⧉"
       }
     ],
     "Scholar Exam + Sage Selection": [
@@ -2985,7 +2593,7 @@
       },
       {
         "question": "What is the maximum party size?",
-        "answer": "5 Players"
+        "answer": "Players"
       },
       {
         "question": "What is required to create a Guild?",
@@ -3032,16 +2640,8 @@
         "answer": "Eddga"
       },
       {
-        "question": "How many types of Guilds are currently available?",
-        "answer": "⧉"
-      },
-      {
         "question": "What is the maximum member capacity for a newly created Guild?",
         "answer": "Top 100"
-      },
-      {
-        "question": "How many types of cargo must be submitted at least in Cat Cargo?",
-        "answer": "⧉"
       },
       {
         "question": "Which of the following is a Guild Sign-In?",
@@ -3056,10 +2656,6 @@
         "answer": "Guild Contribution"
       },
       {
-        "question": "How many Life Jobs are there in the current version?",
-        "answer": "⧉"
-      },
-      {
         "question": "Which of the following is not a Life Job?",
         "answer": "Tailoring"
       },
@@ -3069,11 +2665,7 @@
       },
       {
         "question": "How many times per day can you use Ginseng Royal Jelly?",
-        "answer": "1 time"
-      },
-      {
-        "question": "What is the daily limit for completing Guild Daily Quests?",
-        "answer": "⧉"
+        "answer": "time"
       },
       {
         "question": "Which Guild role name cannot be customized?",
@@ -3090,10 +2682,6 @@
       {
         "question": "Which item is consumed when performing a Piety Wish?",
         "answer": "Kind Pet Tag"
-      },
-      {
-        "question": "How many pets can you deploy at most?",
-        "answer": "⧉"
       },
       {
         "question": "Which Guild position can only be held by female characters?",
@@ -3118,10 +2706,6 @@
       {
         "question": "What is the name of the feature that allows you to plant vegetables?",
         "answer": "Home"
-      },
-      {
-        "question": "How many types of cargo can be submitted at most in Cat Cargo?",
-        "answer": "⧉"
       },
       {
         "question": "What design did the game introduce for the first time in RO series history?",
@@ -3258,22 +2842,6 @@
       {
         "question": "Which of the following pets is NOT SSR grade?",
         "answer": "Sohee"
-      },
-      {
-        "question": "How many times can you participate in Peer Arena each day?",
-        "answer": "⧉"
-      },
-      {
-        "question": "How many seconds must pass for Daily Love Cuisine to restore 300 HP and 50 SP?",
-        "answer": "⧉"
-      },
-      {
-        "question": "How many Lv.40 Royal Essences are needed to exchange for 1 Lv.40 Royal Gear Chest?",
-        "answer": "⧉"
-      },
-      {
-        "question": "How many Elunium are required to craft 1 Enriched Elunium?",
-        "answer": "⧉"
       },
       {
         "question": "Which of the following cities is the capital of the Rune Kingdom?",
@@ -3604,10 +3172,6 @@
         "answer": "Hokage"
       },
       {
-        "question": "In Titanic, in what year did the Titanic sink?",
-        "answer": "⧉"
-      },
-      {
         "question": "In Detective Conan, what is Kaito Kid's real identity?",
         "answer": "Kaito Kuroba"
       },
@@ -3652,140 +3216,28 @@
         "answer": "Collect all the Infinity Stones"
       },
       {
-        "question": "15 + 27 = ?",
-        "answer": "⧉"
-      },
-      {
-        "question": "56 − 38 = ?",
-        "answer": "⧉"
-      },
-      {
-        "question": "18 × 4 = ?",
-        "answer": "⧉"
-      },
-      {
-        "question": "72 ÷ 8 = ?",
-        "answer": "⧉"
-      },
-      {
-        "question": "33 + 49 = ?",
-        "answer": "⧉"
-      },
-      {
-        "question": "90 − 56 = ?",
-        "answer": "⧉"
-      },
-      {
-        "question": "25 × 6 = ?",
-        "answer": "⧉"
-      },
-      {
-        "question": "84 ÷ 12 = ?",
-        "answer": "⧉"
-      },
-      {
-        "question": "47 + 35 = ?",
-        "answer": "⧉"
-      },
-      {
-        "question": "100 − 63 = ?",
-        "answer": "⧉"
-      },
-      {
-        "question": "A rectangle is 7 cm long and 4 cm wide. What is its area in square centimeters?",
-        "answer": "⧉"
-      },
-      {
-        "question": "A square has a side length of 6 cm. What is its perimeter?",
-        "answer": "⧉"
-      },
-      {
         "question": "What is the sum of the interior angles of a triangle?",
         "answer": "180°"
-      },
-      {
-        "question": "A circle has a diameter of 10 cm. What is its radius in centimeters?",
-        "answer": "⧉"
-      },
-      {
-        "question": "A rectangular prism is 3 cm long, 4 cm wide, and 5 cm high. What is its volume in cm³?",
-        "answer": "⧉"
       },
       {
         "question": "An isosceles triangle has a vertex angle of 80°. What is the measure of one base angle?",
         "answer": "50°"
       },
       {
-        "question": "The circumference of a circle is given by C = 2πr. If r = 4 cm and π = 3.14, what is the circumference?",
-        "answer": "25.12"
-      },
-      {
-        "question": "A square has an area of 49 square centimeters. What is its side length in centimeters?",
-        "answer": "⧉"
-      },
-      {
-        "question": "A rectangle has a perimeter of 30 cm and a length of 9 cm. What is its width in centimeters?",
-        "answer": "⧉"
-      },
-      {
-        "question": "A cube has an edge length of 5 cm. What is its volume in cubic centimeters?",
-        "answer": "⧉"
-      },
-      {
-        "question": "The area of a circle is S=πr². If r=5 cm and π=3.14, approximately what is its area in square centimeters?",
-        "answer": "78.5"
-      },
-      {
         "question": "A triangle has side lengths of 5 cm, 12 cm, and 13 cm. What type of triangle is it?",
         "answer": "Right Triangle"
-      },
-      {
-        "question": "A rectangular prism is 8 cm long, 6 cm wide, and 5 cm high. What is its surface area in cm²?",
-        "answer": "⧉"
       },
       {
         "question": "What is the measure of each interior angle of an equilateral triangle?",
         "answer": "60°"
       },
       {
-        "question": "A circle has a diameter of 8 cm. Using π=3.14, approximately what is its circumference in centimeters?",
-        "answer": "25.12"
-      },
-      {
-        "question": "A cube has a surface area of 150 square centimeters. What is its edge length in centimeters?",
-        "answer": "⧉"
-      },
-      {
-        "question": "A rectangle has an area of 60 square centimeters and a width of 5 cm. What is its length in centimeters?",
-        "answer": "⧉"
-      },
-      {
         "question": "A triangle has one 90° angle. What type of triangle is it?",
         "answer": "Right Triangle"
       },
       {
-        "question": "The total edge length of a rectangular prism is 48 cm, and its length, width, and height are in a 3:2:1 ratio. What is its length in centimeters?",
-        "answer": "⧉"
-      },
-      {
         "question": "If the radius of a circle is increased to 2 times its original value, by what factor does its circumference increase?",
-        "answer": "2 times"
-      },
-      {
-        "question": "4.6 + 3.8 = ?",
-        "answer": "8.4"
-      },
-      {
-        "question": "7.2 − 2.5 = ?",
-        "answer": "4.7"
-      },
-      {
-        "question": "2.5 × 3.6 = ?",
-        "answer": "⧉"
-      },
-      {
-        "question": "9.6 ÷ 1.6 = ?",
-        "answer": "⧉"
+        "answer": "times"
       },
       {
         "question": "3/4 + 1/6 = ?",
@@ -3808,18 +3260,6 @@
         "answer": "3/8"
       },
       {
-        "question": "Approximately what decimal is 5/6?",
-        "answer": "0.83"
-      },
-      {
-        "question": "6.3 × 0.4 = ?",
-        "answer": "2.52"
-      },
-      {
-        "question": "8.4 ÷ 0.7 = ?",
-        "answer": "⧉"
-      },
-      {
         "question": "7/9 + 2/3 = ?",
         "answer": "13/9"
       },
@@ -3832,224 +3272,8 @@
         "answer": "1/2"
       },
       {
-        "question": "3/4 ÷ 3/8 = ?",
-        "answer": "⧉"
-      },
-      {
         "question": "What fraction is 0.625?",
         "answer": "5/8"
-      },
-      {
-        "question": "What decimal is 7/10?",
-        "answer": "0.7"
-      },
-      {
-        "question": "9.8 + 2.05 = ?",
-        "answer": "11.85"
-      },
-      {
-        "question": "10 − 3.78 = ?",
-        "answer": "6.22"
-      },
-      {
-        "question": "What is the greatest common factor of 18 and 24?",
-        "answer": "⧉"
-      },
-      {
-        "question": "What is the least common multiple of 24 and 36?",
-        "answer": "⧉"
-      },
-      {
-        "question": "Which of the following numbers is prime?",
-        "answer": "⧉"
-      },
-      {
-        "question": "Which of the following numbers is composite?",
-        "answer": "⧉"
-      },
-      {
-        "question": "How many centimeters are in 1 meter?",
-        "answer": "⧉"
-      },
-      {
-        "question": "How many kilograms are in 1 metric ton?",
-        "answer": "⧉"
-      },
-      {
-        "question": "How many milliliters are in 1 liter?",
-        "answer": "⧉"
-      },
-      {
-        "question": "3 meters and 5 decimeters equals how many meters?",
-        "answer": "3.5"
-      },
-      {
-        "question": "2 kilograms 300 grams equals how many kilograms?",
-        "answer": "2.3"
-      },
-      {
-        "question": "5 liters and 200 milliliters equals how many liters?",
-        "answer": "5.2"
-      },
-      {
-        "question": "What is the greatest common factor of 36 and 48?",
-        "answer": "⧉"
-      },
-      {
-        "question": "What is the least common multiple of 15 and 25?",
-        "answer": "⧉"
-      },
-      {
-        "question": "Which of the following numbers is divisible by 3?",
-        "answer": "⧉"
-      },
-      {
-        "question": "Which of the following numbers is divisible by 5?",
-        "answer": "⧉"
-      },
-      {
-        "question": "4 decimeters equals how many meters?",
-        "answer": "0.4"
-      },
-      {
-        "question": "8 metric tons and 50 kilograms equals how many metric tons?",
-        "answer": "8.05"
-      },
-      {
-        "question": "3 cubic meters equals how many cubic decimeters?",
-        "answer": "⧉"
-      },
-      {
-        "question": "6 centimeters equals how many millimeters?",
-        "answer": "⧉"
-      },
-      {
-        "question": "How many minutes are in 1 hour?",
-        "answer": "⧉"
-      },
-      {
-        "question": "How many hours are in 1 day?",
-        "answer": "⧉"
-      },
-      {
-        "question": "A number multiplied by 3 equals 27. What is the number?",
-        "answer": "⧉"
-      },
-      {
-        "question": "What number is 2.7 greater than 4.8?",
-        "answer": "7.5"
-      },
-      {
-        "question": "What number is 3.5 less than 10?",
-        "answer": "6.5"
-      },
-      {
-        "question": "A number divided by 6 gives a quotient of 8 and a remainder of 3. What is the number?",
-        "answer": "⧉"
-      },
-      {
-        "question": "Five times a number is 5 more than 30. What is the number?",
-        "answer": "⧉"
-      },
-      {
-        "question": "Ming has $25. After spending $8.50 on a notebook, how much money does he have left?",
-        "answer": "16.5"
-      },
-      {
-        "question": "A pen costs $12.80. How much do 3 pens cost?",
-        "answer": "38.4"
-      },
-      {
-        "question": "A pile of goods weighs 4.5 metric tons. If 0.5 metric tons are transported each trip, how many trips are needed?",
-        "answer": "⧉"
-      },
-      {
-        "question": "A rectangular vegetable plot is 12 meters long and 8 meters wide. What is its area in square meters?",
-        "answer": "⧉"
-      },
-      {
-        "question": "A cube has an edge length of 4 cm. What is its surface area in square centimeters?",
-        "answer": "⧉"
-      },
-      {
-        "question": "A rope is 20 meters long. If 3/5 of it is used, how many meters remain?",
-        "answer": "⧉"
-      },
-      {
-        "question": "A rectangle has a perimeter of 28 cm, and its length is 3 times its width. What is its width in centimeters?",
-        "answer": "3.5"
-      },
-      {
-        "question": "Ming walks 60 meters per minute. How far can he walk in 15 minutes?",
-        "answer": "⧉"
-      },
-      {
-        "question": "A circle has a radius of 3 cm. Using π=3.14, approximately what is its area in square centimeters?",
-        "answer": "28.26"
-      },
-      {
-        "question": "A bottle contains 1.2 liters of drink. After 0.3 liters are poured out, how many liters remain?",
-        "answer": "0.9"
-      },
-      {
-        "question": "4 times a number is 36. What is 5 times that number?",
-        "answer": "⧉"
-      },
-      {
-        "question": "A triangular vegetable plot has a base of 10 meters and a height of 6 meters. What is its area in square meters?",
-        "answer": "⧉"
-      },
-      {
-        "question": "Ming buys 4 kilograms of apples at $5.80 per kilogram. How much did he spend in total?",
-        "answer": "23.2"
-      },
-      {
-        "question": "A rectangular prism is 5 cm long, 4 cm wide, and 3 cm high. What is the total length of all its edges in cm?",
-        "answer": "⧉"
-      },
-      {
-        "question": "A 48 cm wire is bent into a square. What is the side length of the square in centimeters?",
-        "answer": "⧉"
-      },
-      {
-        "question": "What number is 1.8 greater than 7.2?",
-        "answer": "9.0"
-      },
-      {
-        "question": "A number divided by 8 gives a quotient of 7 and a remainder of 4. What is the number?",
-        "answer": "⧉"
-      },
-      {
-        "question": "A pile of coal weighs 10 metric tons. After 4.5 metric tons are used, how many metric tons remain?",
-        "answer": "5.5"
-      },
-      {
-        "question": "A circle has a diameter of 6 cm. Using π=3.14, approximately what is its circumference in centimeters?",
-        "answer": "18.84"
-      },
-      {
-        "question": "6 times a number is 4 less than 40. What is the number?",
-        "answer": "⧉"
-      },
-      {
-        "question": "A rectangle is 15 meters long, and its width is 2/3 of its length. What is its width in meters?",
-        "answer": "⧉"
-      },
-      {
-        "question": "A cube has a volume of 64 cm³. What is the length of each edge?",
-        "answer": "⧉"
-      },
-      {
-        "question": "Ming walks 55 meters per minute. How many minutes will it take him to walk 1,320 meters?",
-        "answer": "⧉"
-      },
-      {
-        "question": "A triangle has a base of 8 cm and a height of 6 cm. What is its area in square centimeters?",
-        "answer": "⧉"
-      },
-      {
-        "question": "Ming has $36. If each notebook costs $4.50, what is the maximum number of notebooks he can buy?",
-        "answer": "⧉"
       },
       {
         "question": "At standard atmospheric pressure, approximately what is the boiling point of water?",
@@ -4089,7 +3313,7 @@
       },
       {
         "question": "Approximately how many times per minute is a normal adult's resting heart rate?",
-        "answer": "70 beats"
+        "answer": "beats"
       },
       {
         "question": "In which direction does the sun rise?",
@@ -4164,16 +3388,8 @@
         "answer": "Bright but comfortable"
       },
       {
-        "question": "When does a rainbow generally appear?",
-        "answer": "⧉"
-      },
-      {
         "question": "When does frost generally form?",
         "answer": "On cold mornings"
-      },
-      {
-        "question": "What is the symbol for the positive terminal of a battery?",
-        "answer": "+"
       },
       {
         "question": "If you are bitten or scratched by a cat or dog, what should you do?",
@@ -4266,14 +3482,6 @@
       {
         "question": "What is the core gameplay of a MOBA game?",
         "answer": "Multiplayer Online Battle Arena"
-      },
-      {
-        "question": "What does HP represent in games?",
-        "answer": "⧉"
-      },
-      {
-        "question": "What does MP represent in games?",
-        "answer": "⧉"
       },
       {
         "question": "What type of effect does AOE refer to?",
@@ -4378,10 +3586,6 @@
       {
         "question": "Why does the sky appear blue?",
         "answer": "Scattering of sunlight"
-      },
-      {
-        "question": "How many keys does a standard piano have?",
-        "answer": "⧉"
       },
       {
         "question": "Which is NOT one of the three primary colors in art?",
@@ -4503,1919 +3707,1919 @@
     "Hoppy Quiz": [
       {
         "question": "苹果的英文是APPLE。",
-        "answer": "点击隐藏答案"
+        "answer": "จริง / True (O)"
       },
       {
         "question": "东南亚分为中南半岛和马来群岛两大部分。",
-        "answer": "点击隐藏答案"
+        "answer": "จริง / True (O)"
       },
       {
         "question": "越南属于马来群岛国家。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "泰国是内陆国，没有海岸线。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "老挝是东南亚唯一的内陆国家。",
-        "answer": "点击隐藏答案"
+        "answer": "จริง / True (O)"
       },
       {
         "question": "圣诞节是12月26日。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "泰国的首都是曼谷。",
-        "answer": "点击隐藏答案"
+        "answer": "จริง / True (O)"
       },
       {
         "question": "印尼的首都是吉隆坡。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "5的平方等于25。",
-        "answer": "点击隐藏答案"
+        "answer": "จริง / True (O)"
       },
       {
         "question": "菲律宾的首都是马尼拉。",
-        "answer": "点击隐藏答案"
+        "answer": "จริง / True (O)"
       },
       {
         "question": "一年有12个月份。",
-        "answer": "点击隐藏答案"
+        "answer": "จริง / True (O)"
       },
       {
         "question": "太阳从东边升起，东边落下。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "夏天通常比冬天热。",
-        "answer": "点击隐藏答案"
+        "answer": "จริง / True (O)"
       },
       {
         "question": "一只鸡有2条腿。",
-        "answer": "点击隐藏答案"
+        "answer": "จริง / True (O)"
       },
       {
         "question": "树叶一定都是绿色的。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "鱼生活在陆地上。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "荷花一般在夏天开放。",
-        "answer": "点击隐藏答案"
+        "answer": "จริง / True (O)"
       },
       {
         "question": "蝴蝶是由毛毛虫变成的。",
-        "answer": "点击隐藏答案"
+        "answer": "จริง / True (O)"
       },
       {
         "question": "牛奶是从奶牛身上来的。",
-        "answer": "点击隐藏答案"
+        "answer": "จริง / True (O)"
       },
       {
         "question": "用手摸插座很安全。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "闯红灯是正确的。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "正方形有4个一样的角。",
-        "answer": "点击隐藏答案"
+        "answer": "จริง / True (O)"
       },
       {
         "question": "一周有8天。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "花草需要浇水才能茁壮生长。",
-        "answer": "点击隐藏答案"
+        "answer": "จริง / True (O)"
       },
       {
         "question": "云朵的形状一定是固定不变的。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "5加2等于8。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "西瓜是夏天的应季水果。",
-        "answer": "点击隐藏答案"
+        "answer": "จริง / True (O)"
       },
       {
         "question": "柬埔寨的首都是万象。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "缅甸的首都是内比都。",
-        "answer": "点击隐藏答案"
+        "answer": "จริง / True (O)"
       },
       {
         "question": "新加坡官方语言只有英语。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "东南亚生产天然橡胶、椰子、棕榈油。",
-        "answer": "点击隐藏答案"
+        "answer": "จริง / True (O)"
       },
       {
         "question": "榴莲原产地是欧洲。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "越南、泰国是主要大米出口国。",
-        "answer": "点击隐藏答案"
+        "answer": "จริง / True (O)"
       },
       {
         "question": "波利是最基础的新手怪物。",
-        "answer": "点击隐藏答案"
+        "answer": "จริง / True (O)"
       },
       {
         "question": "向日葵花盘会随着太阳方向转动。",
-        "answer": "点击隐藏答案"
+        "answer": "จริง / True (O)"
       },
       {
         "question": "“world”的意思是“宇宙”",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "七星瓢虫是害虫。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "文莱全境位于加里曼丹岛上。",
-        "answer": "点击隐藏答案"
+        "answer": "จริง / True (O)"
       },
       {
         "question": "东盟十国里，只有柬埔寨实行君主立宪制。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "月亮自己会发光。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "时针走一圈是12小时。",
-        "answer": "点击隐藏答案"
+        "answer": "จริง / True (O)"
       },
       {
         "question": "青蛙可以同时在水里和陆地上生活。",
-        "answer": "点击隐藏答案"
+        "answer": "จริง / True (O)"
       },
       {
         "question": "梦罗克的气候类型是热带雨林。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "头饰“天使发圈”从恶魔波利身上掉落的。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "天使波利是波利家园的MVP。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "魅力宝贝只能由漂亮小姐姐担任。",
-        "answer": "点击隐藏答案"
+        "answer": "จริง / True (O)"
       },
       {
         "question": "“世界之旅”中，玩家是可以飞到空中的。",
-        "answer": "点击隐藏答案"
+        "answer": "จริง / True (O)"
       },
       {
         "question": "公会需要消耗公会资金进行日常维护。",
-        "answer": "点击隐藏答案"
+        "answer": "จริง / True (O)"
       },
       {
         "question": "裁缝是生活职业的一种。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "活力的主要用途是打怪。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "结婚登记需要前往普隆德拉教堂处。",
-        "answer": "点击隐藏答案"
+        "answer": "จริง / True (O)"
       },
       {
         "question": "组队最多可以有10人小队。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "公会拍卖后发给成员的分红是星石。",
-        "answer": "点击隐藏答案"
+        "answer": "จริง / True (O)"
       },
       {
         "question": "可以使用蝴蝶翅膀寻找MVP。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "普隆德拉南门的MVP是天使波利。",
-        "answer": "点击隐藏答案"
+        "answer": "จริง / True (O)"
       },
       {
         "question": "波利家园的MVP是恶魔波利。",
-        "answer": "点击隐藏答案"
+        "answer": "จริง / True (O)"
       },
       {
         "question": "下水道二层的MVP是银色虫。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "蚂蚁洞穴的MVP是蚂后。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "哥布灵森林的MVP是弟布灵首领。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "沉船的MVP是海盗之王。",
-        "answer": "点击隐藏答案"
+        "answer": "จริง / True (O)"
       },
       {
         "question": "梦罗克区域的MVP是皮皮虾。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "公会刚创建时最多可容纳100名成员。",
-        "answer": "点击隐藏答案"
+        "answer": "จริง / True (O)"
       },
       {
         "question": "猫手货运一定要提交8种货物，不满8种无法提交。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "公会商店的兑换货币是功勋。",
-        "answer": "点击隐藏答案"
+        "answer": "จริง / True (O)"
       },
       {
         "question": "公会修炼和生活职业都会消耗公会贡献。",
-        "answer": "点击隐藏答案"
+        "answer": "จริง / True (O)"
       },
       {
         "question": "通过魔物驱逐也可以获得活力值。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "每天可以无限制地使用人参蜂王浆。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "通过参与生活职业可以上架交易行赚取Zeny。",
-        "answer": "点击隐藏答案"
+        "answer": "จริง / True (O)"
       },
       {
         "question": "公会中有一种职务只能由女生担任，这个职务是魅力宝贝。",
-        "answer": "点击隐藏答案"
+        "answer": "จริง / True (O)"
       },
       {
         "question": "公会工资每周日发放。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "游戏中有一种道具可以将自己或其他玩家变身，这种道具叫“变身魔盒”。",
-        "answer": "点击隐藏答案"
+        "answer": "จริง / True (O)"
       },
       {
         "question": "去别人家园是无法偷菜的。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "游戏中不仅可以建造自己的家园，还能乐于助人去建造别人的家园。",
-        "answer": "点击隐藏答案"
+        "answer": "จริง / True (O)"
       },
       {
         "question": "太阳系中唯一拥有生命的行星是地球。",
-        "answer": "点击隐藏答案"
+        "answer": "จริง / True (O)"
       },
       {
         "question": "小熊猫是森林里的“国宝”，爱吃竹子。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "大熊猫是素食动物。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "冬虫夏草是一种珍贵的植物。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "兔子的眼睛都是红色的。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "土豆是块茎，萝卜是根。",
-        "answer": "点击隐藏答案"
+        "answer": "จริง / True (O)"
       },
       {
         "question": "空气中含量最多的是二氧化碳。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "虾虾和鱼鱼一样用鳃呼吸。",
-        "answer": "点击隐藏答案"
+        "answer": "จริง / True (O)"
       },
       {
         "question": "奥运会黄环代表亚洲。",
-        "answer": "点击隐藏答案"
+        "answer": "จริง / True (O)"
       },
       {
         "question": "最高级的爬行动物是海龟。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "暴击率的计算与LUK有最直接关系。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "Job等级是依附于Base等级成长的。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "太阳系中体积最大的行星是金星。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "人体最坚硬的组织是骨骼。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "诺贝尔奖项中无数学奖。",
-        "answer": "点击隐藏答案"
+        "answer": "จริง / True (O)"
       },
       {
         "question": "世界上面积最大的半岛是阿拉伯半岛。",
-        "answer": "点击隐藏答案"
+        "answer": "จริง / True (O)"
       },
       {
         "question": "声音在空气中的传播速度比在水中快。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "钻石是石墨的同素异形体。",
-        "answer": "点击隐藏答案"
+        "answer": "จริง / True (O)"
       },
       {
         "question": "世界上最深的海沟位于太平洋。",
-        "answer": "点击隐藏答案"
+        "answer": "จริง / True (O)"
       },
       {
         "question": "光合作用的原料是氧气和有机物。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "多瑙河是欧洲流经国家最多的河流。",
-        "answer": "点击隐藏答案"
+        "answer": "จริง / True (O)"
       },
       {
         "question": "人体总共有206块骨骼。",
-        "answer": "点击隐藏答案"
+        "answer": "จริง / True (O)"
       },
       {
         "question": "光速在真空中的传播速度约为340米/秒。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "哺乳动物都是胎生。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "文艺复兴起源于14世纪意大利，核心思想是人文主义。",
-        "answer": "点击隐藏答案"
+        "answer": "จริง / True (O)"
       },
       {
         "question": "世界上面积最小的大洲是大洋洲。",
-        "answer": "点击隐藏答案"
+        "answer": "จริง / True (O)"
       },
       {
         "question": "水在0摄氏度时密度最大。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "亚马逊河是世界上含沙量最大的河流。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "肝脏是人体中最大的消化腺。",
-        "answer": "点击隐藏答案"
+        "answer": "จริง / True (O)"
       },
       {
         "question": "化学元素周期表的发明者是居里夫人。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "世界上面积最大的热带雨林分布在非洲刚果盆地。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "水星是气态巨行星。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "新加坡本土原生民族主体是马来人。",
-        "answer": "点击隐藏答案"
+        "answer": "จริง / True (O)"
       },
       {
         "question": "《悲惨世界》的作者是巴尔扎克。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "视网膜是人体中负责感受光线、传递视觉信号的器官。",
-        "answer": "点击隐藏答案"
+        "answer": "จริง / True (O)"
       },
       {
         "question": "笛子是竖着吹的。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "蜗牛对农作物青菜生长有益处。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "所有蔬菜都适合生吃以保留膳食纤维。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "慢跑比快跑更容易损伤膝盖。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "米饭放凉后再食用，热量会变低。",
-        "answer": "点击隐藏答案"
+        "answer": "จริง / True (O)"
       },
       {
         "question": "马拉松长跑全程约53公里。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "企鹅主要生活在南极地区，擅长飞行。",
-        "answer": "点击隐藏答案"
+        "answer": "เท็จ / False (X)"
       },
       {
         "question": "长颈鹿是世界上最高的陆生动物。",
-        "answer": "点击隐藏答案"
+        "answer": "จริง / True (O)"
       },
       {
         "question": "牵牛花一般在清晨开放。",
-        "answer": "点击隐藏答案"
+        "answer": "จริง / True (O)"
       }
     ],
     "งานเลี้ยงกิลด์ / Guild Banquet": [
       {
         "question": "钢琴一共有多少个琴键？",
-        "answer": "点击隐藏答案变体"
+        "answer": "88\n⧉"
       },
       {
         "question": "水的沸点是多少摄氏度？",
-        "answer": "点击隐藏答案变体"
+        "answer": "100\n⧉"
       },
       {
         "question": "彩虹有几种颜色？",
-        "answer": "点击隐藏答案变体"
+        "answer": "7\n⧉"
       },
       {
         "question": "一个礼拜有几天？",
-        "answer": "点击隐藏答案变体"
+        "answer": "7\n⧉"
       },
       {
         "question": "水在常温下是什么状态？",
-        "answer": "点击隐藏答案变体"
+        "answer": "液态\n⧉"
       },
       {
         "question": "世界上面积最小的国家是？",
-        "answer": "点击隐藏答案变体"
+        "answer": "梵蒂冈\n⧉"
       },
       {
         "question": "我们用什么器官闻气味？",
-        "answer": "点击隐藏答案变体"
+        "answer": "鼻子\n⧉"
       },
       {
         "question": "彩虹的颜色排列，最外侧的是什么颜色？",
-        "answer": "点击隐藏答案变体"
+        "answer": "红\n⧉"
       },
       {
         "question": "哪种海洋动物是最大的哺乳动物？",
-        "answer": "点击隐藏答案变体"
+        "answer": "蓝鲸\n⧉"
       },
       {
         "question": "世界上最高的山峰是什么名字？",
-        "answer": "点击隐藏答案变体"
+        "answer": "珠穆朗玛峰\n⧉"
       },
       {
         "question": "世界上面积最大的海洋是哪里？",
-        "answer": "点击隐藏答案变体"
+        "answer": "太平洋\n⧉"
       },
       {
         "question": "人体中最硬的部位是什么？",
-        "answer": "点击隐藏答案变体"
+        "answer": "牙齿\n⧉"
       },
       {
         "question": "世界上面积最大的国家是？",
-        "answer": "点击隐藏答案变体"
+        "answer": "俄罗斯\n⧉"
       },
       {
         "question": "声音在什么环境中无法传播？",
-        "answer": "点击隐藏答案变体"
+        "answer": "真空\n⧉"
       },
       {
         "question": "青蛙小时候的名字叫什么？",
-        "answer": "点击隐藏答案变体"
+        "answer": "蝌蚪\n⧉"
       },
       {
         "question": "奥运会的发源地是哪个国家？",
-        "answer": "点击隐藏答案变体"
+        "answer": "希腊\n⧉"
       },
       {
         "question": "小乌龟是用什么呼吸的？",
-        "answer": "点击隐藏答案变体"
+        "answer": "肺\n⧉"
       },
       {
         "question": "太阳系中，唯一拥有生命的行星是？",
-        "answer": "点击隐藏答案变体"
+        "answer": "地球\n⧉"
       },
       {
         "question": "奥运会的五环标志中，蓝色代表的是哪个大洲？",
-        "answer": "点击隐藏答案变体"
+        "answer": "欧洲\n⧉"
       },
       {
         "question": "向日葵的花盘会跟着什么东西转动？",
-        "answer": "点击隐藏答案变体"
+        "answer": "太阳\n⧉"
       },
       {
         "question": "人体中含量最多的元素是什么？",
-        "answer": "点击隐藏答案变体"
+        "answer": "氧\n⧉"
       },
       {
         "question": "植物进行光合作用的主要场所是？",
-        "answer": "点击隐藏答案变体"
+        "answer": "叶绿体\n⧉"
       },
       {
         "question": "人体的血液循环系统中，负责泵血的器官是？",
-        "answer": "点击隐藏答案变体"
+        "answer": "心脏\n⧉"
       },
       {
         "question": "太阳系中体积最大的行星是？",
-        "answer": "点击隐藏答案变体"
+        "answer": "木星\n⧉"
       },
       {
         "question": "梦罗克是什么气候类型？",
-        "answer": "点击隐藏答案变体"
+        "answer": "热带沙漠气候"
       },
       {
         "question": "结婚登记地点在哪个主城？",
-        "answer": "点击隐藏答案变体"
+        "answer": "普隆德拉"
       },
       {
         "question": "头饰“天使发圈”从哪个怪物身上掉落",
-        "answer": "点击隐藏答案变体"
+        "answer": "天使波利"
       },
       {
         "question": "组队最多可以几人？",
-        "answer": "点击隐藏答案变体"
+        "answer": "5人"
       },
       {
         "question": "创建公会需要？",
-        "answer": "点击隐藏答案变体"
+        "answer": "华丽水晶"
       },
       {
         "question": "公会拍卖后给成员发放的分红是什么？",
-        "answer": "点击隐藏答案变体"
+        "answer": "星石"
       },
       {
         "question": "野外寻找MVP可使用什么道具？",
-        "answer": "点击隐藏答案变体"
+        "answer": "苍蝇翅膀"
       },
       {
         "question": "普隆德拉南门的MVP是",
-        "answer": "点击隐藏答案变体"
+        "answer": "天使波利"
       },
       {
         "question": "波利家园的MVP是",
-        "answer": "点击隐藏答案变体"
+        "answer": "恶魔波利"
       },
       {
         "question": "下水道二层的MVP是",
-        "answer": "点击隐藏答案变体"
+        "answer": "黄金虫"
       },
       {
         "question": "蚂蚁洞穴的MVP是",
-        "answer": "点击隐藏答案变体"
+        "answer": "蚁后"
       },
       {
         "question": "哥布灵森林的MVP是",
-        "answer": "点击隐藏答案变体"
+        "answer": "哥布灵首领"
       },
       {
         "question": "沉船的MVP是",
-        "answer": "点击隐藏答案变体"
+        "answer": "海盗之王"
       },
       {
         "question": "梦罗克区域的MVP是",
-        "answer": "点击隐藏答案变体"
+        "answer": "皮里恩"
       },
       {
         "question": "斐扬区域的MVP是",
-        "answer": "点击隐藏答案变体"
+        "answer": "虎王"
       },
       {
         "question": "目前一共有几种类型的公会？",
-        "answer": "点击隐藏答案变体"
+        "answer": "2种"
       },
       {
         "question": "公会刚创建时最多可容纳多少名成员？",
-        "answer": "点击隐藏答案变体"
+        "answer": "100名"
       },
       {
         "question": "猫手货运至少需要提交几种货物？",
-        "answer": "点击隐藏答案变体"
+        "answer": "5种"
       },
       {
         "question": "以下哪个属于公会签到？",
-        "answer": "点击隐藏答案变体"
+        "answer": "语音签到"
       },
       {
         "question": "公会商店的兑换货币是什么？",
-        "answer": "点击隐藏答案变体"
+        "answer": "功勋"
       },
       {
         "question": "公会修炼需要消耗一种产自公会的货币，是什么？",
-        "answer": "点击隐藏答案变体"
+        "answer": "公会贡献"
       },
       {
         "question": "以下哪个不是生活职业中的一种职业？",
-        "answer": "点击隐藏答案变体"
+        "answer": "裁缝"
       },
       {
         "question": "以下哪种途径无法获得活力？",
-        "answer": "点击隐藏答案变体"
+        "answer": "魔物驱逐"
       },
       {
         "question": "每天可以使用几次人参蜂王浆？",
-        "answer": "点击隐藏答案变体"
+        "answer": "1次"
       },
       {
         "question": "公会日常任务每天最多可以完成几个？",
-        "answer": "点击隐藏答案变体"
+        "answer": "10个"
       },
       {
         "question": "以下哪种公会职务不可以自定义修改名称？",
-        "answer": "点击隐藏答案变体"
+        "answer": "公会小助手"
       },
       {
         "question": "以下哪个功能是当前版本公会没开放的功能？",
-        "answer": "点击隐藏答案变体"
+        "answer": "公会装扮"
       },
       {
         "question": "通过参与生活职业可以上架交易行赚取什么？",
-        "answer": "点击隐藏答案变体"
+        "answer": "Zeny"
       },
       {
         "question": "进行虔诚祈愿会消耗什么物品？",
-        "answer": "点击隐藏答案变体"
+        "answer": "爱心领宠牌"
       },
       {
         "question": "最多可以出战几个宠物？",
-        "answer": "点击隐藏答案变体"
+        "answer": "4个"
       },
       {
         "question": "公会中有一种职务，只能由女生担任，这个职务是什么？",
-        "answer": "点击隐藏答案变体"
+        "answer": "魅力宝贝"
       },
       {
         "question": "公会工资每周几发放？",
-        "answer": "点击隐藏答案变体"
+        "answer": "周一"
       },
       {
         "question": "有一种可以把自己或他人变身的道具，叫什么名字？",
-        "answer": "点击隐藏答案变体"
+        "answer": "变身魔盒"
       },
       {
         "question": "使用什么药水可以把自己变得巨大？",
-        "answer": "点击隐藏答案变体"
+        "answer": "巨大药水"
       },
       {
         "question": "使用什么药水可以把自己变得迷你？",
-        "answer": "点击隐藏答案变体"
+        "answer": "缩小药水"
       },
       {
         "question": "游戏中有一个地方可以种菜，这是什么功能？",
-        "answer": "点击隐藏答案变体"
+        "answer": "家园"
       },
       {
         "question": "猫手货运最多可以提交几种货物？",
-        "answer": "点击隐藏答案变体"
+        "answer": "8种"
       }
     ],
     "Scholar Exam + Sage Selection": [
       {
         "question": "梦罗克是什么气候类型？",
-        "answer": "点击隐藏答案"
+        "answer": "热带沙漠气候"
       },
       {
         "question": "结婚登记地点在哪个主城？",
-        "answer": "点击隐藏答案"
+        "answer": "普隆德拉"
       },
       {
         "question": "头饰“天使发圈”从哪个怪物身上掉落",
-        "answer": "点击隐藏答案"
+        "answer": "天使波利"
       },
       {
         "question": "组队最多可以几人？",
-        "answer": "点击隐藏答案"
+        "answer": "5人"
       },
       {
         "question": "创建公会需要？",
-        "answer": "点击隐藏答案"
+        "answer": "华丽水晶"
       },
       {
         "question": "公会拍卖后给成员发放的分红是什么？",
-        "answer": "点击隐藏答案"
+        "answer": "星石"
       },
       {
         "question": "野外寻找MVP可使用什么道具？",
-        "answer": "点击隐藏答案"
+        "answer": "苍蝇翅膀"
       },
       {
         "question": "普隆德拉南门的MVP是",
-        "answer": "点击隐藏答案"
+        "answer": "天使波利"
       },
       {
         "question": "波利家园的MVP是",
-        "answer": "点击隐藏答案"
+        "answer": "恶魔波利"
       },
       {
         "question": "下水道二层的MVP是",
-        "answer": "点击隐藏答案"
+        "answer": "黄金虫"
       },
       {
         "question": "蚂蚁洞穴的MVP是",
-        "answer": "点击隐藏答案"
+        "answer": "蚁后"
       },
       {
         "question": "哥布灵森林的MVP是",
-        "answer": "点击隐藏答案"
+        "answer": "哥布灵首领"
       },
       {
         "question": "沉船的MVP是",
-        "answer": "点击隐藏答案"
+        "answer": "海盗之王"
       },
       {
         "question": "梦罗克区域的MVP是",
-        "answer": "点击隐藏答案"
+        "answer": "皮里恩"
       },
       {
         "question": "斐扬区域的MVP是",
-        "answer": "点击隐藏答案"
+        "answer": "虎王"
       },
       {
         "question": "目前一共有几种类型的公会？",
-        "answer": "点击隐藏答案"
+        "answer": "2种"
       },
       {
         "question": "公会刚创建时最多可容纳多少名成员？",
-        "answer": "点击隐藏答案"
+        "answer": "100名"
       },
       {
         "question": "猫手货运至少需要提交几种货物？",
-        "answer": "点击隐藏答案"
+        "answer": "5种"
       },
       {
         "question": "以下哪个属于公会签到？",
-        "answer": "点击隐藏答案"
+        "answer": "语音签到"
       },
       {
         "question": "公会商店的兑换货币是什么？",
-        "answer": "点击隐藏答案"
+        "answer": "功勋"
       },
       {
         "question": "公会修炼需要消耗一种产自公会的货币，是什么？",
-        "answer": "点击隐藏答案"
+        "answer": "公会贡献"
       },
       {
         "question": "当前版本中，生活职业一共有几种？",
-        "answer": "点击隐藏答案"
+        "answer": "7种"
       },
       {
         "question": "以下哪个不是生活职业中的一种职业？",
-        "answer": "点击隐藏答案"
+        "answer": "裁缝"
       },
       {
         "question": "以下哪种途径无法获得活力？",
-        "answer": "点击隐藏答案"
+        "answer": "魔物驱逐"
       },
       {
         "question": "每天可以使用几次人参蜂王浆？",
-        "answer": "点击隐藏答案"
+        "answer": "1次"
       },
       {
         "question": "公会日常任务每天最多可以完成几个？",
-        "answer": "点击隐藏答案"
+        "answer": "10个"
       },
       {
         "question": "以下哪种公会职务不可以自定义修改名称？",
-        "answer": "点击隐藏答案"
+        "answer": "公会小助手"
       },
       {
         "question": "以下哪个功能是当前版本公会没开放的功能？",
-        "answer": "点击隐藏答案"
+        "answer": "公会装扮"
       },
       {
         "question": "通过参与生活职业可以上架交易行赚取什么？",
-        "answer": "点击隐藏答案"
+        "answer": "Zeny"
       },
       {
         "question": "进行虔诚祈愿会消耗什么物品？",
-        "answer": "点击隐藏答案"
+        "answer": "爱心领宠牌"
       },
       {
         "question": "最多可以出战几个宠物？",
-        "answer": "点击隐藏答案"
+        "answer": "4个"
       },
       {
         "question": "公会中有一种职务，只能由女生担任，这个职务是什么？",
-        "answer": "点击隐藏答案"
+        "answer": "魅力宝贝"
       },
       {
         "question": "公会工资每周几发放？",
-        "answer": "点击隐藏答案"
+        "answer": "周一"
       },
       {
         "question": "有一种可以把自己或他人变身的道具，叫什么名字？",
-        "answer": "点击隐藏答案"
+        "answer": "变身魔盒"
       },
       {
         "question": "使用什么药水可以把自己变得巨大？",
-        "answer": "点击隐藏答案"
+        "answer": "巨大药水"
       },
       {
         "question": "使用什么药水可以把自己变得迷你？",
-        "answer": "点击隐藏答案"
+        "answer": "缩小药水"
       },
       {
         "question": "游戏中有一个地方可以种菜，这是什么功能？",
-        "answer": "点击隐藏答案"
+        "answer": "家园"
       },
       {
         "question": "猫手货运最多可以提交几种货物？",
-        "answer": "点击隐藏答案"
+        "answer": "8种"
       },
       {
         "question": "游戏实现了RO系列史上首个什么设计？",
-        "answer": "点击隐藏答案"
+        "answer": "主城无缝大世界"
       },
       {
         "question": "十字军是哪个基础职业的二转分支？",
-        "answer": "点击隐藏答案"
+        "answer": "剑士"
       },
       {
         "question": "武僧是哪个基础职业的二转分支？",
-        "answer": "点击隐藏答案"
+        "answer": "服事"
       },
       {
         "question": "弓箭手职业的绝技名称叫什么名字？",
-        "answer": "点击隐藏答案"
+        "answer": "飞鹰冲击"
       },
       {
         "question": "以下哪个职业不属于公测首发职业？",
-        "answer": "点击隐藏答案"
+        "answer": "十字军"
       },
       {
         "question": "十字军的定位是什么？",
-        "answer": "点击隐藏答案"
+        "answer": "坚实壁垒"
       },
       {
         "question": "武僧的战斗风格偏向什么？",
-        "answer": "点击隐藏答案"
+        "answer": "格斗连击"
       },
       {
         "question": "游戏中的\"情缘系统\"拥有以下哪种功能？",
-        "answer": "点击隐藏答案"
+        "answer": "举办婚礼"
       },
       {
         "question": "以下哪个坐骑是飞行坐骑？",
-        "answer": "点击隐藏答案"
+        "answer": "月冠星轨"
       },
       {
         "question": "以下哪个选项不是家园系统中拥有的？",
-        "answer": "点击隐藏答案"
+        "answer": "魔物驱逐"
       },
       {
         "question": "公会联赛采用什么推进模式？",
-        "answer": "点击隐藏答案"
+        "answer": "三路推进水晶"
       },
       {
         "question": "\"黑白战境\"是什么玩法？",
-        "answer": "点击隐藏答案"
+        "answer": "公会BOSS挑战"
       },
       {
         "question": "服装可以通过以下哪个道具进行DIY改色？",
-        "answer": "点击隐藏答案"
+        "answer": "时尚染料"
       },
       {
         "question": "游戏为减轻玩家负担做了什么设计？",
-        "answer": "点击隐藏答案"
+        "answer": "整合优化每日任务"
       },
       {
         "question": "家园系统中可以建造什么特色建筑？",
-        "answer": "点击隐藏答案"
+        "answer": "过山车"
       },
       {
         "question": "游戏中的\"切磋角斗\"是什么玩法？",
-        "answer": "点击隐藏答案"
+        "answer": "PVP对战"
       },
       {
         "question": "游戏实现了什么天气系统？",
-        "answer": "点击隐藏答案"
+        "answer": "昼夜循环与动态天气"
       },
       {
         "question": "梦罗克主城场景中可以乘坐并飞行的载具叫什么名字？",
-        "answer": "点击隐藏答案"
+        "answer": "气球飞艇"
       },
       {
         "question": "游戏中的\"自由跳跃\"机制让玩家可以探索什么？",
-        "answer": "点击隐藏答案"
+        "answer": "มุมลับตามหลังคาและหอคอย"
       },
       {
         "question": "游戏中的\"月冠星轨\"是什么？",
-        "answer": "点击隐藏答案"
+        "answer": "飞行坐骑"
       },
       {
         "question": "游戏强调的经济环境特点是什么？",
-        "answer": "点击隐藏答案"
+        "answer": "公平开放"
       },
       {
         "question": "游戏中\"0氪玩家也能轻松搬砖\"指的是什么？",
-        "answer": "点击隐藏答案"
+        "answer": "免费玩家也能通过游戏内活动获得资源"
       },
       {
         "question": "公会\"黑白战境\"中掉落的稀有道具如何处理？",
-        "answer": "点击隐藏答案"
+        "answer": "进行竞拍，公会成员瓜分金额"
       },
       {
         "question": "十字军的\"牺牲\"技能效果是什么？",
-        "answer": "点击隐藏答案"
+        "answer": "为队友扛伤"
       },
       {
         "question": "武僧的\"连击流\"特点是什么？",
-        "answer": "点击隐藏答案"
+        "answer": "快速连续攻击"
       },
       {
         "question": "十字军的\"圣十字审判\"是什么类型的技能？",
-        "answer": "点击隐藏答案"
+        "answer": "大范围神圣伤害"
       },
       {
         "question": "武僧的\"阿修罗霸凰拳\"需要什么条件？",
-        "answer": "点击隐藏答案"
+        "answer": "耗尽自身所有魔法值"
       },
       {
         "question": "情缘系统中的\"婚车队伍全城巡游\"是什么？",
-        "answer": "点击隐藏答案"
+        "answer": "婚礼仪式的一部分"
       },
       {
         "question": "\"黑白战境\"中公会成员如何分配稀有道具拍卖的收益？",
-        "answer": "点击隐藏答案"
+        "answer": "瓜分竞拍金额"
       },
       {
         "question": "公会宴会活动中不包含以下哪个环节？",
-        "answer": "点击隐藏答案"
+        "answer": "BOSS挑战"
       },
       {
         "question": "以下哪个选项不包含在公会活动内？",
-        "answer": "点击隐藏答案"
+        "answer": "时空回廊"
       },
       {
         "question": "生活职业系统中不包含以下哪个技能？",
-        "answer": "点击隐藏答案"
+        "answer": "保洁"
       },
       {
         "question": "总成就点数达到1000时可以获得什么奖励？",
-        "answer": "点击隐藏答案"
+        "answer": "表情贴·天波好累哦"
       },
       {
         "question": "以下哪只宠物不是SSR级别？",
-        "answer": "点击隐藏答案"
+        "answer": "鬼女"
       },
       {
         "question": "同契竞技每天能参与几次？",
-        "answer": "点击隐藏答案"
+        "answer": "วาร์ป"
       },
       {
         "question": "每日爱心料理每经过多少秒可以恢复300点HP和50点SP？",
-        "answer": "点击隐藏答案"
+        "answer": "Odin"
       },
       {
         "question": "消耗多少个40级王装残魄可以兑换1个40级的王装宝箱？",
-        "answer": "点击隐藏答案"
+        "answer": "หัวใจแห่งอีเมียร์"
       },
       {
         "question": "多少个铝可以合成1个浓缩铝？",
-        "answer": "点击隐藏答案"
+        "answer": "ปีกเร้นลับ"
       },
       {
         "question": "以下哪座城市是卢恩王国的首都？",
-        "answer": "点击隐藏答案"
+        "answer": "普隆德拉"
       },
       {
         "question": "卡普拉公司的主要业务是？",
-        "answer": "点击隐藏答案"
+        "answer": "传送"
       },
       {
         "question": "卢恩王国的国民主要信仰哪位神明？",
-        "answer": "点击隐藏答案"
+        "answer": "奥丁"
       },
       {
         "question": "阿卢纳贝兹教国的十二祭祀一直寻找的东西是什么？",
-        "answer": "点击隐藏答案"
+        "answer": "伊米尔之心"
       },
       {
         "question": "以下哪个不是隶属于卢恩王国的势力？",
-        "answer": "点击隐藏答案"
+        "answer": "秘密之翼"
       },
       {
         "question": "RO大陆分为三个国家，以下哪个不属于其中之一？",
-        "answer": "点击隐藏答案"
+        "answer": "阿斯加德联邦"
       },
       {
         "question": "请问在故事剧情中，拉斐斯的真实身份是？",
-        "answer": "点击隐藏答案"
+        "answer": "教国间谍"
       },
       {
         "question": "在故事剧情中，伊斯鲁得角斗场的不败剑士名为？",
-        "answer": "点击隐藏答案"
+        "answer": "库伦"
       },
       {
         "question": "请问故事中塞尼亚在经历下水道事件后，看到以下哪种颜色的东西可能会生理性反胃？",
-        "answer": "点击隐藏答案"
+        "answer": "金色"
       },
       {
         "question": "故事剧情中，兽人族怨恨哥布灵的原因是什么？",
-        "answer": "点击隐藏答案"
+        "answer": "被炸了祖坟"
       },
       {
         "question": "请问吉芬士兵的头盔是什么形状的？",
-        "answer": "点击隐藏答案"
+        "answer": "鸟嘴状"
       },
       {
         "question": "以下哪样东西曾经在艾尔贝塔的东边起重机的吊钩上出现过？",
-        "answer": "点击隐藏答案"
+        "answer": "小孩"
       },
       {
         "question": "请问在艾尔贝塔最高的天使女神雕像的顶部有什么物品？",
-        "answer": "点击隐藏答案"
+        "answer": "宝箱"
       },
       {
         "question": "梦罗克的房顶上最常出现什么？",
-        "answer": "点击隐藏答案"
+        "answer": "Morroc"
       },
       {
         "question": "铁匠公会位于哪个地图中？",
-        "answer": "点击隐藏答案"
+        "answer": "艾尔贝塔"
       },
       {
         "question": "魔法师公会位于哪个地图中？",
-        "answer": "点击隐藏答案"
+        "answer": "吉芬"
       },
       {
         "question": "剑士公会位于哪个地图中？",
-        "answer": "点击隐藏答案"
+        "answer": "伊斯鲁德"
       },
       {
         "question": "可以从哪个地图进入海底洞窟？",
-        "answer": "点击隐藏答案"
+        "answer": "柏伊亚兰岛"
       },
       {
         "question": "可以从哪个地图进入斯芬克斯一层？",
-        "answer": "点击隐藏答案"
+        "answer": "梦罗克"
       },
       {
         "question": "下水道位于哪个地图的野外？",
-        "answer": "点击隐藏答案"
+        "answer": "普隆德拉"
       },
       {
         "question": "下列哪部是《哈利波特》系列小说的作者？",
-        "answer": "点击隐藏答案"
+        "answer": "J.K.罗琳"
       },
       {
         "question": "电影《泰坦尼克号》的主题曲《我心永恒》的演唱者是？",
-        "answer": "点击隐藏答案"
+        "answer": "席琳·迪翁"
       },
       {
         "question": "电影《复仇者联盟》中，钢铁侠的扮演者是？",
-        "answer": "点击隐藏答案"
+        "answer": "小罗伯特·唐尼"
       },
       {
         "question": "《小王子》的作者来自哪个国家？",
-        "answer": "点击隐藏答案"
+        "answer": "法国"
       },
       {
         "question": "动画电影《冰雪奇缘》中，Elsa 演唱的经典歌曲是？",
-        "answer": "点击隐藏答案"
+        "answer": "《Let It Go》"
       },
       {
         "question": "电影《阿凡达》的导演是？",
-        "answer": "点击隐藏答案"
+        "answer": "詹姆斯·卡梅隆"
       },
       {
         "question": "动画《哆啦A梦》中，哆啦A梦来自哪个年代？",
-        "answer": "点击隐藏答案"
+        "answer": "22世纪"
       },
       {
         "question": "下列哪部是安徒生的童话作品？",
-        "answer": "点击隐藏答案"
+        "answer": "《卖火柴的小女孩》"
       },
       {
         "question": "电影《星际穿越》的核心主题是？",
-        "answer": "点击隐藏答案"
+        "answer": "亲情"
       },
       {
         "question": "《格林童话》中不包含下列哪个故事？",
-        "answer": "点击隐藏答案"
+        "answer": "《海的女儿》"
       },
       {
         "question": "电影《哈利波特与魔法石》中，哈利的魔杖芯是？",
-        "answer": "点击隐藏答案"
+        "answer": "凤凰羽毛"
       },
       {
         "question": "《福尔摩斯探案集》的作者是？",
-        "answer": "点击隐藏答案"
+        "answer": "柯南·道尔"
       },
       {
         "question": "动画《海贼王》中，主角路飞的梦想是？",
-        "answer": "点击隐藏答案"
+        "answer": "成为海贼王"
       },
       {
         "question": "电影《变形金刚》中，正义的机器人阵营是？",
-        "answer": "点击隐藏答案"
+        "answer": "汽车人"
       },
       {
         "question": "《老人与海》的作者是？",
-        "answer": "点击隐藏答案"
+        "answer": "海明威"
       },
       {
         "question": "电影《泰坦尼克号》中，男女主角的名字是？",
-        "answer": "点击隐藏答案"
+        "answer": "杰克与露丝"
       },
       {
         "question": "动画《火影忍者》中，鸣人最擅长的忍术是？",
-        "answer": "点击隐藏答案"
+        "answer": "螺旋丸"
       },
       {
         "question": "《格林童话》的作者是？",
-        "answer": "点击隐藏答案"
+        "answer": "格林兄弟"
       },
       {
         "question": "电影《复仇者联盟4》中，钢铁侠打响指时说的台词是？",
-        "answer": "点击隐藏答案"
+        "answer": "我是钢铁侠"
       },
       {
         "question": "《飘》（《乱世佳人》）的故事背景是？",
-        "answer": "点击隐藏答案"
+        "answer": "美国南北战争"
       },
       {
         "question": "电影《狮子王》中，主角辛巴的父亲是？",
-        "answer": "点击隐藏答案"
+        "answer": "木法沙"
       },
       {
         "question": "下列哪部是村上春树的作品？",
-        "answer": "点击隐藏答案"
+        "answer": "《挪威的森林》"
       },
       {
         "question": "动画《樱桃小丸子》的主角小丸子的全名是？",
-        "answer": "点击隐藏答案"
+        "answer": "樱桃子"
       },
       {
         "question": "王尔德的童话代表作是？",
-        "answer": "点击隐藏答案"
+        "answer": "《快乐王子》"
       },
       {
         "question": "电影《哈利波特》中，霍格沃茨魔法学校的校长是？",
-        "answer": "点击隐藏答案"
+        "answer": "邓布利多"
       },
       {
         "question": "动画《名侦探柯南》中，柯南的真实身份是？",
-        "answer": "点击隐藏答案"
+        "answer": "工藤新一"
       },
       {
         "question": "下列哪部是莫泊桑的短篇小说？",
-        "answer": "点击隐藏答案"
+        "answer": "《项链》"
       },
       {
         "question": "电影《速度与激情》系列的核心主题是？",
-        "answer": "点击隐藏答案"
+        "answer": "赛车与友情"
       },
       {
         "question": "《麦琪的礼物》的作者是？",
-        "answer": "点击隐藏答案"
+        "answer": "欧·亨利"
       },
       {
         "question": "动画《哆啦A梦》中，大雄的好朋友不包括？",
-        "answer": "点击隐藏答案"
+        "answer": "柯南"
       },
       {
         "question": "欧·亨利的作品最突出的特点是？",
-        "answer": "点击隐藏答案"
+        "answer": "反转结局"
       },
       {
         "question": "电影《阿凡达》中，主角杰克最终变成了什么？",
-        "answer": "点击隐藏答案"
+        "answer": "纳美人"
       },
       {
         "question": "《汤姆·索亚历险记》的作者是？",
-        "answer": "点击隐藏答案"
+        "answer": "马克·吐温"
       },
       {
         "question": "马克·吐温是哪个国家的作家？",
-        "answer": "点击隐藏答案"
+        "answer": "美国"
       },
       {
         "question": "电影《冰雪奇缘2》中，Elsa 寻找的真相是？",
-        "answer": "点击隐藏答案"
+        "answer": "魔法的来源"
       },
       {
         "question": "《格列佛游记》的作者是？",
-        "answer": "点击隐藏答案"
+        "answer": "斯威夫特"
       },
       {
         "question": "动画《海贼王》中，路飞的果实能力是？",
-        "answer": "点击隐藏答案"
+        "answer": "橡胶果实"
       },
       {
         "question": "下列哪部是狄更斯的作品？",
-        "answer": "点击隐藏答案"
+        "answer": "《雾都孤儿》"
       },
       {
         "question": "电影《星际穿越》中，主角穿越的是？",
-        "answer": "点击隐藏答案"
+        "answer": "时间与空间"
       },
       {
         "question": "《简·爱》的作者是？",
-        "answer": "点击隐藏答案"
+        "answer": "夏洛蒂·勃朗特"
       },
       {
         "question": "《傲慢与偏见》的作者是？",
-        "answer": "点击隐藏答案"
+        "answer": "简·奥斯汀"
       },
       {
         "question": "电影《哈利波特与密室》中，打开密室的是？",
-        "answer": "点击隐藏答案"
+        "answer": "汤姆·里德尔"
       },
       {
         "question": "动画《火影忍者》中，宇智波鼬的弟弟是？",
-        "answer": "点击隐藏答案"
+        "answer": "宇智波佐助"
       },
       {
         "question": "《挪威的森林》讲述的是哪种类型的故事？",
-        "answer": "点击隐藏答案"
+        "answer": "爱情"
       },
       {
         "question": "电影《变形金刚》中，擎天柱的武器是？",
-        "answer": "点击隐藏答案"
+        "answer": "激光剑"
       },
       {
         "question": "《雪国》的作者是？",
-        "answer": "点击隐藏答案"
+        "answer": "川端康成"
       },
       {
         "question": "动画《樱桃小丸子》中，小丸子的爷爷名叫？",
-        "answer": "点击隐藏答案"
+        "answer": "樱友藏"
       },
       {
         "question": "夏目漱石的代表作是？",
-        "answer": "点击隐藏答案"
+        "answer": "《我是猫》"
       },
       {
         "question": "电影《狮子王》中，刀疤是辛巴的？",
-        "answer": "点击隐藏答案"
+        "answer": "叔叔"
       },
       {
         "question": "《战争与和平》的作者是？",
-        "answer": "点击隐藏答案"
+        "answer": "托尔斯泰"
       },
       {
         "question": "下列哪部是雨果的作品？",
-        "answer": "点击隐藏答案"
+        "answer": "《悲惨世界》"
       },
       {
         "question": "动画《名侦探柯南》中，毛利兰的擅长的技能是？",
-        "answer": "点击隐藏答案"
+        "answer": "空手道"
       },
       {
         "question": "《巴黎圣母院》的作者是？",
-        "answer": "点击隐藏答案"
+        "answer": "雨果"
       },
       {
         "question": "电影《速度与激情7》中，致敬保罗·沃克的歌曲是？",
-        "answer": "点击隐藏答案"
+        "answer": "《See You Again》"
       },
       {
         "question": "《红与黑》的作者是？",
-        "answer": "点击隐藏答案"
+        "answer": "司汤达"
       },
       {
         "question": "动画《哆啦A梦》中，哆啦A梦的口袋里装的是？",
-        "answer": "点击隐藏答案"
+        "answer": "各种道具"
       },
       {
         "question": "巴尔扎克的代表作是？",
-        "answer": "点击隐藏答案"
+        "answer": "《人间喜剧》"
       },
       {
         "question": "电影《复仇者联盟》中，雷神的武器是？",
-        "answer": "点击隐藏答案"
+        "answer": "雷神之锤"
       },
       {
         "question": "大仲马的代表作是？",
-        "answer": "点击隐藏答案"
+        "answer": "《三个火枪手》"
       },
       {
         "question": "动画《海贼王》中，索隆的梦想是成为？",
-        "answer": "点击隐藏答案"
+        "answer": "最强剑客"
       },
       {
         "question": "电影《哈利波特》中，赫敏的宠物是？",
-        "answer": "点击隐藏答案"
+        "answer": "กระต่ายกับเต่า"
       },
       {
         "question": "动画《火影忍者》中，鸣人最终成为了？",
-        "answer": "点击隐藏答案"
+        "answer": "火影"
       },
       {
         "question": "电影《泰坦尼克号》中，泰坦尼克号沉没的年份是？",
-        "answer": "点击隐藏答案"
+        "answer": "1912年"
       },
       {
         "question": "动画《名侦探柯南》中，怪盗基德的真实身份是？",
-        "answer": "点击隐藏答案"
+        "answer": "黑羽快斗"
       },
       {
         "question": "电影《阿凡达》中，纳美人居住的星球是？",
-        "answer": "点击隐藏答案"
+        "answer": "潘多拉星球"
       },
       {
         "question": "《伊索寓言》中最经典的故事是？",
-        "answer": "点击隐藏答案"
+        "answer": "龟兔赛跑"
       },
       {
         "question": "下列哪部是日本作家芥川龙之介的作品？",
-        "answer": "点击隐藏答案"
+        "answer": "《罗生门》"
       },
       {
         "question": "动画《冰雪奇缘》中，Anna的未婚夫是？",
-        "answer": "点击隐藏答案"
+        "answer": "汉斯"
       },
       {
         "question": "《罗生门》讲述的是哪种类型的故事？",
-        "answer": "点击隐藏答案"
+        "answer": "悬疑"
       },
       {
         "question": "电影《星际穿越》中，主角女儿的名字是？",
-        "answer": "点击隐藏答案"
+        "answer": "墨菲"
       },
       {
         "question": "下列哪部是美国作家塞林格的作品？",
-        "answer": "点击隐藏答案"
+        "answer": "《麦田里的守望者》"
       },
       {
         "question": "动画《海贼王》中，娜美的职业是？",
-        "answer": "点击隐藏答案"
+        "answer": "航海士"
       },
       {
         "question": "《麦田里的守望者》的主角是？",
-        "answer": "点击隐藏答案"
+        "answer": "霍尔顿"
       },
       {
         "question": "电影《复仇者联盟3》中，灭霸的目标是？",
-        "answer": "点击隐藏答案"
+        "answer": "集齐无限宝石"
       },
       {
         "question": "15 + 27 =？",
-        "answer": "点击隐藏答案"
+        "answer": "เท่า"
       },
       {
         "question": "56 − 38 =？",
-        "answer": "点击隐藏答案"
+        "answer": "11/12"
       },
       {
         "question": "18 × 4 =？",
-        "answer": "点击隐藏答案"
+        "answer": "7/24"
       },
       {
         "question": "72 ÷ 8 =？",
-        "answer": "点击隐藏答案"
+        "answer": "2/5"
       },
       {
         "question": "33 + 49 =？",
-        "answer": "点击隐藏答案"
+        "answer": "6/7"
       },
       {
         "question": "90 − 56 =？",
-        "answer": "点击隐藏答案"
+        "answer": "3/8"
       },
       {
         "question": "25 × 6 =？",
-        "answer": "点击隐藏答案"
+        "answer": "13/9"
       },
       {
         "question": "84 ÷ 12 =？",
-        "answer": "点击隐藏答案"
+        "answer": "3/10"
       },
       {
         "question": "47 + 35 =？",
-        "answer": "点击隐藏答案"
+        "answer": "1/2"
       },
       {
         "question": "100 − 63 =？",
-        "answer": "点击隐藏答案"
+        "answer": "5/8"
       },
       {
         "question": "一个长方形的长是7厘米，宽是4厘米，它的面积是多少平方厘米？",
-        "answer": "点击隐藏答案"
+        "answer": "100℃"
       },
       {
         "question": "一个正方形的边长是6厘米，它的周长是多少厘米？",
-        "answer": "点击隐藏答案"
+        "answer": "0℃"
       },
       {
         "question": "一个三角形的内角和是多少度？",
-        "answer": "点击隐藏答案"
+        "answer": "180°"
       },
       {
         "question": "一个圆的直径是10厘米，它的半径是多少厘米？",
-        "answer": "点击隐藏答案"
+        "answer": "แสงแดด"
       },
       {
         "question": "一个长方体的长、宽、高分别是3cm、4cm、5cm，它的体积是多少cm³？",
-        "answer": "点击隐藏答案"
+        "answer": "ผลไม้"
       },
       {
         "question": "一个等腰三角形的顶角是80°，它的一个底角是多少度？",
-        "answer": "点击隐藏答案"
+        "answer": "50°"
       },
       {
         "question": "一个圆的周长公式是C=2πr，半径r=4厘米，周长约是多少厘米（π取3.14）？",
-        "answer": "点击隐藏答案"
+        "answer": "25.12"
       },
       {
         "question": "一个正方形的面积是49平方厘米，它的边长是多少厘米？",
-        "answer": "点击隐藏答案"
+        "answer": "โปรตีน"
       },
       {
         "question": "一个长方形的周长是30厘米，长是9厘米，宽是多少厘米？",
-        "answer": "点击隐藏答案"
+        "answer": "ฟัน"
       },
       {
         "question": "一个正方体的棱长是5厘米，它的体积是多少立方厘米？",
-        "answer": "点击隐藏答案"
+        "answer": "ครั้ง"
       },
       {
         "question": "一个圆的面积公式是S=πr²，半径r=5厘米，面积约是多少平方厘米（π取3.14）？",
-        "answer": "点击隐藏答案"
+        "answer": "78.5"
       },
       {
         "question": "一个三角形的三条边分别是5cm、12cm、13cm，这个三角形是？",
-        "answer": "点击隐藏答案"
+        "answer": "直角三角形"
       },
       {
         "question": "一个长方体的长8cm、宽6cm、高5cm，它的表面积是多少cm²？",
-        "answer": "点击隐藏答案"
+        "answer": "เหนือ"
       },
       {
         "question": "一个等边三角形的每个角是多少度？",
-        "answer": "点击隐藏答案"
+        "answer": "60°"
       },
       {
         "question": "一个圆的直径是8厘米，它的周长约是多少厘米（π取3.14）？",
-        "answer": "点击隐藏答案"
+        "answer": "25.12"
       },
       {
         "question": "一个正方体的表面积是150平方厘米，它的棱长是多少厘米？",
-        "answer": "点击隐藏答案"
+        "answer": "สะสมอาหาร"
       },
       {
         "question": "一个长方形的面积是60平方厘米，宽是5厘米，长是多少厘米？",
-        "answer": "点击隐藏答案"
+        "answer": "หนอน"
       },
       {
         "question": "一个三角形中，有一个角是90°，这个三角形是？",
-        "answer": "点击隐藏答案"
+        "answer": "直角三角形"
       },
       {
         "question": "一个长方体的棱长总和是48厘米，长、宽、高的比是3:2:1，它的长是多少厘米？",
-        "answer": "点击隐藏答案"
+        "answer": "ตัดแหล่งจ่ายไฟ"
       },
       {
         "question": "一个圆的半径扩大到原来的2倍，它的周长扩大到原来的多少倍？",
-        "answer": "点击隐藏答案"
+        "answer": "2倍"
       },
       {
         "question": "4.6 + 3.8 =？",
-        "answer": "点击隐藏答案"
+        "answer": "8.4"
       },
       {
         "question": "7.2 − 2.5 =？",
-        "answer": "点击隐藏答案"
+        "answer": "4.7"
       },
       {
         "question": "2.5 × 3.6 =？",
-        "answer": "点击隐藏答案"
+        "answer": "7-8 ชั่วโมง"
       },
       {
         "question": "9.6 ÷ 1.6 =？",
-        "answer": "点击隐藏答案"
+        "answer": "ชาเข้ม"
       },
       {
         "question": "3/4 + 1/6 =？",
-        "answer": "点击隐藏答案"
+        "answer": "11/12"
       },
       {
         "question": "5/8 − 1/3 =？",
-        "answer": "点击隐藏答案"
+        "answer": "7/24"
       },
       {
         "question": "2/3 × 3/5 =？",
-        "answer": "点击隐藏答案"
+        "answer": "2/5"
       },
       {
         "question": "4/7 ÷ 2/3 =？",
-        "answer": "点击隐藏答案"
+        "answer": "6/7"
       },
       {
         "question": "0.375转化为分数是？",
-        "answer": "点击隐藏答案"
+        "answer": "3/8"
       },
       {
         "question": "5/6转化为小数约是？",
-        "answer": "点击隐藏答案"
+        "answer": "0.83"
       },
       {
         "question": "6.3 × 0.4 =？",
-        "answer": "点击隐藏答案"
+        "answer": "2.52"
       },
       {
         "question": "8.4 ÷ 0.7 =？",
-        "answer": "点击隐藏答案"
+        "answer": "โรคลมแดด"
       },
       {
         "question": "7/9 + 2/3 =？",
-        "answer": "点击隐藏答案"
+        "answer": "13/9"
       },
       {
         "question": "3/5 − 3/10 =？",
-        "answer": "点击隐藏答案"
+        "answer": "3/10"
       },
       {
         "question": "5/8 × 4/5 =？",
-        "answer": "点击隐藏答案"
+        "answer": "1/2"
       },
       {
         "question": "3/4 ÷ 3/8 =？",
-        "answer": "点击隐藏答案"
+        "answer": "ขยะเปียก"
       },
       {
         "question": "0.625转化为分数是？",
-        "answer": "点击隐藏答案"
+        "answer": "5/8"
       },
       {
         "question": "7/10转化为小数是？",
-        "answer": "点击隐藏答案"
+        "answer": "0.7"
       },
       {
         "question": "9.8 + 2.05 =？",
-        "answer": "点击隐藏答案"
+        "answer": "11.85"
       },
       {
         "question": "10 − 3.78 =？",
-        "answer": "点击隐藏答案"
+        "answer": "6.22"
       },
       {
         "question": "18和24的最大公因数是？",
-        "answer": "点击隐藏答案"
+        "answer": "เศษกระดาษ"
       },
       {
         "question": "24和36的最小公倍数是？",
-        "answer": "点击隐藏答案"
+        "answer": "ตัดแหล่งจ่ายไฟ"
       },
       {
         "question": "下列哪个数是质数？",
-        "answer": "点击隐藏答案"
+        "answer": "หลบใต้โต๊ะที่แข็งแรง"
       },
       {
         "question": "下列哪个数是合数？",
-        "answer": "点击隐藏答案"
+        "answer": "ดื่มชาร้อน"
       },
       {
         "question": "1米等于多少厘米？",
-        "answer": "点击隐藏答案"
+        "answer": "น้ำมันเบนซิน"
       },
       {
         "question": "1吨等于多少千克？",
-        "answer": "点击隐藏答案"
+        "answer": "ยุงกัด"
       },
       {
         "question": "1升等于多少毫升？",
-        "answer": "点击隐藏答案"
+        "answer": "ชามโลหะหรือภาชนะที่มีขอบโลหะ"
       },
       {
         "question": "3米5分米等于多少米？",
-        "answer": "点击隐藏答案"
+        "answer": "3.5"
       },
       {
         "question": "2千克300克等于多少千克？",
-        "answer": "点击隐藏答案"
+        "answer": "2.3"
       },
       {
         "question": "5升200毫升等于多少升？",
-        "answer": "点击隐藏答案"
+        "answer": "5.2"
       },
       {
         "question": "36和48的最大公因数是？",
-        "answer": "点击隐藏答案"
+        "answer": "วิตามิน D"
       },
       {
         "question": "15和25的最小公倍数是？",
-        "answer": "点击隐藏答案"
+        "answer": "เกมยิงมุมมองบุคคลที่หนึ่ง"
       },
       {
         "question": "下列哪个数能被3整除？",
-        "answer": "点击隐藏答案"
+        "answer": "เกมสวมบทบาท"
       },
       {
         "question": "下列哪个数能被5整除？",
-        "answer": "点击隐藏答案"
+        "answer": "เกมวางแผนการรบออนไลน์แบบหลายผู้เล่น"
       },
       {
         "question": "4分米等于多少米？",
-        "answer": "点击隐藏答案"
+        "answer": "0.4"
       },
       {
         "question": "8吨50千克等于多少吨？",
-        "answer": "点击隐藏答案"
+        "answer": "8.05"
       },
       {
         "question": "3立方米等于多少立方分米？",
-        "answer": "点击隐藏答案"
+        "answer": "ดาเมจวงกว้าง"
       },
       {
         "question": "6厘米等于多少毫米？",
-        "answer": "点击隐藏答案"
+        "answer": "คูลดาวน์สกิล"
       },
       {
         "question": "1小时等于多少分钟？",
-        "answer": "点击隐藏答案"
+        "answer": "เอฟเฟกต์บัฟ"
       },
       {
         "question": "1天等于多少小时？",
-        "answer": "点击隐藏答案"
+        "answer": "เอฟเฟกต์ดีบัฟ"
       },
       {
         "question": "一个数的3倍是27，这个数是多少？",
-        "answer": "点击隐藏答案"
+        "answer": "ตัวละครที่ไม่ใช่ผู้เล่น"
       },
       {
         "question": "比4.8多2.7的数是多少？",
-        "answer": "点击隐藏答案"
+        "answer": "7.5"
       },
       {
         "question": "比10少3.5的数是多少？",
-        "answer": "点击隐藏答案"
+        "answer": "6.5"
       },
       {
         "question": "一个数除以6商是8，余数是3，这个数是多少？",
-        "answer": "点击隐藏答案"
+        "answer": "ไนโตรเจน"
       },
       {
         "question": "一个数的5倍比30多5，这个数是多少？",
-        "answer": "点击隐藏答案"
+        "answer": "ระยะทาง"
       },
       {
         "question": "小明有25元，买笔记本花了8.5元，还剩多少元？",
-        "answer": "点击隐藏答案"
+        "answer": "16.5"
       },
       {
         "question": "一支钢笔12.8元，买3支这样的钢笔需要多少元？",
-        "answer": "点击隐藏答案"
+        "answer": "38.4"
       },
       {
         "question": "一堆货物重4.5吨，每次运0.5吨，需要运多少次？",
-        "answer": "点击隐藏答案"
+        "answer": "สกิน"
       },
       {
         "question": "长方形菜地的长是12米，宽是8米，这块菜地的面积是多少平方米？",
-        "answer": "点击隐藏答案"
+        "answer": "ถุงลมปลา"
       },
       {
         "question": "一个正方体的棱长是4厘米，它的表面积是多少平方厘米？",
-        "answer": "点击隐藏答案"
+        "answer": "4℃"
       },
       {
         "question": "一根绳子长20米，用去3/5，还剩多少米？",
-        "answer": "点击隐藏答案"
+        "answer": "ออกลูกเป็นตัวและเลี้ยงลูกด้วยนม"
       },
       {
         "question": "一个长方形的周长是28厘米，长是宽的3倍，宽是多少厘米？",
-        "answer": "点击隐藏答案"
+        "answer": "3.5"
       },
       {
         "question": "小明每分钟走60米，他15分钟能走多少米？",
-        "answer": "点击隐藏答案"
+        "answer": "การหักเหและการกระจายแสง"
       },
       {
         "question": "一个圆的半径是3厘米，它的面积约是多少平方厘米（π取3.14）？",
-        "answer": "点击隐藏答案"
+        "answer": "28.26"
       },
       {
         "question": "一瓶饮料有1.2升，倒出0.3升后，还剩多少升？",
-        "answer": "点击隐藏答案"
+        "answer": "0.9"
       },
       {
         "question": "一个数的4倍是36，这个数的5倍是多少？",
-        "answer": "点击隐藏答案"
+        "answer": "37℃"
       },
       {
         "question": "一块三角形菜地，底是10米，高是6米，它的面积是多少平方米？",
-        "answer": "点击隐藏答案"
+        "answer": "ยาง"
       },
       {
         "question": "小明买了4千克苹果，每千克5.8元，一共花了多少元？",
-        "answer": "点击隐藏答案"
+        "answer": "23.2"
       },
       {
         "question": "一个长方体的长5cm、宽4cm、高3cm，它的棱长总和是多少cm？",
-        "answer": "点击隐藏答案"
+        "answer": "ขั้วเดียวกัน"
       },
       {
         "question": "一根铁丝长48厘米，围成一个正方形，这个正方形的边长是多少厘米？",
-        "answer": "点击隐藏答案"
+        "answer": "ดวงจันทร์"
       },
       {
         "question": "比7.2多1.8的数是多少？",
-        "answer": "点击隐藏答案"
+        "answer": "9.0"
       },
       {
         "question": "一个数除以8商是7，余数是4，这个数是多少？",
-        "answer": "点击隐藏答案"
+        "answer": "แมว"
       },
       {
         "question": "一堆煤重10吨，用去4.5吨，还剩多少吨？",
-        "answer": "点击隐藏答案"
+        "answer": "5.5"
       },
       {
         "question": "一个圆的直径是6厘米，它的周长约是多少厘米（π取3.14）？",
-        "answer": "点击隐藏答案"
+        "answer": "18.84"
       },
       {
         "question": "一个数的6倍比40少4，这个数是多少？",
-        "answer": "点击隐藏答案"
+        "answer": "100℃"
       },
       {
         "question": "长方形的长是15米，宽是长的2/3，宽是多少米？",
-        "answer": "点击隐藏答案"
+        "answer": "ตัดแหล่งจ่ายไฟ"
       },
       {
         "question": "一个正方体的体积是64立方厘米，它的棱长是多少厘米？",
-        "answer": "点击隐藏答案"
+        "answer": "โลหะ"
       },
       {
         "question": "小明每分钟走55米，他走1320米需要多少分钟？",
-        "answer": "点击隐藏答案"
+        "answer": "โรคลักปิดลักเปิด"
       },
       {
         "question": "一个三角形的底是8厘米，高是6厘米，它的面积是多少平方厘米？",
-        "answer": "点击隐藏答案"
+        "answer": "หลบเข้าที่ร่ม"
       },
       {
         "question": "小明有36元，买每本4.5元的笔记本，最多能买多少本？",
-        "answer": "点击隐藏答案"
+        "answer": "ไข่ไก่"
       },
       {
         "question": "水的沸点在标准大气压下约为？",
-        "answer": "点击隐藏答案"
+        "answer": "100℃"
       },
       {
         "question": "水结冰的温度是？",
-        "answer": "点击隐藏答案"
+        "answer": "0℃"
       },
       {
         "question": "下列哪种气体是我们呼吸必需的？",
-        "answer": "点击隐藏答案"
+        "answer": "氧气"
       },
       {
         "question": "植物进行光合作用离不开？",
-        "answer": "点击隐藏答案"
+        "answer": "阳光"
       },
       {
         "question": "苹果、橘子属于？",
-        "answer": "点击隐藏答案"
+        "answer": "水果"
       },
       {
         "question": "白菜、萝卜属于？",
-        "answer": "点击隐藏答案"
+        "answer": "蔬菜"
       },
       {
         "question": "大米、面粉主要为我们提供？",
-        "answer": "点击隐藏答案"
+        "answer": "碳水化合物"
       },
       {
         "question": "牛奶、鸡蛋富含？",
-        "answer": "点击隐藏答案"
+        "answer": "蛋白质"
       },
       {
         "question": "人体最坚硬的部位是？",
-        "answer": "点击隐藏答案"
+        "answer": "牙齿"
       },
       {
         "question": "正常成年人安静心率每分钟大约？",
-        "answer": "点击隐藏答案"
+        "answer": "70次"
       },
       {
         "question": "一天中，太阳在哪个方向升起？",
-        "answer": "点击隐藏答案"
+        "answer": "ข้าวโอ๊ต"
       },
       {
         "question": "太阳通常在哪个方向落下？",
-        "answer": "点击隐藏答案"
+        "answer": "ล้างด้วยน้ำเย็น"
       },
       {
         "question": "指南针红色指针一般指向？",
-        "answer": "点击隐藏答案"
+        "answer": "ถ่านกัมมันต์"
       },
       {
         "question": "下雨前，蚂蚁通常会？",
-        "answer": "点击隐藏答案"
+        "answer": "往高处搬"
       },
       {
         "question": "下列哪种动物会冬眠？",
-        "answer": "点击隐藏答案"
+        "answer": "乌龟"
       },
       {
         "question": "蜜蜂采蜜主要是为了？",
-        "answer": "点击隐藏答案"
+        "answer": "储存食物"
       },
       {
         "question": "蝴蝶是由什么变来的？",
-        "answer": "点击隐藏答案"
+        "answer": "毛毛虫"
       },
       {
         "question": "青蛙小时候叫？",
-        "answer": "点击隐藏答案"
+        "answer": "蝌蚪"
       },
       {
         "question": "遇到触电，首先应该？",
-        "answer": "点击隐藏答案"
+        "answer": "切断电源"
       },
       {
         "question": "油锅起火，正确做法是？",
-        "answer": "点击隐藏答案"
+        "answer": "盖锅盖"
       },
       {
         "question": "夏天出汗多，应多补充？",
-        "answer": "点击隐藏答案"
+        "answer": "水分和盐分"
       },
       {
         "question": "刷牙主要是为了？",
-        "answer": "点击隐藏答案"
+        "answer": "清洁口腔、防蛀牙"
       },
       {
         "question": "正常成年人每天应睡大约？",
-        "answer": "点击隐藏答案"
+        "answer": "7-8小时"
       },
       {
         "question": "空腹不宜大量喝？",
-        "answer": "点击隐藏答案"
+        "answer": "浓茶"
       },
       {
         "question": "维生素C含量较高的是？",
-        "answer": "点击隐藏答案"
+        "answer": "新鲜水果"
       },
       {
         "question": "钙主要对人体哪部分有益？",
-        "answer": "点击隐藏答案"
+        "answer": "骨骼牙齿"
       },
       {
         "question": "近视主要与哪个器官有关？",
-        "answer": "点击隐藏答案"
+        "answer": "眼睛"
       },
       {
         "question": "看电视、用电脑时，光线应？",
-        "answer": "点击隐藏答案"
+        "answer": "柔和明亮"
       },
       {
         "question": "彩虹一般出现在？",
-        "answer": "点击隐藏答案"
+        "answer": "雨后晴天"
       },
       {
         "question": "霜一般出现在？",
-        "answer": "点击隐藏答案"
+        "answer": "寒冷清晨"
       },
       {
         "question": "电池正极符号是？",
@@ -6423,179 +5627,179 @@
       },
       {
         "question": "被猫狗抓伤咬伤，应及时？",
-        "answer": "点击隐藏答案"
+        "answer": "打疫苗"
       },
       {
         "question": "夏天高温，长时间暴晒容易？",
-        "answer": "点击隐藏答案"
+        "answer": "中暑"
       },
       {
         "question": "下列哪种是可再生能源？",
-        "answer": "点击隐藏答案"
+        "answer": "太阳能"
       },
       {
         "question": "废旧电池应该？",
-        "answer": "点击隐藏答案"
+        "answer": "分类回收"
       },
       {
         "question": "塑料瓶属于？",
-        "answer": "点击隐藏答案"
+        "answer": "可回收垃圾"
       },
       {
         "question": "苹果核属于？",
-        "answer": "点击隐藏答案"
+        "answer": "厨余垃圾"
       },
       {
         "question": "感冒时应？",
-        "answer": "点击隐藏答案"
+        "answer": "多休息多喝水"
       },
       {
         "question": "洗手最好用？",
-        "answer": "点击隐藏答案"
+        "answer": "流动清水 + 肥皂"
       },
       {
         "question": "台风天不应该做什么？",
-        "answer": "点击隐藏答案"
+        "answer": "靠近窗户"
       },
       {
         "question": "冰箱冷藏室的适宜温度大约是？",
-        "answer": "点击隐藏答案"
+        "answer": "4℃"
       },
       {
         "question": "以下哪种垃圾属于可回收物？",
-        "answer": "点击隐藏答案"
+        "answer": "废纸张"
       },
       {
         "question": "遇到有人触电，首先应该做什么？",
-        "answer": "点击隐藏答案"
+        "answer": "切断电源"
       },
       {
         "question": "地震时如果在室内，应该怎么做？",
-        "answer": "点击隐藏答案"
+        "answer": "躲到坚固的桌子下"
       },
       {
         "question": "中暑的急救措施不包括？",
-        "answer": "点击隐藏答案"
+        "answer": "喝热茶"
       },
       {
         "question": "以下哪种是易燃易爆物品？",
-        "answer": "点击隐藏答案"
+        "answer": "汽油"
       },
       {
         "question": "登革热主要是通过什么传播的？",
-        "answer": "点击隐藏答案"
+        "answer": "蚊子叮咬"
       },
       {
         "question": "使用微波炉加热食物时，应避免使用哪种容器？",
-        "answer": "点击隐藏答案"
+        "answer": "金属碗或有金属镶边的容器"
       },
       {
         "question": "发生大地震时，如果在公共场所（如商场），首先应该？",
-        "answer": "点击隐藏答案"
+        "answer": "躲到结实的柜台或柱子旁"
       },
       {
         "question": "处理流鼻血的正确方法是？",
-        "answer": "点击隐藏答案"
+        "answer": "用手捏住鼻翼上方，身体微微前倾"
       },
       {
         "question": "在户外遇到打雷闪电，最安全的做法是？",
-        "answer": "点击隐藏答案"
+        "answer": "跑到空旷地带蹲下，减少与地面的接触"
       },
       {
         "question": "为了预防骨质疏松，除了补钙，还应适当补充什么？",
-        "answer": "点击隐藏答案"
+        "answer": "维生素D"
       },
       {
         "question": "FPS游戏指的是？",
-        "answer": "点击隐藏答案"
+        "answer": "第一人称射击"
       },
       {
         "question": "RPG游戏的中文意思是？",
-        "answer": "点击隐藏答案"
+        "answer": "角色扮演游戏"
       },
       {
         "question": "MOBA 游戏核心玩法是？",
-        "answer": "点击隐藏答案"
+        "answer": "多人在线战术竞技"
       },
       {
         "question": "游戏里 HP 代表？",
-        "answer": "点击隐藏答案"
+        "answer": "生命值"
       },
       {
         "question": "游戏里 MP 代表？",
-        "answer": "点击隐藏答案"
+        "answer": "魔法 / 体力值"
       },
       {
         "question": "AOE指的是什么效果？",
-        "answer": "点击隐藏答案"
+        "answer": "范围伤害"
       },
       {
         "question": "CD在游戏里是指？",
-        "answer": "点击隐藏答案"
+        "answer": "技能冷却时间"
       },
       {
         "question": "BUFF是什么意思？",
-        "answer": "点击隐藏答案"
+        "answer": "增益效果"
       },
       {
         "question": "DEBUFF是指？",
-        "answer": "点击隐藏答案"
+        "answer": "减益效果"
       },
       {
         "question": "NPC的意思是？",
-        "answer": "点击隐藏答案"
+        "answer": "非玩家角色"
       },
       {
         "question": "PVP指的是？",
-        "answer": "点击隐藏答案"
+        "answer": "玩家对战玩家"
       },
       {
         "question": "PVE指的是？",
-        "answer": "点击隐藏答案"
+        "answer": "玩家对战环境 / 怪物"
       },
       {
         "question": "空气中占比最高的气体是？",
-        "answer": "点击隐藏答案"
+        "answer": "氮气"
       },
       {
         "question": "光年是什么单位？",
-        "answer": "点击隐藏答案"
+        "answer": "距离"
       },
       {
         "question": "声音不能在什么中传播？",
-        "answer": "点击隐藏答案"
+        "answer": "真空"
       },
       {
         "question": "植物光合作用产生的气体是？",
-        "answer": "点击隐藏答案"
+        "answer": "氧气"
       },
       {
         "question": "人体最大的器官是？",
-        "answer": "点击隐藏答案"
+        "answer": "皮肤"
       },
       {
         "question": "鱼调节浮力依靠？",
-        "answer": "点击隐藏答案"
+        "answer": "鱼鳔"
       },
       {
         "question": "水在多少度密度最大？",
-        "answer": "点击隐藏答案"
+        "answer": "4℃"
       },
       {
         "question": "哺乳动物的共同特征是？",
-        "answer": "点击隐藏答案"
+        "answer": "胎生哺乳"
       },
       {
         "question": "标准大气压下冰的熔点是？",
-        "answer": "点击隐藏答案"
+        "answer": "0℃"
       },
       {
         "question": "彩虹形成原理是？",
-        "answer": "点击隐藏答案"
+        "answer": "折射与色散"
       },
       {
         "question": "下列属于可再生能源的是？",
-        "answer": "点击隐藏答案"
+        "answer": "太阳能"
       },
       {
         "question": "地壳中含量最高的金属是？",
@@ -6603,27 +5807,27 @@
       },
       {
         "question": "人体正常体温约为？",
-        "answer": "点击隐藏答案"
+        "answer": "37℃"
       },
       {
         "question": "下列属于绝缘体的是？",
-        "answer": "点击隐藏答案"
+        "answer": "橡胶"
       },
       {
         "question": "蜜蜂的蜂王是？",
-        "answer": "点击隐藏答案"
+        "answer": "雌蜂"
       },
       {
         "question": "磁铁什么极相互排斥？",
-        "answer": "点击隐藏答案"
+        "answer": "同极"
       },
       {
         "question": "地球的天然卫星是？",
-        "answer": "点击隐藏答案"
+        "answer": "月球"
       },
       {
         "question": "酸雨主要由什么造成？",
-        "answer": "点击隐藏答案"
+        "answer": "二氧化硫"
       },
       {
         "question": "下列属于恒温动物的是？",
@@ -6631,7 +5835,7 @@
       },
       {
         "question": "天空呈蓝色是因为？",
-        "answer": "点击隐藏答案"
+        "answer": "光的散射"
       },
       {
         "question": "标准钢琴有多少键？",
@@ -6643,55 +5847,55 @@
       },
       {
         "question": "水的沸点（标准）是？",
-        "answer": "点击隐藏答案"
+        "answer": "100℃"
       },
       {
         "question": "电器着火第一步应？",
-        "answer": "点击隐藏答案"
+        "answer": "切断电源"
       },
       {
         "question": "不能放进微波炉的是？",
-        "answer": "点击隐藏答案"
+        "answer": "金属"
       },
       {
         "question": "缺乏维生素 C 易得？",
-        "answer": "点击隐藏答案"
+        "answer": "坏血病"
       },
       {
         "question": "中暑后应立即？",
-        "answer": "点击隐藏答案"
+        "answer": "移到阴凉处"
       },
       {
         "question": "富含蛋白质的食物是？",
-        "answer": "点击隐藏答案"
+        "answer": "鸡蛋"
       },
       {
         "question": "夏天穿什么更凉快？",
-        "answer": "点击隐藏答案"
+        "answer": "白色"
       },
       {
         "question": "长时间看手机易导致？",
-        "answer": "点击隐藏答案"
+        "answer": "眼疲劳"
       },
       {
         "question": "蜂蜜不能用什么冲泡？",
-        "answer": "点击隐藏答案"
+        "answer": "开水"
       },
       {
         "question": "深色与浅色衣服应？",
-        "answer": "点击隐藏答案"
+        "answer": "分开洗"
       },
       {
         "question": "人体消化主要器官是？",
-        "answer": "点击隐藏答案"
+        "answer": "小肠"
       },
       {
         "question": "属于碳水化合物的是？",
-        "answer": "点击隐藏答案"
+        "answer": "米饭"
       },
       {
         "question": "健康的睡姿是？",
-        "answer": "点击隐藏答案"
+        "answer": "侧卧"
       },
       {
         "question": "不能用来灭火的是？",
@@ -6699,57 +5903,57 @@
       },
       {
         "question": "蔬菜最健康做法是？",
-        "answer": "点击隐藏答案"
+        "answer": "清蒸"
       },
       {
         "question": "人体最大消化腺是？",
-        "answer": "点击隐藏答案"
+        "answer": "肝脏"
       },
       {
         "question": "属于粗粮的是？",
-        "answer": "点击隐藏答案"
+        "answer": "燕麦"
       },
       {
         "question": "烫伤第一步应？",
-        "answer": "点击隐藏答案"
+        "answer": "冷水冲"
       },
       {
         "question": "冰箱除异味可用？",
-        "answer": "点击隐藏答案"
+        "answer": "活性炭"
       },
       {
         "question": "刷牙水温最好是？",
-        "answer": "点击隐藏答案"
+        "answer": "温水"
       }
     ],
     "เช็กอินใต้แสงจันทร์ / Moon Riddle": [
       {
         "question": "哪种动物可以倒着飞？",
-        "answer": "点击隐藏答案"
+        "answer": "蜂鸟"
       },
       {
         "question": "章鱼有几颗心脏？",
-        "answer": "点击隐藏答案"
+        "answer": "三颗"
       },
       {
         "question": "哪种动物会改变体色？",
-        "answer": "点击隐藏答案"
+        "answer": "变色龙"
       },
       {
         "question": "植物主要从哪里吸收水分？",
-        "answer": "点击隐藏答案"
+        "answer": "根部"
       },
       {
         "question": "白天的天空通常是什么颜色？",
-        "answer": "点击隐藏答案"
+        "answer": "蓝色"
       },
       {
         "question": "哪一种属于哺乳动物？",
-        "answer": "点击隐藏答案"
+        "answer": "海豚"
       },
       {
         "question": "哪个物体能吸引铁？",
-        "answer": "点击隐藏答案"
+        "answer": "磁铁"
       }
     ]
   },
@@ -7227,99 +6431,99 @@
     "งานเลี้ยงกิลด์ / Guild Banquet": [
       {
         "question": "Berapa total tuts pada piano?",
-        "answer": "⧉"
+        "answer": "88\n⧉"
       },
       {
         "question": "Titik didih air berapa derajat Celsius?",
-        "answer": "⧉"
+        "answer": "100\n⧉"
       },
       {
         "question": "Pelangi memiliki berapa warna?",
-        "answer": "⧉"
+        "answer": "7\n⧉"
       },
       {
         "question": "Satu minggu ada berapa hari?",
-        "answer": "⧉"
+        "answer": "7\n⧉"
       },
       {
         "question": "Air pada suhu ruang berbentuk apa?",
-        "answer": "液态"
+        "answer": "液态\n⧉"
       },
       {
         "question": "Negara dengan wilayah terkecil di dunia adalah?",
-        "answer": "梵蒂冈"
+        "answer": "梵蒂冈\n⧉"
       },
       {
         "question": "Organ apa yang kita gunakan untuk mencium bau?",
-        "answer": "鼻子"
+        "answer": "鼻子\n⧉"
       },
       {
         "question": "Warna paling luar pelangi adalah?",
-        "answer": "红"
+        "answer": "红\n⧉"
       },
       {
         "question": "Hewan laut mana yang merupakan mamalia terbesar?",
-        "answer": "蓝鲸"
+        "answer": "蓝鲸\n⧉"
       },
       {
         "question": "Gunung tertinggi di dunia adalah?",
-        "answer": "珠穆朗玛峰"
+        "answer": "珠穆朗玛峰\n⧉"
       },
       {
         "question": "Samudra terluas di dunia ada di mana?",
-        "answer": "太平洋"
+        "answer": "太平洋\n⧉"
       },
       {
         "question": "Bagian tubuh manusia yang paling keras adalah apa?",
-        "answer": "牙齿"
+        "answer": "牙齿\n⧉"
       },
       {
         "question": "Negara dengan wilayah terluas di dunia adalah?",
-        "answer": "俄罗斯"
+        "answer": "俄罗斯\n⧉"
       },
       {
         "question": "Suara tidak bisa merambat di lingkungan apa?",
-        "answer": "真空"
+        "answer": "真空\n⧉"
       },
       {
         "question": "Apa nama katak saat masih kecil?",
-        "answer": "蝌蚪"
+        "answer": "蝌蚪\n⧉"
       },
       {
         "question": "Negara asal Olimpiade adalah?",
-        "answer": "希腊"
+        "answer": "希腊\n⧉"
       },
       {
         "question": "Kura-kura kecil bernapas dengan?",
-        "answer": "肺"
+        "answer": "肺\n⧉"
       },
       {
         "question": "Di tata surya, planet satu-satunya yang memiliki kehidupan adalah?",
-        "answer": "地球"
+        "answer": "地球\n⧉"
       },
       {
         "question": "Benua mana yang diwakili oleh warna biru dalam logo lima cincin Olimpiade?",
-        "answer": "欧洲"
+        "answer": "欧洲\n⧉"
       },
       {
         "question": "Kepala bunga matahari akan berputar mengikuti apa?",
-        "answer": "太阳"
+        "answer": "太阳\n⧉"
       },
       {
         "question": "Elemen apa yang paling banyak terkandung dalam tubuh manusia?",
-        "answer": "氧"
+        "answer": "氧\n⧉"
       },
       {
         "question": "Tempat utama tumbuhan melakukan fotosintesis adalah?",
-        "answer": "叶绿体"
+        "answer": "叶绿体\n⧉"
       },
       {
         "question": "Dalam sistem peredaran darah manusia, organ mana yang bertugas memompa darah?",
-        "answer": "心脏"
+        "answer": "心脏\n⧉"
       },
       {
         "question": "Planet dengan volume terbesar di tata surya adalah?",
-        "answer": "木星"
+        "answer": "木星\n⧉"
       },
       {
         "question": "Apa jenis iklim Morroc?",
@@ -7335,7 +6539,7 @@
       },
       {
         "question": "Berapa maksimal anggota dalam Party?",
-        "answer": "5 orang"
+        "answer": "orang"
       },
       {
         "question": "Membuat Guild membutuhkan?",
@@ -7383,15 +6587,15 @@
       },
       {
         "question": "Saat ini ada berapa jenis Guild?",
-        "answer": "2 jenis"
+        "answer": "jenis"
       },
       {
         "question": "Berapa maksimal anggota yang bisa ditampung Guild saat baru dibuat?",
-        "answer": "100 orang"
+        "answer": "orang"
       },
       {
         "question": "Cat Cargo setidaknya perlu mengirim berapa jenis barang?",
-        "answer": "5 jenis"
+        "answer": "jenis"
       },
       {
         "question": "Manakah yang termasuk metode Check-in Guild?",
@@ -7418,10 +6622,6 @@
         "answer": "1x"
       },
       {
-        "question": "Berapa maksimal misi harian Guild yang bisa diselesaikan setiap hari?",
-        "answer": "⧉"
-      },
-      {
         "question": "Jabatan Guild mana yang tidak dapat diubah namanya?",
         "answer": "Asisten Guild"
       },
@@ -7436,10 +6636,6 @@
       {
         "question": "Melakukan Piety Wish akan mengonsumsi item apa?",
         "answer": "Kind Pet Tag"
-      },
-      {
-        "question": "Maksimal berapa Pet yang bisa bertarung?",
-        "answer": "⧉"
       },
       {
         "question": "Di Guild ada satu posisi yang hanya bisa dijabat karakter wanita, posisi apa itu?",
@@ -7467,7 +6663,7 @@
       },
       {
         "question": "Berapa jenis barang maksimal yang bisa dikirim Cat Cargo?",
-        "answer": "8 jenis"
+        "answer": "jenis"
       }
     ],
     "Scholar Exam + Sage Selection": [
@@ -7485,7 +6681,7 @@
       },
       {
         "question": "Berapa maksimal anggota dalam Party?",
-        "answer": "5 orang"
+        "answer": "orang"
       },
       {
         "question": "Membuat Guild membutuhkan?",
@@ -7533,15 +6729,15 @@
       },
       {
         "question": "Saat ini ada berapa jenis Guild?",
-        "answer": "2 jenis"
+        "answer": "jenis"
       },
       {
         "question": "Berapa maksimal anggota yang bisa ditampung Guild saat baru dibuat?",
-        "answer": "100 orang"
+        "answer": "orang"
       },
       {
         "question": "Cat Cargo setidaknya perlu mengirim berapa jenis barang?",
-        "answer": "5 jenis"
+        "answer": "jenis"
       },
       {
         "question": "Manakah yang termasuk metode Check-in Guild?",
@@ -7557,7 +6753,7 @@
       },
       {
         "question": "Dalam versi saat ini, berapa banyak jenis Life Jobs yang tersedia?",
-        "answer": "7 jenis"
+        "answer": "jenis"
       },
       {
         "question": "Yang mana yang tidak termasuk salah satu profesi dalam Life Jobs?",
@@ -7570,10 +6766,6 @@
       {
         "question": "Berapa kali sehari bisa menggunakan Ginseng Royal Jelly?",
         "answer": "1x"
-      },
-      {
-        "question": "Berapa maksimal misi harian Guild yang bisa diselesaikan setiap hari?",
-        "answer": "⧉"
       },
       {
         "question": "Jabatan Guild mana yang tidak dapat diubah namanya?",
@@ -7590,10 +6782,6 @@
       {
         "question": "Melakukan Piety Wish akan mengonsumsi item apa?",
         "answer": "Kind Pet Tag"
-      },
-      {
-        "question": "Maksimal berapa Pet yang bisa bertarung?",
-        "answer": "⧉"
       },
       {
         "question": "Di Guild ada satu posisi yang hanya bisa dijabat karakter wanita, posisi apa itu?",
@@ -7621,7 +6809,7 @@
       },
       {
         "question": "Berapa jenis barang maksimal yang bisa dikirim Cat Cargo?",
-        "answer": "8 jenis"
+        "answer": "jenis"
       },
       {
         "question": "Desain pertama apa dalam sejarah seri RO yang diwujudkan game ini?",
@@ -7758,22 +6946,6 @@
       {
         "question": "Pet mana di bawah ini yang bukan level SSR?",
         "answer": "Sohee"
-      },
-      {
-        "question": "Berapa kali bisa ikut Peer Arena setiap hari?",
-        "answer": "⧉"
-      },
-      {
-        "question": "Setiap berapa detik Masakan Cinta Harian dapat memulihkan 300 HP dan 50 SP?",
-        "answer": "⧉"
-      },
-      {
-        "question": "Berapa banyak Lv.40 Royal Gear Fragment yang dibutuhkan untuk menukar 1 Lv.40 Royal Gear Peti?",
-        "answer": "⧉"
-      },
-      {
-        "question": "Berapa banyak Elunium yang dibutuhkan untuk Fusi 1 Enriched Elunium?",
-        "answer": "⧉"
       },
       {
         "question": "Kota mana di bawah ini yang merupakan ibu kota Kerajaan Rune?",
@@ -8152,64 +7324,8 @@
         "answer": "Mengumpulkan semua Infinity Gem"
       },
       {
-        "question": "15 + 27 =?",
-        "answer": "⧉"
-      },
-      {
-        "question": "56 − 38 =?",
-        "answer": "⧉"
-      },
-      {
-        "question": "18 × 4 =?",
-        "answer": "⧉"
-      },
-      {
-        "question": "72 ÷ 8 =?",
-        "answer": "⧉"
-      },
-      {
-        "question": "33 + 49 =?",
-        "answer": "⧉"
-      },
-      {
-        "question": "90 − 56 =?",
-        "answer": "⧉"
-      },
-      {
-        "question": "25 × 6 =?",
-        "answer": "⧉"
-      },
-      {
-        "question": "84 ÷ 12 =?",
-        "answer": "⧉"
-      },
-      {
-        "question": "47 + 35 =?",
-        "answer": "⧉"
-      },
-      {
-        "question": "100 − 63 =?",
-        "answer": "⧉"
-      },
-      {
-        "question": "Sebuah persegi panjang memiliki panjang 7 cm dan lebar 4 cm, berapa luas areanya dalam cm²?",
-        "answer": "⧉"
-      },
-      {
-        "question": "Sebuah persegi memiliki sisi 6 cm, berapa kelilingnya dalam cm?",
-        "answer": "⧉"
-      },
-      {
         "question": "Jumlah sudut dalam segitiga adalah berapa derajat?",
         "answer": "180°"
-      },
-      {
-        "question": "Sebuah lingkaran memiliki diameter 10 cm, berapa cm radiusnya?",
-        "answer": "⧉"
-      },
-      {
-        "question": "Sebuah balok memiliki panjang, lebar, tinggi masing-masing 3cm, 4cm, 5cm, berapa cm³ volumenya?",
-        "answer": "⧉"
       },
       {
         "question": "Sebuah segitiga sama kaki memiliki sudut puncak 80°, berapakah besar salah satu sudut alasnya?",
@@ -8220,28 +7336,12 @@
         "answer": "25,12"
       },
       {
-        "question": "Sebuah persegi memiliki luas 49 cm persegi, berapa panjang sisinya?",
-        "answer": "⧉"
-      },
-      {
-        "question": "Sebuah persegi panjang memiliki keliling 30 cm, panjangnya 9 cm, berapa lebarnya?",
-        "answer": "⧉"
-      },
-      {
-        "question": "Sebuah kubus memiliki panjang rusuk 5 cm, berapa volumenya dalam cm kubik?",
-        "answer": "⧉"
-      },
-      {
         "question": "Rumus luas lingkaran adalah S=πr², dengan jari-jari r=5 cm, berapa luas lingkaran tersebut dalam cm² (π=3,14)?",
         "answer": "78,5"
       },
       {
         "question": "Sebuah segitiga memiliki tiga sisi masing-masing 5cm, 12cm, 13cm, segitiga ini adalah?",
         "answer": "Segitiga siku-siku"
-      },
-      {
-        "question": "Sebuah balok memiliki panjang 8cm, lebar 6cm, tinggi 5cm, berapa luas permukaannya dalam cm²?",
-        "answer": "⧉"
       },
       {
         "question": "Berapa derajat setiap sudut segitiga sama sisi?",
@@ -8252,24 +7352,12 @@
         "answer": "25,12"
       },
       {
-        "question": "Sebuah kubus memiliki luas permukaan 150 cm², berapa panjang rusuknya?",
-        "answer": "⧉"
-      },
-      {
-        "question": "Sebuah persegi panjang memiliki luas 60 cm², lebar 5 cm, berapa panjangnya?",
-        "answer": "⧉"
-      },
-      {
         "question": "Dalam sebuah segitiga, ada satu sudut 90°, segitiga ini adalah?",
         "answer": "Segitiga siku-siku"
       },
       {
-        "question": "Sebuah balok memiliki total panjang rusuk 48 cm, perbandingan panjang, lebar, tinggi adalah 3:2:1, berapa cm panjangnya?",
-        "answer": "⧉"
-      },
-      {
         "question": "Sebuah lingkaran dengan Radius diperbesar 2 kali lipat, kelilingnya diperbesar berapa kali lipat?",
-        "answer": "2 kali"
+        "answer": "kali"
       },
       {
         "question": "4.6 + 3.8 =?",
@@ -8278,14 +7366,6 @@
       {
         "question": "7,2 − 2,5 =?",
         "answer": "4,7"
-      },
-      {
-        "question": "2,5 × 3,6 =?",
-        "answer": "⧉"
-      },
-      {
-        "question": "9.6 ÷ 1.6 =?",
-        "answer": "⧉"
       },
       {
         "question": "3/4 + 1/6 =?",
@@ -8308,16 +7388,8 @@
         "answer": "3/8"
       },
       {
-        "question": "5/6 diubah ke desimal kira-kira?",
-        "answer": "0.83"
-      },
-      {
         "question": "6,3 × 0,4 =?",
         "answer": "2,52"
-      },
-      {
-        "question": "8,4 ÷ 0,7 =?",
-        "answer": "⧉"
       },
       {
         "question": "7/9 + 2/3 =?",
@@ -8330,10 +7402,6 @@
       {
         "question": "5/8 × 4/5 =?",
         "answer": "1/2"
-      },
-      {
-        "question": "3/4 ÷ 3/8 =?",
-        "answer": "⧉"
       },
       {
         "question": "0,625 diubah menjadi pecahan adalah?",
@@ -8352,34 +7420,6 @@
         "answer": "6,22"
       },
       {
-        "question": "Faktor persekutuan terbesar dari 18 dan 24 adalah?",
-        "answer": "⧉"
-      },
-      {
-        "question": "Berapa kelipatan persekutuan terkecil dari 24 dan 36?",
-        "answer": "⧉"
-      },
-      {
-        "question": "Manakah dari angka berikut yang merupakan bilangan prima?",
-        "answer": "⧉"
-      },
-      {
-        "question": "Manakah dari angka berikut yang merupakan bilangan komposit?",
-        "answer": "⧉"
-      },
-      {
-        "question": "1 meter sama dengan berapa sentimeter?",
-        "answer": "⧉"
-      },
-      {
-        "question": "1 ton sama dengan berapa kilogram?",
-        "answer": "⧉"
-      },
-      {
-        "question": "1 liter sama dengan berapa mililiter?",
-        "answer": "⧉"
-      },
-      {
         "question": "3 meter 5 desimeter sama dengan berapa meter?",
         "answer": "3,5"
       },
@@ -8392,48 +7432,12 @@
         "answer": "5,2"
       },
       {
-        "question": "36 dan 48 memiliki faktor persekutuan terbesar berapa?",
-        "answer": "⧉"
-      },
-      {
-        "question": "15 dan 25 memiliki kelipatan persekutuan terkecil berapa?",
-        "answer": "⧉"
-      },
-      {
-        "question": "Angka mana di bawah ini yang dapat dibagi 3?",
-        "answer": "⧉"
-      },
-      {
-        "question": "Manakah dari angka berikut yang dapat dibagi 5?",
-        "answer": "⧉"
-      },
-      {
         "question": "4 desimeter sama dengan berapa meter?",
         "answer": "0,4"
       },
       {
         "question": "8 ton 50 kilogram sama dengan berapa ton?",
         "answer": "8,05"
-      },
-      {
-        "question": "3 meter kubik sama dengan berapa desimeter kubik?",
-        "answer": "3.000"
-      },
-      {
-        "question": "6 sentimeter sama dengan berapa milimeter?",
-        "answer": "⧉"
-      },
-      {
-        "question": "1 jam sama dengan berapa menit?",
-        "answer": "⧉"
-      },
-      {
-        "question": "1 hari sama dengan berapa jam?",
-        "answer": "⧉"
-      },
-      {
-        "question": "3 kali suatu bilangan adalah 27, berapa bilangan tersebut?",
-        "answer": "⧉"
       },
       {
         "question": "Bilangan yang 2,7 lebih besar dari 4,8 adalah berapa?",
@@ -8444,14 +7448,6 @@
         "answer": "6,5"
       },
       {
-        "question": "Sebuah bilangan dibagi 6 hasilnya 8 dengan sisa 3, bilangan tersebut adalah berapa?",
-        "answer": "⧉"
-      },
-      {
-        "question": "5 kali suatu bilangan lebih besar 5 dari 30, berapa bilangan tersebut?",
-        "answer": "⧉"
-      },
-      {
         "question": "Xiao Ming punya 25 yuan, beli buku tulis habis 8,5 yuan, sisa berapa yuan?",
         "answer": "16,5"
       },
@@ -8460,96 +7456,20 @@
         "answer": "38,4"
       },
       {
-        "question": "Sebuah tumpukan barang seberat 4,5 ton, setiap kali mengangkut 0,5 ton, berapa kali perlu diangkut?",
-        "answer": "⧉"
-      },
-      {
-        "question": "Lahan sayuran berbentuk persegi panjang memiliki panjang 12 meter dan lebar 8 meter, berapa luas lahan sayuran tersebut dalam meter persegi?",
-        "answer": "⧉"
-      },
-      {
-        "question": "Sebuah kubus memiliki panjang rusuk 4 cm, berapa luas permukaannya dalam cm persegi?",
-        "answer": "⧉"
-      },
-      {
-        "question": "Seutas tali panjangnya 20 meter. Setelah digunakan 3/5, berapa meter sisanya?",
-        "answer": "⧉"
-      },
-      {
         "question": "Sebuah persegi panjang memiliki keliling 28 cm, panjangnya 3 kali lebarnya, berapa cm lebarnya?",
         "answer": "3,5"
-      },
-      {
-        "question": "Xiao Ming berjalan 60 meter per menit, berapa meter yang bisa dia tempuh dalam 15 menit?",
-        "answer": "⧉"
-      },
-      {
-        "question": "Sebuah lingkaran memiliki jari-jari 3 cm, berapa kira-kira luasnya dalam cm persegi (π = 3,14)?",
-        "answer": "28.26"
       },
       {
         "question": "Sebuah botol minuman berisi 1,2 liter, setelah dituang 0,3 liter, berapa liter yang tersisa?",
         "answer": "0,9"
       },
       {
-        "question": "Sebuah bilangan dikali 4 sama dengan 36, berapa hasil bilangan tersebut dikali 5?",
-        "answer": "⧉"
-      },
-      {
-        "question": "Sebuah lahan segitiga memiliki alas 10 meter dan tinggi 6 meter, berapa luas areanya dalam meter persegi?",
-        "answer": "⧉"
-      },
-      {
         "question": "Xiaoming membeli 4 kilogram apel seharga 5,8 yuan per kilogram. Berapa total yang dibelanjakan?",
         "answer": "23,2"
       },
       {
-        "question": "Sebuah balok memiliki panjang 5cm, lebar 4cm, tinggi 3cm, berapa cm total panjang rusuknya?",
-        "answer": "⧉"
-      },
-      {
-        "question": "Seutas kawat besi sepanjang 48 sentimeter dibentuk menjadi persegi. Berapa sentimeter panjang sisinya?",
-        "answer": "⧉"
-      },
-      {
-        "question": "Berapa angka yang 1.8 lebih besar dari 7.2?",
-        "answer": "9.0"
-      },
-      {
-        "question": "Sebuah bilangan dibagi 8 hasilnya 7, sisanya 4, bilangan tersebut adalah berapa?",
-        "answer": "⧉"
-      },
-      {
         "question": "Sebuah tumpukan batu bara seberat 10 ton, digunakan 4,5 ton, berapa ton yang tersisa?",
         "answer": "5,5"
-      },
-      {
-        "question": "Sebuah lingkaran memiliki diameter 6 cm, berapa keliling lingkaran tersebut (π = 3,14)?",
-        "answer": "18.84"
-      },
-      {
-        "question": "6 kali suatu bilangan kurang 4 dari 40, bilangan tersebut adalah berapa?",
-        "answer": "⧉"
-      },
-      {
-        "question": "Panjang persegi panjang adalah 15 meter, lebar adalah 2/3 dari panjang, berapa meter lebarnya?",
-        "answer": "⧉"
-      },
-      {
-        "question": "Sebuah kubus memiliki volume 64 cm³, berapa cm panjang rusuknya?",
-        "answer": "⧉"
-      },
-      {
-        "question": "Xiao Ming berjalan 55 meter per menit, berapa menit yang dibutuhkan untuk berjalan sejauh 1320 meter?",
-        "answer": "⧉"
-      },
-      {
-        "question": "Sebuah segitiga memiliki alas 8 cm dan tinggi 6 cm, berapa luas areanya dalam cm²?",
-        "answer": "⧉"
-      },
-      {
-        "question": "Xiao Ming punya 36 yuan, jika beli buku tulis seharga 4,5 yuan per buku, maksimal bisa beli berapa buku?",
-        "answer": "⧉"
       },
       {
         "question": "Titik didih air pada tekanan atmosfer standar sekitar?",
@@ -8670,10 +7590,6 @@
       {
         "question": "Kapan embun beku biasanya muncul?",
         "answer": "Pagi yang Dingin"
-      },
-      {
-        "question": "Simbol kutub positif baterai adalah?",
-        "answer": "+"
       },
       {
         "question": "Tergigit atau terkena scratch kucing dan anjing, harus segera?",
@@ -8886,10 +7802,6 @@
       {
         "question": "Mengapa langit berwarna biru?",
         "answer": "Hamburan cahaya"
-      },
-      {
-        "question": "Berapa banyak tuts pada piano standar?",
-        "answer": "⧉"
       },
       {
         "question": "Manakah yang bukan termasuk tiga warna primer dalam seni?",

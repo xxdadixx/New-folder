@@ -1,5 +1,6 @@
 import json
 import os
+import re
 import tempfile
 import time
 from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeoutError
@@ -27,175 +28,219 @@ def fetch_multilingual_database():
 
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
-        context = browser.new_context(viewport={"width": 1280, "height": 800})
-        page = context.new_page()
-        page.set_default_navigation_timeout(15000)
+        try:
+            context = browser.new_context(viewport={"width": 1280, "height": 800})
+            page = context.new_page()
+            page.set_default_navigation_timeout(15000)
 
-        for lang in SUPPORTED_LANGUAGES:
-            lang_code = lang["code"]
-            lang_name = lang["name"]
-            all_db[lang_name] = {}
+            for lang in SUPPORTED_LANGUAGES:
+                lang_code = lang["code"]
+                lang_name = lang["name"]
+                all_db[lang_name] = {}
 
-            print(f"\n==========================================")
-            print(f"Fetching Language: {lang_name} ({lang_code})")
-            print(f"==========================================")
+                print(f"\n==========================================")
+                print(f"Fetching Language: {lang_name} ({lang_code})")
+                print(f"==========================================")
 
-            for cat in CATEGORIES:
-                cat_id = cat["id"]
-                cat_name = cat["name"]
-                event_url = f"{base_url}?lang={lang_code}#event={cat_id}&reveal=1"
+                for cat in CATEGORIES:
+                    cat_id = cat["id"]
+                    cat_name = cat["name"]
+                    event_url = f"{base_url}?lang={lang_code}#event={cat_id}&reveal=1"
 
-                print(f"URL: {event_url}")
-                try:
-                    page.goto(event_url, wait_until="domcontentloaded", timeout=15000)
-                    page.wait_for_timeout(2000)
-                except PlaywrightTimeoutError:
-                    print(f"  [Warning] Timeout loading {event_url}. Attempting extraction on current DOM.")
-                except Exception as e:
-                    print(f"  [Error] Navigation failed for {event_url}: {e}")
-                    all_db[lang_name][cat_name] = []
-                    continue
+                    print(f"URL: {event_url}")
+                    try:
+                        page.goto(event_url, wait_until="domcontentloaded", timeout=15000)
+                        try:
+                            page.wait_for_selector("div, article, section, li", timeout=5000)
+                        except PlaywrightTimeoutError:
+                            pass
+                    except PlaywrightTimeoutError:
+                        print(f"  [Warning] Timeout loading {event_url}. Attempting extraction on current DOM.")
+                    except Exception as e:
+                        print(f"  [Error] Navigation failed for {event_url}: {e}")
+                        all_db[lang_name][cat_name] = []
+                        continue
 
-                try:
-                    page.evaluate("""
-                        () => {
-                            const check = document.querySelector('input[type="checkbox"]');
-                            if (check && !check.checked) { check.click(); }
-                        }
-                    """)
-                    page.wait_for_timeout(1000)
-                except Exception as e:
-                    print(f"  [Warning] Checkbox reveal click failed: {e}")
-
-                try:
-                    qa_items = page.evaluate(r"""
-                    () => {
-                        const results = [];
-                        const allDivs = Array.from(document.querySelectorAll('div, article, section, li'));
-
-                        const qCards = allDivs.filter(el => {
-                            const txt = (el.innerText || '').trim();
-                            if (!/^Q\d+[\.\s\:\n]/i.test(txt) && !/^Q\d+$/i.test(txt.split('\n')[0])) return false;
-                            
-                            const children = Array.from(el.querySelectorAll('div, article, section, li'));
-                            return !children.some(c => c !== el && (/^Q\d+[\.\s\:\n]/i.test(c.innerText || '') || /^Q\d+$/i.test((c.innerText || '').split('\n')[0])));
-                        });
-
-                        qCards.forEach(card => {
-                            const rawText = card.innerText || '';
-                            const lines = rawText.split('\n').map(l => l.trim()).filter(l => l.length > 0);
-                            if (lines.length < 2) return;
-
-                            let question = "";
-                            let answer = "";
-
-                            for (let i = 0; i < lines.length; i++) {
-                                if (/^Q\d+/i.test(lines[i])) {
-                                    let cleaned = lines[i].replace(/^Q\d+[\.\s\:]*/i, '').trim();
-                                    if (cleaned.length > 3) {
-                                        question = cleaned;
-                                    } else if (i + 1 < lines.length) {
-                                        question = lines[i + 1];
-                                    }
-                                    break;
-                                }
+                    try:
+                        page.evaluate("""
+                            () => {
+                                const check = document.querySelector('input[type="checkbox"]');
+                                if (check && !check.checked) { check.click(); }
                             }
+                        """)
+                    except Exception as e:
+                        print(f"  [Warning] Checkbox reveal click failed: {e}")
 
-                            if (!question) return;
+                    try:
+                        qa_items = page.evaluate(r"""
+                        () => {
+                            const results = [];
+                            const allDivs = Array.from(document.querySelectorAll('div, article, section, li'));
 
-                            const allChildElems = Array.from(card.querySelectorAll('*'));
-                            for (const el of allChildElems) {
-                                const style = window.getComputedStyle(el);
-                                const color = style.color || '';
-                                const classStr = el.className || '';
+                            const qCards = allDivs.filter(el => {
+                                const txt = (el.innerText || '').trim();
+                                if (!/^Q\d+[\.\s\:\n]/i.test(txt) && !/^Q\d+$/i.test((txt.split('\n')[0] || ''))) return false;
                                 
-                                let isGreen = false;
-                                if (typeof classStr === 'string' && (
-                                    classStr.includes('green') || 
-                                    classStr.includes('emerald') || 
-                                    classStr.includes('teal') || 
-                                    classStr.includes('success')
-                                )) {
-                                    isGreen = true;
-                                } else if (color.startsWith('rgb')) {
-                                    const rgb = color.match(/\d+/g);
-                                    if (rgb && rgb.length >= 3) {
-                                        const r = parseInt(rgb[0]), g = parseInt(rgb[1]), b = parseInt(rgb[2]);
-                                        if (g > 120 && g > r * 1.2 && g > b * 1.2) {
-                                            isGreen = true;
+                                const children = Array.from(el.querySelectorAll('div, article, section, li'));
+                                return !children.some(c => c !== el && (/^Q\d+[\.\s\:\n]/i.test(c.innerText || '') || /^Q\d+$/i.test((c.innerText || '').split('\n')[0])));
+                            });
+
+                            qCards.forEach(card => {
+                                const rawText = card.innerText || '';
+                                const lines = rawText.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+                                if (lines.length < 2) return;
+
+                                let question = "";
+                                let answer = "";
+
+                                for (let i = 0; i < lines.length; i++) {
+                                    if (/^Q\d+/i.test(lines[i])) {
+                                        let cleaned = lines[i].replace(/^Q\d+[\.\s\:]*/i, '').trim();
+                                        if (cleaned.length > 3) {
+                                            question = cleaned;
+                                        } else if (i + 1 < lines.length) {
+                                            question = lines[i + 1];
+                                        }
+                                        break;
+                                    }
+                                }
+
+                                if (!question) return;
+
+                                const cleanText = (str) => {
+                                    if (!str) return '';
+                                    return str
+                                        .replace(/[\uE000-\uF8FF\u2700-\u27BF\u2600-\u26FF✓✔✅]/g, '')
+                                        .replace(/^(?:Ans|Answer|Option)\s*[\:\.-]?\s*/i, '')
+                                        .replace(/^\d+[\.\:\)\s]+\s*/, '')
+                                        .trim();
+                                };
+
+                                const allChildElems = Array.from(card.querySelectorAll('*'));
+                                for (const el of allChildElems) {
+                                    const style = window.getComputedStyle(el);
+                                    const color = style.color || '';
+                                    const classStr = el.className || '';
+                                    
+                                    let isGreen = false;
+                                    if (typeof classStr === 'string' && (
+                                        classStr.includes('green') || 
+                                        classStr.includes('emerald') || 
+                                        classStr.includes('teal') || 
+                                        classStr.includes('success') ||
+                                        classStr.includes('correct')
+                                    )) {
+                                        isGreen = true;
+                                    } else if (color.startsWith('rgb')) {
+                                        const rgb = color.match(/\d+/g);
+                                        if (rgb && rgb.length >= 3) {
+                                            const r = parseInt(rgb[0]), g = parseInt(rgb[1]), b = parseInt(rgb[2]);
+                                            if (g > 120 && g > r * 1.2 && g > b * 1.2) {
+                                                isGreen = true;
+                                            }
                                         }
                                     }
-                                }
 
-                                if (isGreen) {
-                                    let t = (el.innerText || el.textContent || '').replace(/[\uE000-\uF8FF\u2700-\u27BF\u2600-\u26FF✓✔✅]/g, '').trim();
-                                    if (t && t !== question && !/^Q\d+/i.test(t) && t.length > 0) {
-                                        if (!/^\d+$/.test(t) || lines.length <= 3) {
-                                            answer = t;
+                                    if (isGreen) {
+                                        let rawElText = (el.innerText || el.textContent || '').trim();
+                                        let candidate = cleanText(rawElText);
+
+                                        if (!candidate || /^\d+$/.test(candidate) || candidate.length <= 1) {
+                                            const parentContainer = el.closest('li, div, p, tr, button');
+                                            if (parentContainer) {
+                                                candidate = cleanText(parentContainer.innerText || parentContainer.textContent || '');
+                                            }
+                                        }
+
+                                        if (candidate && candidate !== question && !/^Q\d+/i.test(candidate) && !/^\d+$/.test(candidate) && candidate.length > 1) {
+                                            answer = candidate;
                                             break;
                                         }
                                     }
                                 }
-                            }
 
-                            if (!answer) {
-                                for (const l of lines) {
-                                    const cleanL = l.replace(/[\uE000-\uF8FF\u2700-\u27BF\u2600-\u26FF✓✔✅]/g, '').trim();
-                                    if (['จริง', 'O', 'True', '正确', 'Benar'].includes(cleanL)) {
-                                        answer = 'จริง / True (O)';
-                                        break;
-                                    } else if (['เท็จ', 'X', 'False', '錯誤', 'Salah'].includes(cleanL)) {
-                                        answer = 'เท็จ / False (X)';
-                                        break;
+                                if (!answer) {
+                                    for (const l of lines) {
+                                        const cleanL = l.replace(/[\uE000-\uF8FF\u2700-\u27BF\u2600-\u26FF✓✔✅]/g, '').trim();
+                                        if (['จริง', 'O', 'True', '正确', 'Benar'].includes(cleanL)) {
+                                            answer = 'จริง / True (O)';
+                                            break;
+                                        } else if (['เท็จ', 'X', 'False', '錯誤', 'Salah'].includes(cleanL)) {
+                                            answer = 'เท็จ / False (X)';
+                                            break;
+                                        }
                                     }
                                 }
-                            }
 
-                            if (!answer) {
-                                const candidates = lines.map(l => l.replace(/[\uE000-\uF8FF\u2700-\u27BF\u2600-\u26FF✓✔✅]/g, '').trim())
-                                                     .filter(l => l && !/^Q\d+/i.test(l) && l !== question && !l.includes('Study') && !l.includes('กิจกรรม') && !l.includes('Question') && !l.includes('Score'));
-                                
-                                const textCandidates = candidates.filter(c => !/^\d+$/.test(c));
-                                if (textCandidates.length > 0) {
-                                    answer = textCandidates[0];
-                                } else if (candidates.length > 0) {
-                                    answer = candidates[candidates.length - 1];
+                                if (!answer) {
+                                    const candidates = lines
+                                        .map(l => cleanText(l))
+                                        .filter(l => l && !/^Q\d+/i.test(l) && l !== question && !/^\d+$/.test(l) && l.length > 1 && !l.includes('Study') && !l.includes('กิจกรรม') && !l.includes('Question') && !l.includes('Score') && !l.includes('Sage Selection'));
+                                    
+                                    if (candidates.length > 0) {
+                                        answer = candidates[0];
+                                    }
+                                }
+
+                                if (question && answer && !/^\d+$/.test(answer) && answer.length > 1) {
+                                    results.push({ question, answer });
+                                }
+                            });
+
+                            const unique = [];
+                            const seen = new Set();
+                            for (const item of results) {
+                                if (!seen.has(item.question)) {
+                                    seen.add(item.question);
+                                    unique.push(item);
                                 }
                             }
-
-                            if (question && answer) {
-                                results.push({ question, answer });
-                            }
-                        });
-
-                        const unique = [];
-                        const seen = new Set();
-                        for (const item of results) {
-                            if (!seen.has(item.question)) {
-                                seen.add(item.question);
-                                unique.push(item);
-                            }
+                            return unique;
                         }
-                        return unique;
-                    }
-                    """)
-                    all_db[lang_name][cat_name] = qa_items
-                    print(f"  -> Category '{cat_name}': Loaded {len(qa_items)} items.")
-                except Exception as eval_err:
-                    print(f"  [Error] DOM Extraction failed on category '{cat_name}': {eval_err}")
-                    all_db[lang_name][cat_name] = []
+                        """)
+                        all_db[lang_name][cat_name] = qa_items
+                        print(f"  -> Category '{cat_name}': Loaded {len(qa_items)} items.")
+                    except Exception as eval_err:
+                        print(f"  [Error] DOM Extraction failed on category '{cat_name}': {eval_err}")
+                        all_db[lang_name][cat_name] = []
+        finally:
+            browser.close()
 
-        browser.close()
+    print("\nSanitizing extracted Q&A entries...")
+    sanitized_db = {}
+    total_entries = 0
+    for lang_key, cat_dict in all_db.items():
+        sanitized_db[lang_key] = {}
+        for cat_key, items in cat_dict.items():
+            clean_list = []
+            for entry in items:
+                if not isinstance(entry, dict):
+                    continue
+                q = entry.get("question", "").strip()
+                a = entry.get("answer", "").strip()
 
-    # Atomic write to protect database integrity from interruption or crashes
+                a = re.sub(r"^(?:Ans\s*:\s*|\d+[\.\:\)]\s*|[A-Da-d][\.\:\)]\s*)", "", a).strip()
+
+                if a and not a.isdigit() and len(a) > 1 and q.lower() != a.lower():
+                    clean_list.append({"question": q, "answer": a})
+                    total_entries += 1
+            sanitized_db[lang_key][cat_key] = clean_list
+
+    print(f"Sanitization complete: {total_entries} valid Q&A entries verified.")
+
     target_path = "qa_database.json"
-    dir_name = os.path.dirname(os.path.abspath(target_path))
-    with tempfile.NamedTemporaryFile("w", dir=dir_name, delete=False, encoding="utf-8") as tf:
-        json.dump(all_db, tf, ensure_ascii=False, indent=2)
-        temp_name = tf.name
-
-    os.replace(temp_name, target_path)
-    print("\n✅ Multi-language database update complete!")
+    dir_name = os.path.dirname(os.path.abspath(target_path)) or "."
+    temp_fd, temp_path = tempfile.mkstemp(dir=dir_name, suffix=".tmp")
+    try:
+        with os.fdopen(temp_fd, "w", encoding="utf-8") as tf:
+            json.dump(sanitized_db, tf, ensure_ascii=False, indent=2)
+        os.replace(temp_path, target_path)
+        print("✅ Multi-language database update complete!")
+    except Exception as e:
+        if os.path.exists(temp_path):
+            os.remove(temp_path)
+        print(f"\n❌ Atomic database update failed: {e}")
+        raise
 
 
 if __name__ == "__main__":

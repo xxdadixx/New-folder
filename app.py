@@ -106,9 +106,7 @@ class LogWindow:
         self.text_area.configure(yscrollcommand=self.scrollbar.set)
 
         self.scrollbar.pack(side="right", fill="y", padx=(0, 8), pady=8)
-        self.text_area.pack(
-            side="left", fill="both", expand=True, padx=(12, 0), pady=8
-        )
+        self.text_area.pack(side="left", fill="both", expand=True, padx=(12, 0), pady=8)
 
         self.text_area.tag_config("INFO", foreground="#00e5ff")
         self.text_area.tag_config("SUCCESS", foreground="#00e676")
@@ -166,20 +164,14 @@ def fetch_multilingual_database(log_fn=None):
                 lang_name = lang["name"]
                 all_db[lang_name] = {}
 
-                log(
-                    f"\n--------------------------------------------------"
-                )
+                log(f"\n--------------------------------------------------")
                 log(f"🌐 กำลังประมวลผลภาษา: {lang_name} [{lang_code}]")
-                log(
-                    f"--------------------------------------------------"
-                )
+                log(f"--------------------------------------------------")
 
                 for cat in CATEGORIES:
                     cat_id = cat["id"]
                     cat_name = cat["name"]
-                    event_url = (
-                        f"{base_url}?lang={lang_code}#event={cat_id}&reveal=1"
-                    )
+                    event_url = f"{base_url}?lang={lang_code}#event={cat_id}&reveal=1"
 
                     log(f"  🔍 หมวดกิจกรรม: '{cat_name}'")
                     log(f"     URL: {event_url}")
@@ -188,7 +180,8 @@ def fetch_multilingual_database(log_fn=None):
                     page.wait_for_timeout(1500)
 
                     # สลับหมวดกิจกรรม
-                    page.evaluate(f"""
+                    page.evaluate(
+                        f"""
                         () => {{
                             const selects = Array.from(document.querySelectorAll('select'));
                             for (const s of selects) {{
@@ -200,7 +193,8 @@ def fetch_multilingual_database(log_fn=None):
                                 }}
                             }}
                         }}
-                    """)
+                    """
+                    )
                     page.wait_for_timeout(1000)
 
                     # บังคับกดปุ่ม "แสดงคำตอบทั้งหมด"
@@ -213,12 +207,11 @@ def fetch_multilingual_database(log_fn=None):
 
                             body_text = page.inner_text("body")
                             if "???" not in body_text:
-                                log(
-                                    "     🔓 เปิดแสดงเฉลยเรียบร้อยแล้ว!"
-                                )
+                                log("     🔓 เปิดแสดงเฉลยเรียบร้อยแล้ว!")
                                 break
                             else:
-                                page.evaluate("""
+                                page.evaluate(
+                                    """
                                     () => {
                                         document.querySelectorAll('div').forEach(d => {
                                             if (d.innerText && d.innerText.includes('???')) {
@@ -226,13 +219,15 @@ def fetch_multilingual_database(log_fn=None):
                                             }
                                         });
                                     }
-                                """)
+                                """
+                                )
                                 page.wait_for_timeout(800)
                         except Exception:
                             pass
 
                     # สกัดคำถามและเฉลย พร้อมคัดกรองปุ่ม UI ออก
-                    qa_items = page.evaluate(r"""
+                    qa_items = page.evaluate(
+                        r"""
                     () => {
                         const results = [];
                         const text = document.body.innerText || '';
@@ -355,12 +350,11 @@ def fetch_multilingual_database(log_fn=None):
                         }
                         return unique;
                     }
-                    """)
+                    """
+                    )
 
                     all_db[lang_name][cat_name] = qa_items
-                    log(
-                        f"     ✅ สำเร็จ! ดึงมาได้ {len(qa_items)} รายการ"
-                    )
+                    log(f"     ✅ สำเร็จ! ดึงมาได้ {len(qa_items)} รายการ")
 
             browser.close()
 
@@ -585,9 +579,7 @@ class AnswerOverlay:
         if not clean_ans:
             clean_ans = answer_text.strip()
 
-        self.current_question_text = (
-            raw_question if raw_question else question_text
-        )
+        self.current_question_text = raw_question if raw_question else question_text
         self.label_question.config(text=f"คำถามที่พบ: {question_text}")
         self.label_answer.config(text=f"เฉลย: {clean_ans}")
 
@@ -609,15 +601,11 @@ def perform_scan(overlay_window, lang_combobox, category_combobox, silent=False)
     win = get_game_window()
     if not win:
         if not silent:
-            messagebox.showwarning(
-                "แจ้งเตือน", f"ไม่พบหน้าต่างเกม '{GAME_WINDOW_TITLE}'!"
-            )
+            messagebox.showwarning("แจ้งเตือน", f"ไม่พบหน้าต่างเกม '{GAME_WINDOW_TITLE}'!")
         return
 
     selected_lang = lang_combobox.get() if lang_combobox else "ไทย (TH)"
-    selected_cat = (
-        category_combobox.get() if category_combobox else "ทุกหมวดหมู่"
-    )
+    selected_cat = category_combobox.get() if category_combobox else "ทุกหมวดหมู่"
 
     roi = get_absolute_roi_for_category(selected_cat)
     if not roi:
@@ -777,9 +765,7 @@ def main():
     btn_scan = tk.Button(
         main_card,
         text="⚡ สแกนคำถามทันที (หรือกด F9)",
-        command=lambda: perform_scan(
-            overlay, lang_combobox, category_combobox
-        ),
+        command=lambda: perform_scan(overlay, lang_combobox, category_combobox),
         bg=ACCENT_GREEN,
         fg="#0d0e15",
         activebackground="#00c853",
@@ -801,16 +787,12 @@ def main():
 
             def auto_loop():
                 while auto_scan_active:
-                    perform_scan(
-                        overlay, lang_combobox, category_combobox, silent=True
-                    )
+                    perform_scan(overlay, lang_combobox, category_combobox, silent=True)
                     time.sleep(2)
 
             threading.Thread(target=auto_loop, daemon=True).start()
         else:
-            btn_auto.config(
-                text="🔄 เปิดสแกนอัตโนมัติ (Auto-Scan)", bg=ACCENT_BLUE
-            )
+            btn_auto.config(text="🔄 เปิดสแกนอัตโนมัติ (Auto-Scan)", bg=ACCENT_BLUE)
             lbl_status.config(text="สถานะ: หยุดสแกนอัตโนมัติแล้ว")
 
     btn_auto = tk.Button(
@@ -846,9 +828,7 @@ def main():
             else:
                 lbl_status.config(text="สถานะ: เกิดข้อผิดพลาดขณะอัปเดต")
 
-            btn_update.config(
-                state="normal", text="🌐 ดึงเฉลยจากเว็บเพิ่ม (Update DB)"
-            )
+            btn_update.config(state="normal", text="🌐 ดึงเฉลยจากเว็บเพิ่ม (Update DB)")
 
         threading.Thread(target=run_update, daemon=True).start()
 
@@ -874,9 +854,7 @@ def main():
         def on_press(key):
             try:
                 if key == keyboard.Key.f9:
-                    perform_scan(
-                        overlay, lang_combobox, category_combobox, silent=True
-                    )
+                    perform_scan(overlay, lang_combobox, category_combobox, silent=True)
             except Exception:
                 pass
 
