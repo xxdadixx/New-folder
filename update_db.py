@@ -496,9 +496,11 @@ def fetch_multilingual_database(
         target_path = "qa_database.json"
         dir_name = os.path.dirname(os.path.abspath(target_path)) or "."
         temp_fd, temp_path = tempfile.mkstemp(dir=dir_name, suffix=".tmp")
+        file_written = False
         try:
             with os.fdopen(temp_fd, "w", encoding="utf-8") as tf:
                 json.dump(sanitized_db, tf, ensure_ascii=False, indent=2)
+            file_written = True
             os.replace(temp_path, target_path)
             log("==================================================")
             log("🎉 Database and proof images update complete!")
@@ -506,7 +508,15 @@ def fetch_multilingual_database(
             log(f"🏁 Finished at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
             log("==================================================")
             return True
+        except Exception as write_err:
+            log(f"❌ Failed to write JSON database: {write_err}")
+            return False
         finally:
+            if not file_written:
+                try:
+                    os.close(temp_fd)
+                except OSError:
+                    pass
             if os.path.exists(temp_path):
                 try:
                     os.remove(temp_path)

@@ -421,20 +421,22 @@ class AnswerOverlay:
         self.label_question.config(text=f"Detected Question: {question_text}")
         self.label_answer.config(text=f"Answer: {clean_ans}")
 
-        # Render website element screenshot proof if present
         if HAS_PIL and image_path and os.path.exists(image_path):
             try:
-                pil_img = Image.open(image_path)
-                w, h = pil_img.size
-                max_w = 400
-                if w > max_w:
-                    h = int(h * (max_w / w))
-                    w = max_w
-                    pil_img = pil_img.resize((w, h), Image.Resampling.LANCZOS)
+                with Image.open(image_path) as pil_img:
+                    w, h = pil_img.size
+                    max_w = 400
+                    if w > max_w:
+                        h = int(h * (max_w / w))
+                        w = max_w
+                        resized_img = pil_img.resize((w, h), Image.Resampling.LANCZOS)
+                    else:
+                        resized_img = pil_img.copy()
 
-                self._current_photo = ImageTk.PhotoImage(pil_img)
+                    self._current_photo = ImageTk.PhotoImage(resized_img)
+                    resized_img.close()
+
                 self.label_image.config(image=self._current_photo)
-
                 self.label_proof_title.pack(before=self.btn_copy, pady=(6, 2))
                 self.label_image.pack(before=self.btn_copy, pady=(2, 6), padx=10)
             except Exception as img_err:
@@ -553,6 +555,11 @@ class ROHelperApp:
     def on_closing(self):
         self.auto_scan_active = False
         self._auto_scan_stop_event.set()
+        if hasattr(self, "keyboard_listener") and self.keyboard_listener:
+            try:
+                self.keyboard_listener.stop()
+            except Exception as e:
+                print(f"[Warning] Error stopping keyboard listener: {e}")
         self.save_config()
         self.root.destroy()
 
@@ -791,7 +798,7 @@ class ROHelperApp:
             return windows[0]
         return None
 
-    def get_absolute_roi_for_category(self, category_name: str):
+    def get_absolute_roi_for_category(self, category_name: str) -> Optional[Dict[str, int]]:
         win = self.get_game_window()
         if not win or category_name not in self.roi_presets:
             return None
@@ -799,18 +806,45 @@ class ROHelperApp:
         preset = self.roi_presets[category_name]
         abs_x = win.left + preset["rel_x"]
         abs_y = win.top + preset["rel_y"]
+        w = preset["w"]
+        h = preset["h"]
+
+        with mss.mss() as sct:
+            v_mon = sct.monitors[0]
+            v_left, v_top = v_mon["left"], v_mon["top"]
+            v_right = v_left + v_mon["width"]
+            v_bottom = v_top + v_mon["height"]
+
+        clamped_x = max(v_left, min(abs_x, v_right - 10))
+        clamped_y = max(v_top, min(abs_y, v_bottom - 10))
+        clamped_w = max(10, min(w, v_right - clamped_x))
+        clamped_h = max(10, min(h, v_bottom - clamped_y))
 
         return {
-            "top": int(abs_y),
-            "left": int(abs_x),
-            "width": int(preset["w"]),
-            "height": int(preset["h"]),
+            "top": int(clamped_y),
+            "left": int(clamped_x),
+            "width": int(clamped_w),
+            "height": int(clamped_h),
         }
 
-    def trigger_scan(self, silent=False):
+    def trigger_scan(self, silent: bool = False):
         if self._scan_lock.locked():
             return
-        threading.Thread(target=self._execute_scan, args=(silent,), daemon=True).start()
+        selected_lang = (
+            self.lang_combobox.get()
+            if hasattr(self, "lang_combobox") and self.lang_combobox
+            else "ไทย (TH)"
+        )
+        selected_cat = (
+            self.category_combobox.get()
+            if hasattr(self, "category_combobox") and self.category_combobox
+            else "ทุกหมวดหมู่"
+        )
+        threading.Thread(
+            target=self._execute_scan,
+            args=(selected_lang, selected_cat, silent),
+            daemon=True,
+        ).start()
 
     def toggle_auto_scan(self):
         if self.auto_scan_active:
@@ -826,24 +860,25 @@ class ROHelperApp:
 
             def auto_loop():
                 while not self._auto_scan_stop_event.is_set():
-                    self._execute_scan(silent=True)
+                    selected_lang = self.saved_lang or "ไทย (TH)"
+                    selected_cat = self.saved_cat or "ทุกหมวดหมู่"
+                    if hasattr(self, "lang_combobox") and self.lang_combobox:
+                        try:
+                            selected_lang = self.lang_combobox.get()
+                            selected_cat = self.category_combobox.get()
+                        except Exception:
+                            pass
+                    self._execute_scan(selected_lang, selected_cat, silent=True)
                     if self._auto_scan_stop_event.wait(timeout=2.0):
                         break
 
             threading.Thread(target=auto_loop, daemon=True).start()
 
-    def _execute_scan(self, silent: bool):
+    def _execute_scan(self, selected_lang: str, selected_cat: str, silent: bool):
         if not self._scan_lock.acquire(blocking=False):
             return
 
         try:
-            selected_lang = (
-                self.lang_combobox.get() if self.lang_combobox else "ไทย (TH)"
-            )
-            selected_cat = (
-                self.category_combobox.get() if self.category_combobox else "ทุกหมวดหมู่"
-            )
-
             win = self.get_game_window()
             if not win:
                 if not silent:
@@ -877,7 +912,6 @@ class ROHelperApp:
 
             primary_tuples = get_cached_tuples(selected_lang, selected_cat)
 
-            # Initialize thread-local screen capture context
             with mss.mss() as sct:
                 sct_img = sct.grab(roi)
                 img = np.array(sct_img)
@@ -1013,9 +1047,9 @@ class ROHelperApp:
             except Exception:
                 pass
 
-        listener = keyboard.Listener(on_press=on_press)
-        listener.daemon = True
-        listener.start()
+        self.keyboard_listener = keyboard.Listener(on_press=on_press)
+        self.keyboard_listener.daemon = True
+        self.keyboard_listener.start()
 
 
 def init_windows_dpi():
