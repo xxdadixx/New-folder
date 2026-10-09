@@ -1,23 +1,10 @@
-import json
-import requests
-from bs4 import BeautifulSoup
+"""
+Deprecated: scrape_qa.py
+All web scraping operations have been consolidated into update_db.py.
+"""
 
-# ดึงข้อมูลจาก API หรือหน้าเว็บ roworlddb
-url = "https://roworlddb.com/sea/study/?lang=th-TH"
+from update_db import fetch_multilingual_database
 
-headers = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
-}
-
-try:
-    response = requests.get(url, headers=headers)
-    response.encoding = 'utf-8'
-    
-    # หมายเหตุ: หากหน้าเว็บใช้อินเทอร์เฟซหลักผ่าน API ให้ปรับโครงสร้างดึงค่า JSON ตาม API ของเว็บ
-    print("กำลังสกัดข้อมูล...")
-    
-    # เมื่อได้ข้อมูลเรียบร้อย นำมาเขียนลงไฟล์
-    # data = [{"question": "...", "answer": "..."}]
-    
-except Exception as e:
-    print(f"เกิดข้อผิดพลาดในการดึงข้อมูล: {e}")
+if __name__ == "__main__":
+    print("[Notice] Delegating scrape_qa execution to update_db pipeline...")
+    fetch_multilingual_database()
