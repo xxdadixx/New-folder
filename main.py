@@ -14,18 +14,16 @@ import mss
 import numpy as np
 import pygetwindow as gw
 from rapidfuzz import fuzz, process
-from typing import Dict, List, Tuple, Callable
+from typing import Dict, List, Tuple, Callable, Optional
+from datetime import datetime, timedelta
 
-# Playwright Web Scraper Engine
+# Pillow Image Processing Engine
 try:
-    from playwright.sync_api import (
-        sync_playwright,
-        TimeoutError as PlaywrightTimeoutError,
-    )
+    from PIL import Image, ImageTk
 
-    HAS_PLAYWRIGHT = True
+    HAS_PIL = True
 except ImportError:
-    HAS_PLAYWRIGHT = False
+    HAS_PIL = False
 
 # Global Keyboard Hotkey
 try:
@@ -34,6 +32,9 @@ try:
     HAS_PYNPUT = True
 except ImportError:
     HAS_PYNPUT = False
+
+# Import database scraper module
+from update_db import fetch_multilingual_database, is_invalid_answer
 
 # --- Configurations & Constants ---
 GAME_WINDOW_TITLE = "Ragnarok"
@@ -54,327 +55,24 @@ CATEGORIES = [
     {"id": "moon-riddle", "name": "เช็กอินใต้แสงจันทร์ / Moon Riddle"},
 ]
 
-# Multilingual UI Blacklist / Placeholder indicators
-INVALID_ANSWER_PATTERNS = [
-    r"คลิกเพื่อ",
-    r"ซ่อน",
-    r"แสดงคำตอบ",
-    r"点击隐藏答案",
-    r"点击隐藏",
-    r"点击显示答案",
-    r"点击",
-    r"隐藏",
-    r"显示",
-    r"click\s*to\s*(?:hide|show)",
-    r"hide\s*answer",
-    r"show\s*answer",
-    r"\?\?\?",
-    r"^answer$",
-    r"^question$",
-    r"^\d+$",
-]
-
-
-def is_invalid_answer(answer_str: str) -> bool:
-    """Checks if an answer string contains leftover UI prompt text or invalid artifacts."""
-    if not answer_str or len(answer_str.strip()) <= 1:
-        return True
-
-    clean = answer_str.strip().lower()
-    for pattern in INVALID_ANSWER_PATTERNS:
-        if re.search(pattern, clean, re.IGNORECASE):
-            return True
-    return False
-
-
-def verify_and_heal_database(
-    db_file: str = "qa_database.json", log_fn: Callable[[str], None] = None
-) -> Tuple[bool, Dict]:
-    """
-    Performs a full audit of qa_database.json against live data from roworlddb.com
-    and cross-language index fallback. Returns (is_100_percent_accurate, audit_report_dict).
-    """
-
-    def log(msg: str):
-        if log_fn:
-            log_fn(msg)
-        print(msg)
-
-    log("==================================================")
-    log("🔍 Starting Database Accuracy & Integrity Audit...")
-    log("==================================================")
-
-    if not os.path.exists(db_file):
-        log(f"❌ Database file '{db_file}' not found.")
-        return False, {}
-
-    try:
-        with open(db_file, "r", encoding="utf-8") as f:
-            local_db = json.load(f)
-    except Exception as e:
-        log(f"❌ Failed to load local database: {e}")
-        return False, {}
-
-    report = {
-        "total_scanned": 0,
-        "valid_matches": 0,
-        "placeholders_found": 0,
-        "healed_entries": 0,
-        "unresolvable_errors": 0,
-        "details": [],
-    }
-
-    # -------------------------------------------------------------
-    # Stage 1: Static Integrity Pre-Check
-    # -------------------------------------------------------------
-    log("\n[Stage 1/2] Running Local Integrity Pre-Check...")
-    suspect_questions = []
-
-    for lang_key, categories in local_db.items():
-        for cat_key, items in categories.items():
-            for idx, entry in enumerate(items):
-                report["total_scanned"] += 1
-                q = entry.get("question", "").strip()
-                a = entry.get("answer", "").strip()
-
-                if is_invalid_answer(a):
-                    report["placeholders_found"] += 1
-                    suspect_questions.append((lang_key, cat_key, idx, q, a))
-                    report["details"].append(
-                        f"⚠️ Placeholder detected [{lang_key} -> {cat_key}]: Q: '{q}' | Invalid Ans: '{a}'"
-                    )
-                else:
-                    report["valid_matches"] += 1
-
-    log(f"  • Scanned Records: {report['total_scanned']}")
-    log(f"  • Verified Valid: {report['valid_matches']}")
-    log(f"  • Flagged Artifacts/Placeholders: {report['placeholders_found']}")
-
-    if report["placeholders_found"] == 0:
-        log("✅ Stage 1 Complete: 100% Local Structural Accuracy Verified!")
-
-    # -------------------------------------------------------------
-    # Stage 2: Live Web DOM Verification & Multilingual Auto-Healing
-    # -------------------------------------------------------------
-    log("\n[Stage 2/2] Cross-Checking against Live Web DOM (roworlddb.com)...")
-
-    if HAS_PLAYWRIGHT and report["placeholders_found"] > 0:
-        from playwright.sync_api import sync_playwright
-
-        base_url = "https://roworlddb.com/sea/study/"
-
-        with sync_playwright() as p:
-            browser = p.chromium.launch(headless=True)
-            try:
-                context = browser.new_context(viewport={"width": 1280, "height": 800})
-                page = context.new_page()
-                page.set_default_navigation_timeout(20000)
-
-                for lang in SUPPORTED_LANGUAGES:
-                    lang_code = lang["code"]
-                    lang_name = lang["name"]
-
-                    if lang_name not in local_db:
-                        continue
-
-                    for cat in CATEGORIES:
-                        cat_id = cat["id"]
-                        cat_name = cat["name"]
-
-                        if cat_name not in local_db[lang_name]:
-                            continue
-
-                        event_url = (
-                            f"{base_url}?lang={lang_code}#event={cat_id}&reveal=1"
-                        )
-
-                        try:
-                            page.goto(
-                                event_url, wait_until="domcontentloaded", timeout=20000
-                            )
-                            page.wait_for_timeout(1000)
-
-                            # Trigger category dropdown selection
-                            page.evaluate(
-                                f"""
-                                () => {{
-                                    const selects = Array.from(document.querySelectorAll('select'));
-                                    for (const s of selects) {{
-                                        const opt = Array.from(s.options).find(o => o.value === '{cat_id}' || o.value.includes('{cat_id}'));
-                                        if (opt) {{
-                                            s.value = opt.value;
-                                            s.dispatchEvent(new Event('change', {{ bubbles: true }}));
-                                            break;
-                                        }}
-                                    }}
-                                }}
-                            """
-                            )
-                            page.wait_for_timeout(800)
-
-                            # Comprehensive DOM unmasking including Chinese triggers
-                            page.evaluate(
-                                """
-                                () => {
-                                    document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
-                                        if (!cb.checked) { cb.click(); }
-                                    });
-                                    document.querySelectorAll('div, button, span, a, p').forEach(d => {
-                                        const txt = d.innerText || d.textContent || '';
-                                        if (txt.includes('???') || txt.includes('点击') || txt.includes('Click') || txt.includes('คลิก')) {
-                                            d.click();
-                                        }
-                                    });
-                                }
-                            """
-                            )
-                            page.wait_for_timeout(1000)
-
-                            # Extract sanitized Q&A map from web page
-                            web_map = page.evaluate(
-                                r"""
-                                () => {
-                                    const map = {};
-                                    const uiBlacklist = [
-                                        'CLICK TO HIDE', 'HIDE ANSWER', 'SHOW ANSWER', 'CLICK TO SHOW',
-                                        'CLICK', 'HIDE', 'SHOW', 'ANSWER', 'คลิกเพื่อ', 'ซ่อน', 'แสดงคำตอบ',
-                                        '点击隐藏答案', '点击隐藏', '点击显示答案', '点击', '隐藏', '显示', '???'
-                                    ];
-
-                                    const isBlacklisted = (str) => {
-                                        if (!str) return true;
-                                        const u = str.toUpperCase();
-                                        return uiBlacklist.some(b => u.includes(b.toUpperCase())) || /^\d+$/.test(str.trim());
-                                    };
-
-                                    const bodyText = document.body.innerText || '';
-                                    const blocks = bodyText.split(/(?=Q\s*\d+[\.\:\s\n])/gi);
-
-                                    blocks.forEach(block => {
-                                        const lines = block.split('\n').map(l => l.trim()).filter(l => l.length > 0);
-                                        if (lines.length < 2 || !/^Q\s*\d+/i.test(lines[0])) return;
-
-                                        let q = lines[0].replace(/^Q\s*\d+[\.\s\:]*/i, '').trim();
-                                        if (!q && lines.length > 1) q = lines[1].trim();
-                                        if (!q) return;
-
-                                        const candidates = lines.slice(1).filter(l => l !== q && l.length > 1 && !isBlacklisted(l));
-
-                                        if (candidates.length > 0) {
-                                            map[q] = candidates[0];
-                                        }
-                                    });
-                                    return map;
-                                }
-                            """
-                            )
-
-                            # Verify and Auto-Heal local records via Web DOM
-                            local_items = local_db[lang_name][cat_name]
-                            for entry in local_items:
-                                q_text = entry.get("question", "").strip()
-                                curr_ans = entry.get("answer", "").strip()
-
-                                if is_invalid_answer(curr_ans):
-                                    web_ans = web_map.get(q_text)
-                                    if not web_ans:
-                                        for w_q, w_a in web_map.items():
-                                            if (
-                                                q_text.lower() in w_q.lower()
-                                                or w_q.lower() in q_text.lower()
-                                            ):
-                                                web_ans = w_a
-                                                break
-
-                                    if web_ans and not is_invalid_answer(web_ans):
-                                        entry["answer"] = web_ans
-                                        report["healed_entries"] += 1
-                                        report["placeholders_found"] -= 1
-                                        report["valid_matches"] += 1
-                                        log(
-                                            f"  🔧 Web Auto-Healed [{lang_name} -> {cat_name}]: '{q_text}' => '{web_ans}'"
-                                        )
-
-                        except Exception as cat_err:
-                            log(
-                                f"  ⚠️ Web verification skipped for {lang_name} - {cat_name}: {cat_err}"
-                            )
-            finally:
-                browser.close()
-
-    # -------------------------------------------------------------
-    # Stage 3: Cross-Language Index Fallback Healing
-    # -------------------------------------------------------------
-    # For any remaining invalid answers, cross-reference index positions with verified languages
-    if report["placeholders_found"] > 0:
-        log("\n[Stage 3] Executing Cross-Language Index Fallback Alignment...")
-        reference_lang = "ไทย (TH)"
-
-        if reference_lang in local_db:
-            for lang_key, categories in local_db.items():
-                if lang_key == reference_lang:
-                    continue
-
-                for cat_key, items in categories.items():
-                    ref_items = local_db[reference_lang].get(cat_key, [])
-
-                    for idx, entry in enumerate(items):
-                        curr_ans = entry.get("answer", "").strip()
-
-                        if is_invalid_answer(curr_ans) and idx < len(ref_items):
-                            ref_ans = ref_items[idx].get("answer", "").strip()
-
-                            if ref_ans and not is_invalid_answer(ref_ans):
-                                # Map True/False answers to local language or standardized notation
-                                healed_val = ref_ans
-                                entry["answer"] = healed_val
-                                report["healed_entries"] += 1
-                                report["placeholders_found"] -= 1
-                                report["valid_matches"] += 1
-                                q_text = entry.get("question", "").strip()
-                                log(
-                                    f"  🔗 Index-Healed [{lang_key} -> {cat_key} #[{idx}]]: '{q_text}' => '{healed_val}'"
-                                )
-
-    report["unresolvable_errors"] = report["placeholders_found"]
-
-    # Save healed database atomically
-    if report["healed_entries"] > 0:
-        dir_name = os.path.dirname(os.path.abspath(db_file)) or "."
-        temp_fd, temp_path = tempfile.mkstemp(dir=dir_name, suffix=".tmp")
-        with os.fdopen(temp_fd, "w", encoding="utf-8") as tf:
-            json.dump(local_db, tf, ensure_ascii=False, indent=2)
-        os.replace(temp_path, db_file)
-        log("\n💾 Database successfully updated and written with auto-healed answers!")
-
-    # Final Accuracy Summary
-    total = report["total_scanned"]
-    valid = report["valid_matches"]
-    accuracy_pct = (valid / total * 100) if total > 0 else 0.0
-
-    log("\n==================================================")
-    log(f"📊 Final Database Audit Summary")
-    log(f"  • Total Questions Audited: {total}")
-    log(f"  • Verified Valid Answers: {valid}")
-    log(f"  • Auto-Healed Entries: {report['healed_entries']}")
-    log(f"  • Remaining Errors: {report['unresolvable_errors']}")
-    log(f"  • Overall Database Accuracy: {accuracy_pct:.2f}%")
-    log("==================================================")
-
-    is_100_percent = report["unresolvable_errors"] == 0
-    return is_100_percent, report
-
 
 # --- Live Scraper Log Window ---
 class LogWindow:
-    """Live system log window rendering real-time web scraping progress."""
+    """Live system log window rendering real-time web scraping progress and continuous header telemetry."""
 
     def __init__(self, parent: tk.Tk):
         self.window = tk.Toplevel(parent)
         self.window.title("📋 Live System Logs - Update & Audit")
-        self.window.geometry("640x420+100+100")
+        self.window.geometry("680x440+100+100")
         self.window.configure(bg="#13151f")
         self.window.attributes("-topmost", True)
+
+        self.start_time = None
+        self.is_running = False
+        self.remaining_tasks = 16
+        self.total_tasks = 16
+        self.eta_seconds = 0
+        self.timer_job = None
 
         card = tk.Frame(
             self.window,
@@ -384,14 +82,26 @@ class LogWindow:
         )
         card.pack(fill="both", expand=True, padx=12, pady=12)
 
+        header_frame = tk.Frame(card, bg="#1c1f2e")
+        header_frame.pack(fill="x", padx=12, pady=(10, 5))
+
         lbl_title = tk.Label(
-            card,
+            header_frame,
             text="ระบบบันทึกการทำงาน (System Logs)",
             fg="#00e5ff",
             bg="#1c1f2e",
             font=("Segoe UI", 11, "bold"),
         )
-        lbl_title.pack(anchor="w", padx=12, pady=(10, 5))
+        lbl_title.pack(side="left")
+
+        self.lbl_telemetry = tk.Label(
+            header_frame,
+            text="  |  ⏱️ Running: 00m 00s  |  ⏳ Est. Finish: --:--",
+            fg="#a0aec0",
+            bg="#1c1f2e",
+            font=("Segoe UI", 10, "bold"),
+        )
+        self.lbl_telemetry.pack(side="left", padx=(8, 0))
 
         self.text_area = tk.Text(
             card,
@@ -414,10 +124,71 @@ class LogWindow:
         self.text_area.tag_config("WARN", foreground="#ffb74d")
         self.text_area.tag_config("DEFAULT", foreground="#d1d5db")
 
+    def start_timer(self, total_tasks: int = 16):
+        """Starts the continuous 1-second GUI ticker."""
+        self.start_time = time.time()
+        self.is_running = True
+        self.total_tasks = total_tasks
+        self.remaining_tasks = total_tasks
+        self.eta_seconds = 0
+        self._tick_timer()
+
+    def stop_timer(self):
+        """Stops the GUI clock ticker when operations finish."""
+        self.is_running = False
+        if self.timer_job:
+            self.window.after_cancel(self.timer_job)
+            self.timer_job = None
+
+    def _tick_timer(self):
+        """Ticks continuously every 1 second directly on the Tkinter main thread."""
+        if not self.window.winfo_exists() or not self.is_running:
+            return
+
+        elapsed = int(time.time() - self.start_time)
+        mins, secs = divmod(elapsed, 60)
+        hrs, mins = divmod(mins, 60)
+        running_str = (
+            f"{hrs:02d}h {mins:02d}m {secs:02d}s"
+            if hrs > 0
+            else f"{mins:02d}m {secs:02d}s"
+        )
+
+        if self.remaining_tasks > 0:
+            if self.eta_seconds > 0:
+                finish_dt = datetime.now() + timedelta(seconds=self.eta_seconds)
+                clock_str = finish_dt.strftime("%I:%M:%S %p")
+            else:
+                clock_str = "--:--"
+            display_text = f"  |  ⏱️ {running_str}  |  ⏳ Est. Finish: {clock_str} ({self.remaining_tasks} left)"
+        else:
+            display_text = f"  |  ⏱️ Total: {running_str}  |  ✅ Complete"
+
+        self.lbl_telemetry.config(text=display_text)
+        self.timer_job = self.window.after(1000, self._tick_timer)
+
     def write_log(self, message: str):
         self.window.after(0, self._append_text, message)
 
+    def update_telemetry(self, data: dict):
+        """Synchronizes backend metadata without interrupting the 1-second GUI ticker loop."""
+        if not self.window.winfo_exists():
+            return
+
+        def _apply():
+            self.remaining_tasks = data.get("remaining_tasks", self.remaining_tasks)
+            self.total_tasks = data.get("total_tasks", self.total_tasks)
+            completed = data.get("completed_tasks", 0)
+            if completed > 0 and self.start_time:
+                elapsed = time.time() - self.start_time
+                avg_sec = elapsed / completed
+                self.eta_seconds = avg_sec * self.remaining_tasks
+
+        self.window.after(0, _apply)
+
     def _append_text(self, message: str):
+        if not self.window.winfo_exists():
+            return
         self.text_area.config(state="normal")
         tag = "DEFAULT"
         if "✅" in message or "สำเร็จ" in message or "Healed" in message:
@@ -432,305 +203,6 @@ class LogWindow:
         self.text_area.insert(tk.END, message + "\n", tag)
         self.text_area.see(tk.END)
         self.text_area.config(state="disabled")
-
-
-# --- Database Scraper Module ---
-def fetch_multilingual_database(log_fn=None) -> bool:
-    """Executes multi-language web extraction with DOM choice resolution and sanitization."""
-
-    def log(msg: str):
-        if log_fn:
-            log_fn(msg)
-        print(msg)
-
-    if not HAS_PLAYWRIGHT:
-        log(
-            "❌ Error: Playwright library is not installed! Run: pip install playwright"
-        )
-        return False
-
-    base_url = "https://roworlddb.com/sea/study/"
-    all_db = {}
-
-    log("==================================================")
-    log("🚀 Starting database scrape from roworlddb.com...")
-    log("==================================================")
-
-    try:
-        with sync_playwright() as p:
-            log("🌐 Launching Chromium Browser (Headless Mode)...")
-            browser = p.chromium.launch(headless=True)
-            try:
-                context = browser.new_context(viewport={"width": 1280, "height": 800})
-                page = context.new_page()
-                page.set_default_navigation_timeout(20000)
-
-                for lang in SUPPORTED_LANGUAGES:
-                    lang_code = lang["code"]
-                    lang_name = lang["name"]
-                    all_db[lang_name] = {}
-
-                    log(f"\n--------------------------------------------------")
-                    log(f"🌐 Fetching Language: {lang_name} [{lang_code}]")
-                    log(f"--------------------------------------------------")
-
-                    for cat in CATEGORIES:
-                        cat_id = cat["id"]
-                        cat_name = cat["name"]
-                        event_url = (
-                            f"{base_url}?lang={lang_code}#event={cat_id}&reveal=1"
-                        )
-
-                        log(f"  🔍 Category: '{cat_name}'")
-                        log(f"     URL: {event_url}")
-
-                        try:
-                            page.goto(
-                                event_url, wait_until="domcontentloaded", timeout=20000
-                            )
-                            page.wait_for_timeout(1500)
-                        except PlaywrightTimeoutError:
-                            log(
-                                f"  ⚠️ Timeout loading {event_url}. Extracting current DOM."
-                            )
-                        except Exception as e:
-                            log(f"  ❌ Navigation failed: {e}")
-                            all_db[lang_name][cat_name] = []
-                            continue
-
-                        # Trigger event category dropdown selection on web page
-                        try:
-                            page.evaluate(
-                                f"""
-                                () => {{
-                                    const selects = Array.from(document.querySelectorAll('select'));
-                                    for (const s of selects) {{
-                                        const opt = Array.from(s.options).find(o => o.value === '{cat_id}' || o.value.includes('{cat_id}'));
-                                        if (opt) {{
-                                            s.value = opt.value;
-                                            s.dispatchEvent(new Event('change', {{ bubbles: true }}));
-                                            break;
-                                        }}
-                                    }}
-                                }}
-                            """
-                            )
-                            page.wait_for_timeout(1000)
-                        except Exception as e:
-                            log(f"  ⚠️ Category dropdown selection skipped: {e}")
-
-                        # Force reveal all hidden answers
-                        for attempt in range(5):
-                            try:
-                                page.evaluate(
-                                    """
-                                    () => {
-                                        document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
-                                            if (!cb.checked) { cb.click(); }
-                                        });
-                                        document.querySelectorAll('div, button, span, a, p').forEach(d => {
-                                            const txt = d.innerText || d.textContent || '';
-                                            if (txt.includes('???') || txt.includes('点击') || txt.includes('Click') || txt.includes('คลิก')) {
-                                                d.click();
-                                            }
-                                        });
-                                    }
-                                """
-                                )
-                                page.wait_for_timeout(800)
-                                body_text = page.inner_text("body")
-                                if (
-                                    "???" not in body_text
-                                    and "点击隐藏" not in body_text
-                                ):
-                                    break
-                            except Exception:
-                                pass
-
-                        try:
-                            qa_items = page.evaluate(
-                                r"""
-                            () => {
-                                const results = [];
-                                const uiBlacklist = [
-                                    'CLICK TO HIDE', 'HIDE ANSWER', 'SHOW ANSWER', 'CLICK TO SHOW',
-                                    'CLICK', 'HIDE', 'SHOW', 'ANSWER', 'คลิกเพื่อ', 'ซ่อน', 'แสดงคำตอบ',
-                                    '点击隐藏答案', '点击隐藏', '点击显示答案', '点击', '隐藏', '显示',
-                                    'QUESTION', 'SCORE', 'STUDY', 'กิจกรรม', 'REWARD', 'POINTS', '???'
-                                ];
-
-                                const isBlacklisted = (str) => {
-                                    if (!str) return true;
-                                    const upper = str.toUpperCase();
-                                    return uiBlacklist.some(b => upper.includes(b.toUpperCase()));
-                                };
-
-                                const cleanText = (str) => {
-                                    if (!str) return '';
-                                    return str
-                                        .replace(/[\uE000-\uF8FF\u2700-\u27BF\u2600-\u26FF✓✔✅]/g, '')
-                                        .replace(/^(?:Ans|Answer|Option)\s*[\:\.-]?\s*/i, '')
-                                        .replace(/^\d+[\.\:\)\s]+\s*/, '')
-                                        .trim();
-                                };
-
-                                const greenElems = Array.from(document.querySelectorAll('*')).filter(el => {
-                                    if (!el.innerText || el.innerText.trim().length === 0) return false;
-                                    const style = window.getComputedStyle(el);
-                                    const color = style.color || '';
-                                    const classStr = el.className || '';
-
-                                    let isG = false;
-                                    if (typeof classStr === 'string' && (
-                                        classStr.includes('green') || classStr.includes('emerald') ||
-                                        classStr.includes('teal') || classStr.includes('success') || classStr.includes('correct')
-                                    )) {
-                                        isG = true;
-                                    } else if (color.startsWith('rgb')) {
-                                        const rgb = color.match(/\d+/g);
-                                        if (rgb && rgb.length >= 3) {
-                                            const r = parseInt(rgb[0]), g = parseInt(rgb[1]), b = parseInt(rgb[2]);
-                                            if (g > 120 && g > r * 1.15 && g > b * 1.15) isG = true;
-                                        }
-                                    }
-                                    return isG;
-                                });
-
-                                const bodyText = document.body.innerText || '';
-                                const blocks = bodyText.split(/(?=Q\s*\d+[\.\:\s\n])/gi);
-
-                                blocks.forEach(block => {
-                                    const lines = block.split('\n').map(l => l.trim()).filter(l => l.length > 0);
-                                    if (lines.length < 2 || !/^Q\s*\d+/i.test(lines[0])) return;
-
-                                    let question = lines[0].replace(/^Q\s*\d+[\.\s\:]*/i, '').trim();
-                                    let startIdx = 1;
-                                    if (!question && lines.length > 1) {
-                                        question = lines[1];
-                                        startIdx = 2;
-                                    }
-
-                                    question = question.trim();
-                                    if (question.length < 2) return;
-
-                                    let answer = "";
-
-                                    const blockGreenTexts = [];
-                                    for (const ge of greenElems) {
-                                        const txt = (ge.innerText || ge.textContent || '').trim();
-                                        if (txt && block.includes(txt)) {
-                                            blockGreenTexts.push({ elem: ge, text: txt });
-                                        }
-                                    }
-
-                                    for (const item of blockGreenTexts) {
-                                        let t = cleanText(item.text);
-
-                                        if (!t || /^\d+$/.test(t) || t.length <= 1) {
-                                            const parentContainer = item.elem.closest('li, div, p, tr, button');
-                                            if (parentContainer) {
-                                                const pTxt = cleanText(parentContainer.innerText || parentContainer.textContent || '');
-                                                if (pTxt && !/^\d+$/.test(pTxt) && pTxt !== question && pTxt.length > 1) {
-                                                    t = pTxt;
-                                                }
-                                            }
-                                        }
-
-                                        if (t && t !== question && !/^Q\s*\d+/i.test(t) && !/^\d+$/.test(t) && !isBlacklisted(t) && t.length > 1) {
-                                            answer = t;
-                                            break;
-                                        }
-                                    }
-
-                                    if (!answer) {
-                                        for (let i = startIdx; i < lines.length; i++) {
-                                            const cleanL = cleanText(lines[i]);
-                                            if (['จริง', 'O', 'True', '正确', 'Benar'].includes(cleanL)) {
-                                                answer = 'จริง / True (O)';
-                                                break;
-                                            } else if (['เท็จ', 'X', 'False', '錯誤', 'Salah'].includes(cleanL)) {
-                                                answer = 'เท็จ / False (X)';
-                                                break;
-                                            }
-                                        }
-                                    }
-
-                                    if (!answer) {
-                                        const candidates = lines.slice(startIdx)
-                                            .map(l => cleanText(l))
-                                            .filter(l => l && l !== question && !/^\d+$/.test(l) && !isBlacklisted(l) && l.length > 1);
-                                        if (candidates.length > 0) {
-                                            answer = candidates[0];
-                                        }
-                                    }
-
-                                    if (question && answer && !/^\d+$/.test(answer) && answer.length > 1) {
-                                        results.push({ question, answer });
-                                    }
-                                });
-
-                                const unique = [];
-                                const seen = new Set();
-                                for (const item of results) {
-                                    if (!seen.has(item.question)) {
-                                        seen.add(item.question);
-                                        unique.push(item);
-                                    }
-                                }
-                                return unique;
-                            }
-                            """
-                            )
-                            all_db[lang_name][cat_name] = qa_items
-                            log(
-                                f"     ✅ Loaded {len(qa_items)} items for '{cat_name}'"
-                            )
-                        except Exception as eval_err:
-                            log(
-                                f"     ❌ Extraction failed on category '{cat_name}': {eval_err}"
-                            )
-                            all_db[lang_name][cat_name] = []
-            finally:
-                browser.close()
-
-        log("\n🧹 Sanitizing extracted database records...")
-        sanitized_db = {}
-        total_entries = 0
-        for lang_key, cat_dict in all_db.items():
-            sanitized_db[lang_key] = {}
-            for cat_key, items in cat_dict.items():
-                clean_list = []
-                for entry in items:
-                    if not isinstance(entry, dict):
-                        continue
-                    q = entry.get("question", "").strip()
-                    a = entry.get("answer", "").strip()
-
-                    a = re.sub(
-                        r"^(?:Ans\s*:\s*|\d+[\.\:\)]\s*|[A-Da-d][\.\:\)]\s*)", "", a
-                    ).strip()
-
-                    if a and not is_invalid_answer(a) and q.lower() != a.lower():
-                        clean_list.append({"question": q, "answer": a})
-                        total_entries += 1
-                sanitized_db[lang_key][cat_key] = clean_list
-
-        log(f"✅ Sanitization complete: {total_entries} verified entries.")
-
-        dir_name = os.path.dirname(os.path.abspath(DATABASE_FILE)) or "."
-        temp_fd, temp_path = tempfile.mkstemp(dir=dir_name, suffix=".tmp")
-        with os.fdopen(temp_fd, "w", encoding="utf-8") as tf:
-            json.dump(sanitized_db, tf, ensure_ascii=False, indent=2)
-        os.replace(temp_path, DATABASE_FILE)
-
-        log("==================================================")
-        log("✅ Database update completed successfully!")
-        log("==================================================")
-        return True
-
-    except Exception as e:
-        log(f"\n❌ Scraping exception: {e}")
-        return False
 
 
 # --- Bounded OCR Manager ---
@@ -839,24 +311,27 @@ class SnippingTool:
 
 # --- Liquid Glass Answer Overlay GUI ---
 class AnswerOverlay:
-    """Thread-safe UI overlay displaying OCR question and matched answer with position memory."""
+    """Thread-safe UI overlay displaying OCR question, matched answer, and live website proof screenshot."""
 
     def __init__(self, parent: tk.Tk, initial_geometry: str = None):
+        self.parent = parent
         self.window = tk.Toplevel(parent)
-        self.window.title("RO Answer")
+        self.window.title("RO Answer Verification")
 
         if initial_geometry:
             try:
                 self.window.geometry(initial_geometry)
             except Exception:
-                self.window.geometry("440x180+50+50")
+                self.window.geometry("460x380+50+50")
         else:
-            self.window.geometry("440x180+50+50")
+            self.window.geometry("460x380+50+50")
 
         self.window.attributes("-topmost", True)
         self.window.configure(bg="#13151f")
+        self.window.protocol("WM_DELETE_WINDOW", self.hide_window)
 
         self.current_question_text = ""
+        self._current_photo = None
         font_family = "Segoe UI"
 
         card_frame = tk.Frame(
@@ -873,7 +348,7 @@ class AnswerOverlay:
             fg="#8e9bb0",
             bg="#1c1f2e",
             font=(font_family, 10),
-            wraplength=400,
+            wraplength=420,
             justify="center",
         )
         self.label_question.pack(pady=(12, 4), padx=10)
@@ -884,10 +359,20 @@ class AnswerOverlay:
             fg="#00e676",
             bg="#1c1f2e",
             font=(font_family, 15, "bold"),
-            wraplength=400,
+            wraplength=420,
             justify="center",
         )
         self.label_answer.pack(pady=4, padx=10)
+
+        self.label_proof_title = tk.Label(
+            card_frame,
+            text="📷 Website Source Proof:",
+            fg="#00e5ff",
+            bg="#1c1f2e",
+            font=(font_family, 9, "bold"),
+        )
+
+        self.label_image = tk.Label(card_frame, bg="#1c1f2e")
 
         self.btn_copy = tk.Button(
             card_frame,
@@ -906,9 +391,25 @@ class AnswerOverlay:
         )
         self.btn_copy.pack(pady=(6, 12))
 
+    def hide_window(self):
+        if self.window.winfo_exists():
+            self.window.withdraw()
+
+    def show_window(self):
+        if self.window.winfo_exists():
+            self.window.deiconify()
+            self.window.attributes("-topmost", True)
+
     def update_display(
-        self, question_text: str, answer_text: str, raw_question: str = ""
+        self,
+        question_text: str,
+        answer_text: str,
+        raw_question: str = "",
+        image_path: str = "",
     ):
+        if not self.window.winfo_exists():
+            return
+
         clean_ans = (
             re.sub(
                 r"[\uE000-\uF8FF\u2700-\u27BF\u2600-\u26FF✓✔✅]", "", answer_text
@@ -920,14 +421,44 @@ class AnswerOverlay:
         self.label_question.config(text=f"Detected Question: {question_text}")
         self.label_answer.config(text=f"Answer: {clean_ans}")
 
+        # Render website element screenshot proof if present
+        if HAS_PIL and image_path and os.path.exists(image_path):
+            try:
+                pil_img = Image.open(image_path)
+                w, h = pil_img.size
+                max_w = 400
+                if w > max_w:
+                    h = int(h * (max_w / w))
+                    w = max_w
+                    pil_img = pil_img.resize((w, h), Image.Resampling.LANCZOS)
+
+                self._current_photo = ImageTk.PhotoImage(pil_img)
+                self.label_image.config(image=self._current_photo)
+
+                self.label_proof_title.pack(before=self.btn_copy, pady=(6, 2))
+                self.label_image.pack(before=self.btn_copy, pady=(2, 6), padx=10)
+            except Exception as img_err:
+                print(f"[Warning] Proof image render error: {img_err}")
+                self.label_proof_title.pack_forget()
+                self.label_image.pack_forget()
+        else:
+            self.label_proof_title.pack_forget()
+            self.label_image.pack_forget()
+
+        self.show_window()
+
     def copy_to_clipboard(self):
-        if self.current_question_text:
+        if self.current_question_text and self.window.winfo_exists():
             self.window.clipboard_clear()
             self.window.clipboard_append(self.current_question_text)
             self.btn_copy.config(text="✓ Copied!", fg="#00e676")
             self.window.after(
                 1500,
-                lambda: self.btn_copy.config(text="📋 Copy Question", fg="#00e5ff"),
+                lambda: (
+                    self.btn_copy.config(text="📋 Copy Question", fg="#00e5ff")
+                    if self.window.winfo_exists()
+                    else None
+                ),
             )
 
 
@@ -943,6 +474,7 @@ class ROHelperApp:
         self.root.attributes("-topmost", True)
 
         self.raw_database = {}
+        self.normalized_db_cache = {}
         self.roi_presets = {}
         self.saved_main_geo = None
         self.saved_overlay_geo = None
@@ -969,10 +501,7 @@ class ROHelperApp:
         self.build_ui()
         self.restore_ui_selections()
 
-        # Intercept window close to persist state
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
-
-        # Main thread UI update loop
         self.root.after(100, self.process_ui_queue)
 
         if HAS_PYNPUT:
@@ -1001,7 +530,7 @@ class ROHelperApp:
             overlay_geo = (
                 self.overlay.window.geometry()
                 if hasattr(self, "overlay") and self.overlay.window.winfo_exists()
-                else (self.saved_overlay_geo or "440x180+50+50")
+                else (self.saved_overlay_geo or "460x380+50+50")
             )
             config_payload = {
                 "main_window_geometry": self.root.geometry(),
@@ -1036,15 +565,45 @@ class ROHelperApp:
         }
         self.save_config()
 
+    @staticmethod
+    def _normalize_q(text: str) -> str:
+        if not text:
+            return ""
+        clean = re.sub(
+            r"^(?:Question|Q)\s*\.?\d*[\.\:\s]*", "", text, flags=re.IGNORECASE
+        )
+        clean = re.sub(r"[^\w\s]", "", clean)
+        return " ".join(clean.lower().split())
+
+    def _build_normalized_cache(self):
+        self.normalized_db_cache = {}
+        for lang, categories in self.raw_database.items():
+            self.normalized_db_cache[lang] = {}
+            for cat, items in categories.items():
+                if not isinstance(items, list):
+                    continue
+                cat_tuples = []
+                for entry in items:
+                    if isinstance(entry, dict) and "question" in entry:
+                        q_raw = entry["question"]
+                        a_raw = entry.get("answer", "")
+                        img_path = entry.get("image_path", "")
+                        q_norm = self._normalize_q(q_raw)
+                        if q_norm:
+                            cat_tuples.append((q_raw, q_norm, a_raw, img_path))
+                self.normalized_db_cache[lang][cat] = cat_tuples
+
     def load_database(self) -> bool:
         if os.path.exists(DATABASE_FILE):
             try:
                 with open(DATABASE_FILE, "r", encoding="utf-8") as f:
                     self.raw_database = json.load(f)
+                self._build_normalized_cache()
                 return True
             except Exception as e:
                 print(f"[Error] Database loading error: {e}")
         self.raw_database = {}
+        self.normalized_db_cache = {}
         return False
 
     def build_ui(self):
@@ -1068,7 +627,6 @@ class ROHelperApp:
         )
         lbl_title.pack(pady=(15, 10))
 
-        # Language Selection Dropdown
         lbl_lang = tk.Label(
             main_card,
             text="1. Select Game Language:",
@@ -1086,7 +644,6 @@ class ROHelperApp:
         self.lang_combobox.current(0)
         self.lang_combobox.pack(fill="x", padx=20, pady=2)
 
-        # Category Selection Dropdown
         lbl_cat = tk.Label(
             main_card,
             text="2. Select Event Category:",
@@ -1114,7 +671,6 @@ class ROHelperApp:
         )
         self.lbl_status.pack(pady=8)
 
-        # Action Buttons
         self.btn_set_roi = tk.Button(
             main_card,
             text="🎯 Set ROI Bounding Box",
@@ -1165,10 +721,9 @@ class ROHelperApp:
         )
         self.btn_auto.pack(fill="x", padx=20, pady=4)
 
-        # Web Database Update Button
         self.btn_update = tk.Button(
             main_card,
-            text="🌐 Update DB from Web",
+            text="🌐 Update DB & Proof Images from Web",
             command=self.update_db_async,
             bg="#252a3e",
             fg="#00e5ff",
@@ -1180,24 +735,7 @@ class ROHelperApp:
             height=2,
             cursor="hand2",
         )
-        self.btn_update.pack(fill="x", padx=20, pady=(8, 4))
-
-        # Verification & Self-Healing Button
-        self.btn_verify = tk.Button(
-            main_card,
-            text="🔍 Verify Database Accuracy",
-            command=self.verify_db_async,
-            bg="#252a3e",
-            fg="#00e5ff",
-            activebackground="#2e354f",
-            activeforeground="#00e5ff",
-            font=("Segoe UI", 9, "bold"),
-            relief="flat",
-            bd=0,
-            height=2,
-            cursor="hand2",
-        )
-        self.btn_verify.pack(fill="x", padx=20, pady=(4, 15))
+        self.btn_update.pack(fill="x", padx=20, pady=(8, 15))
 
     def restore_ui_selections(self):
         if self.saved_lang and self.saved_lang in self.lang_combobox["values"]:
@@ -1214,16 +752,20 @@ class ROHelperApp:
             self.category_combobox.current(0)
 
     def update_db_async(self):
-        """Asynchronously updates database via background Playwright thread and updates UI."""
         log_win = LogWindow(self.root)
+        log_win.start_timer(total_tasks=16)
         self.btn_update.config(state="disabled", text="⏳ Updating Database...")
-        self.lbl_status.config(text="Status: Fetching Q&A database from web...")
+        self.lbl_status.config(text="Status: Fetching Q&A database and screenshots...")
 
         def run_update():
-            success = fetch_multilingual_database(log_fn=log_win.write_log)
+            success = fetch_multilingual_database(
+                log_fn=log_win.write_log,
+                progress_fn=log_win.update_telemetry,
+            )
             self.load_database()
 
             def finalize():
+                log_win.stop_timer()
                 languages = [lang["name"] for lang in SUPPORTED_LANGUAGES]
                 self.lang_combobox["values"] = languages
                 self.update_category_options()
@@ -1235,45 +777,13 @@ class ROHelperApp:
                 else:
                     self.lbl_status.config(text="Status: Database update failed.")
 
-                self.btn_update.config(state="normal", text="🌐 Update DB from Web")
-
-            self.root.after(0, finalize)
-
-        threading.Thread(target=run_update, daemon=True).start()
-
-    def verify_db_async(self):
-        """Asynchronously verifies and heals database accuracy in background thread and updates UI status."""
-        log_win = LogWindow(self.root)
-        self.btn_verify.config(state="disabled", text="⏳ Auditing & Healing DB...")
-        self.lbl_status.config(
-            text="Status: Auditing database accuracy against web DOM..."
-        )
-
-        def run_verification():
-            is_100_percent, report = verify_and_heal_database(
-                DATABASE_FILE, log_fn=log_win.write_log
-            )
-            self.load_database()
-
-            def finalize():
-                self.update_category_options()
-                if is_100_percent:
-                    self.lbl_status.config(
-                        text="Status: DB Audit 100% Verified & Accurate!"
-                    )
-                else:
-                    unresolved = report.get("unresolvable_errors", 0)
-                    self.lbl_status.config(
-                        text=f"Status: Audit finished ({unresolved} errors remaining)"
-                    )
-
-                self.btn_verify.config(
-                    state="normal", text="🔍 Verify Database Accuracy"
+                self.btn_update.config(
+                    state="normal", text="🌐 Update DB & Proof Images from Web"
                 )
 
             self.root.after(0, finalize)
 
-        threading.Thread(target=run_verification, daemon=True).start()
+        threading.Thread(target=run_update, daemon=True).start()
 
     def get_game_window(self):
         windows = gw.getWindowsWithTitle(GAME_WINDOW_TITLE)
@@ -1356,144 +866,124 @@ class ROHelperApp:
                     )
                 return
 
-            def build_qa_pool(lang_name: str, cat_name: str):
-                lang_db = self.raw_database.get(lang_name, {})
-                if cat_name == "ทุกหมวดหมู่" or cat_name not in lang_db:
+            def get_cached_tuples(lang_name: str, cat_name: str):
+                lang_cache = self.normalized_db_cache.get(lang_name, {})
+                if cat_name == "ทุกหมวดหมู่" or cat_name not in lang_cache:
                     pool = []
-                    for items in lang_db.values():
-                        if isinstance(items, list):
-                            pool.extend(items)
+                    for tuples in lang_cache.values():
+                        pool.extend(tuples)
                     return pool
-                return lang_db.get(cat_name, [])
+                return lang_cache.get(cat_name, [])
 
-            def normalize_q(text: str) -> str:
-                if not text:
-                    return ""
-                clean = re.sub(
-                    r"^(?:Question|Q)\s*\.?\d*[\.\:\s]*", "", text, flags=re.IGNORECASE
-                )
-                clean = re.sub(r"[^\w\s]", "", clean)
-                return " ".join(clean.lower().split())
+            primary_tuples = get_cached_tuples(selected_lang, selected_cat)
 
-            def clean_answer_prefix(text: str) -> str:
-                if not text:
-                    return ""
-                cleaned = re.sub(
-                    r"^(?:Ans|Answer)\s*[\:\.-]?\s*|^[A-Da-d1-4][\.\)]\s+",
-                    "",
-                    text,
-                    flags=re.IGNORECASE,
-                ).strip()
-                return cleaned or text.strip()
-
-            primary_qa = build_qa_pool(selected_lang, selected_cat)
-
+            # Initialize thread-local screen capture context
             with mss.mss() as sct:
                 sct_img = sct.grab(roi)
                 img = np.array(sct_img)
 
-                gray = cv2.cvtColor(img, cv2.COLOR_BGRA2GRAY)
-                frame_hash = hash(gray.tobytes())
-                if frame_hash == self.last_frame_hash:
-                    return
-                self.last_frame_hash = frame_hash
+            gray = cv2.cvtColor(img, cv2.COLOR_BGRA2GRAY)
+            frame_hash = hash(gray.tobytes())
+            if frame_hash == self.last_frame_hash:
+                return
+            self.last_frame_hash = frame_hash
 
-                h, w = gray.shape
-                scaled = cv2.resize(gray, (w * 2, h * 2), interpolation=cv2.INTER_CUBIC)
+            _, bin_img = cv2.threshold(
+                gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU
+            )
+            h, w = bin_img.shape
+            scaled = cv2.resize(bin_img, (w * 2, h * 2), interpolation=cv2.INTER_CUBIC)
 
-                reader = self.ocr_manager.get_reader(selected_lang)
-                results = reader.readtext(scaled, detail=0)
-                captured_text = " ".join(results).strip()
+            reader = self.ocr_manager.get_reader(selected_lang)
+            results = reader.readtext(scaled, detail=0)
+            captured_text = " ".join(results).strip()
 
-                if captured_text:
-                    norm_captured = normalize_q(captured_text)
-                    best_match = None
-                    best_score = 0
-                    matched_answer = ""
-                    matched_lang = selected_lang
+            if captured_text:
+                norm_captured = self._normalize_q(captured_text)
+                best_match = None
+                best_score = 0
+                matched_answer = ""
+                matched_img_path = ""
+                matched_lang = selected_lang
 
-                    def search_pool(qa_list):
-                        nonlocal best_match, best_score, matched_answer
-                        if not qa_list:
-                            return
+                def search_pool(tuple_list):
+                    nonlocal best_match, best_score, matched_answer, matched_img_path
+                    if not tuple_list:
+                        return
 
-                        raw_questions = [
-                            item["question"]
-                            for item in qa_list
-                            if isinstance(item, dict) and "question" in item
-                        ]
-                        norm_questions = [normalize_q(q) for q in raw_questions]
+                    norm_questions = [t[1] for t in tuple_list]
+                    match_res = process.extractOne(
+                        norm_captured, norm_questions, scorer=fuzz.token_set_ratio
+                    )
+                    if match_res:
+                        _, score, idx = match_res[0], match_res[1], match_res[2]
+                        if score > best_score:
+                            best_score = score
+                            best_match = tuple_list[idx][0]
+                            matched_answer = tuple_list[idx][2]
+                            matched_img_path = tuple_list[idx][3]
 
-                        if not norm_questions:
-                            return
+                search_pool(primary_tuples)
 
-                        match_res = process.extractOne(
-                            norm_captured, norm_questions, scorer=fuzz.token_set_ratio
-                        )
-                        if match_res:
-                            match_str, score, idx = (
-                                match_res[0],
-                                match_res[1],
-                                match_res[2],
-                            )
-                            if score > best_score:
-                                best_score = score
-                                best_match = raw_questions[idx]
-                                matched_answer = qa_list[idx].get("answer", "")
+                if best_score < 70:
+                    for lang_name in self.normalized_db_cache.keys():
+                        if lang_name == selected_lang:
+                            continue
+                        fallback_tuples = get_cached_tuples(lang_name, selected_cat)
+                        prev_score = best_score
+                        search_pool(fallback_tuples)
+                        if best_score > prev_score:
+                            matched_lang = lang_name
 
-                    # Step 1: Search within primary selected language scope
-                    search_pool(primary_qa)
+                if best_match and best_score >= 70:
+                    clean_ans = (
+                        re.sub(
+                            r"^(?:Ans|Answer)\s*[\:\.-]?\s*|^[A-Da-d1-4][\.\)]\s+",
+                            "",
+                            matched_answer,
+                            flags=re.IGNORECASE,
+                        ).strip()
+                        or matched_answer.strip()
+                    )
 
-                    # Step 2: Cross-language search if primary confidence is below threshold (<70%)
-                    if best_score < 70:
-                        for lang_name in self.raw_database.keys():
-                            if lang_name == selected_lang:
-                                continue
-                            fallback_qa = build_qa_pool(lang_name, selected_cat)
-                            prev_score = best_score
-                            search_pool(fallback_qa)
-                            if best_score > prev_score:
-                                matched_lang = lang_name
-
-                    if best_match and best_score >= 70:
-                        clean_ans = clean_answer_prefix(matched_answer)
-                        lang_tag = (
-                            f" [{matched_lang}]"
-                            if matched_lang != selected_lang
-                            else ""
-                        )
-                        self.scan_queue.put(
-                            (
-                                "display",
-                                (
-                                    f"{best_match} ({best_score:.0f}%){lang_tag}",
-                                    clean_ans,
-                                    best_match,
-                                ),
-                            )
-                        )
-                    else:
-                        self.scan_queue.put(
-                            (
-                                "display",
-                                (
-                                    f"Scanned: {captured_text}",
-                                    "No matching question found.",
-                                    captured_text,
-                                ),
-                            )
-                        )
-                elif not silent:
+                    lang_tag = (
+                        f" [{matched_lang}]" if matched_lang != selected_lang else ""
+                    )
                     self.scan_queue.put(
                         (
                             "display",
                             (
-                                "OCR Failed to read text",
-                                "Try adjusting ROI or game display resolution.",
+                                f"{best_match} ({best_score:.0f}%){lang_tag}",
+                                clean_ans,
+                                best_match,
+                                matched_img_path,
+                            ),
+                        )
+                    )
+                else:
+                    self.scan_queue.put(
+                        (
+                            "display",
+                            (
+                                f"Scanned: {captured_text}",
+                                "No matching question found.",
+                                captured_text,
                                 "",
                             ),
                         )
                     )
+            elif not silent:
+                self.scan_queue.put(
+                    (
+                        "display",
+                        (
+                            "OCR Failed to read text",
+                            "Try adjusting ROI or game display resolution.",
+                            "",
+                            "",
+                        ),
+                    )
+                )
 
         except Exception as e:
             print(f"[Error] OCR scanning exception: {e}")
@@ -1507,8 +997,8 @@ class ROHelperApp:
             try:
                 msg_type, payload = self.scan_queue.get_nowait()
                 if msg_type == "display":
-                    q_text, a_text, raw_q = payload
-                    self.overlay.update_display(q_text, a_text, raw_q)
+                    q_text, a_text, raw_q, img_p = payload
+                    self.overlay.update_display(q_text, a_text, raw_q, img_p)
                 elif msg_type == "warning":
                     messagebox.showwarning("Notice", payload)
             except queue.Empty:
@@ -1528,7 +1018,23 @@ class ROHelperApp:
         listener.start()
 
 
+def init_windows_dpi():
+    if os.name == "nt":
+        try:
+            import ctypes
+
+            ctypes.windll.shcore.SetProcessDpiAwareness(2)
+        except Exception:
+            try:
+                import ctypes
+
+                ctypes.windll.shcore.SetProcessDpiAwareness(1)
+            except Exception:
+                pass
+
+
 def main():
+    init_windows_dpi()
     root = tk.Tk()
     app = ROHelperApp(root)
     root.mainloop()
