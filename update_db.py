@@ -60,6 +60,14 @@ def format_duration(seconds: float) -> str:
     return f"{minutes:02d}m {secs:02d}s"
 
 
+def get_loading_bar(percent: int) -> str:
+    """Generates a visual CLI loading bar string."""
+    clamped = max(0, min(100, percent))
+    filled = int(clamped // 10)
+    bar = "█" * filled + "░" * (10 - filled)
+    return f"[{bar}] {clamped}%"
+
+
 def is_invalid_answer(answer_str: str) -> bool:
     """Checks if an answer string contains leftover UI prompt text or invalid artifacts."""
     if not answer_str or len(answer_str.strip()) <= 1:
@@ -76,7 +84,7 @@ async def _async_fetch_multilingual_database(
     log_fn: Optional[Callable[[str], None]] = None,
     progress_fn: Optional[Callable[[dict], None]] = None,
 ) -> bool:
-    """Sub-60s multi-worker priority scraper with accurate atomic task logging."""
+    """Sub-60s multi-worker priority scraper with synchronized task numbering and clean active loading bars."""
 
     def log(msg: str):
         if log_fn:
@@ -200,7 +208,7 @@ async def _async_fetch_multilingual_database(
                         await asyncio.sleep(0.5)
 
             if not nav_success:
-                log(f"❌ Navigation failed for '{cat_name}' [{lang_name}]. Skipping.")
+                log(f"❌ [Task {current_start_num}/{total_tasks}] Navigation failed for '{cat_name}' [{lang_name}]. Skipping.")
                 all_db[lang_name][cat_name] = []
                 async with telemetry_lock:
                     completed_task_count += 1
@@ -233,6 +241,15 @@ async def _async_fetch_multilingual_database(
             unchanged_passes = 0
             last_y = -1
             max_passes = 35
+
+            estimated_passes_map = {
+                "scholar-exam": 25,
+                "lucky-rabbit": 8,
+                "guild-banquet": 4,
+                "moon-riddle": 1,
+            }
+            estimated_total_passes = estimated_passes_map.get(cat_id, 10)
+            logged_milestones = set()
 
             while scroll_pass < max_passes and unchanged_passes < 3:
                 scroll_pass += 1
@@ -460,6 +477,17 @@ async def _async_fetch_multilingual_database(
 
                 last_y = pos["scrollY"]
 
+                if estimated_total_passes > 2:
+                    current_pct = min(
+                        90, int((scroll_pass / estimated_total_passes) * 100)
+                    )
+                    milestone = (current_pct // 25) * 25
+                    if milestone in [25, 50, 75] and milestone not in logged_milestones:
+                        logged_milestones.add(milestone)
+                        log(
+                            f"⏳ [Task {current_start_num}/{total_tasks}] {get_loading_bar(milestone)} Running '{cat_name}' [{lang_name}]... ({len(accumulated_qa)} items)"
+                        )
+
                 async with telemetry_lock:
                     task_progress_tracker[task_key] = min(
                         0.95, scroll_pass / max_passes
@@ -472,12 +500,11 @@ async def _async_fetch_multilingual_database(
             task_duration = time.perf_counter() - task_start_time
             async with telemetry_lock:
                 completed_task_count += 1
-                curr_done = completed_task_count
                 task_progress_tracker[task_key] = 0.0
             await emit_progress()
 
             log(
-                f"   ✅ [Done {curr_done}/{total_tasks}] '{cat_name}' [{lang_name}] in {format_duration(task_duration)} "
+                f"   ✅ [Done {current_start_num}/{total_tasks}] '{cat_name}' [{lang_name}] in {format_duration(task_duration)} "
                 f"({len(final_list)} items | {saved_screenshots} screenshots)"
             )
             await context.close()

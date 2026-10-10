@@ -10,6 +10,7 @@ import tkinter as tk
 from tkinter import messagebox, ttk
 import unicodedata
 import math
+from fractions import Fraction
 from datetime import datetime, timedelta
 from typing import Callable, Dict, List, Optional, Tuple
 
@@ -97,7 +98,6 @@ class LogWindow:
         )
         lbl_title.pack(side="left")
 
-        # IDM-style Live Telemetry Label
         self.lbl_telemetry = tk.Label(
             header_frame,
             text="  |  ⏱️ Elapsed: 00m 00s  |  ⏳ Time Left: Calculating...",
@@ -107,7 +107,6 @@ class LogWindow:
         )
         self.lbl_telemetry.pack(side="left", padx=(8, 0))
 
-        # Copy Logs Button
         self.btn_copy_logs = tk.Button(
             header_frame,
             text="📋 Copy Logs",
@@ -147,7 +146,6 @@ class LogWindow:
         self.text_area.tag_config("DEFAULT", foreground="#d1d5db")
 
     def copy_logs(self):
-        """Copies all text from the log window to the clipboard."""
         if not self.window.winfo_exists():
             return
         logs_text = self.text_area.get("1.0", tk.END).strip()
@@ -165,7 +163,6 @@ class LogWindow:
             )
 
     def start_timer(self, total_tasks: int = 16):
-        """Starts the continuous 1-second GUI ticker."""
         self.start_time = time.time()
         self.is_running = True
         self.total_tasks = total_tasks
@@ -174,14 +171,12 @@ class LogWindow:
         self._tick_timer()
 
     def stop_timer(self):
-        """Stops the GUI clock ticker when operations finish."""
         self.is_running = False
         if self.timer_job:
             self.window.after_cancel(self.timer_job)
             self.timer_job = None
 
     def _tick_timer(self):
-        """IDM-Style continuous 1-second ticker calculating live Time Left countdown."""
         if not self.window.winfo_exists() or not self.is_running:
             return
 
@@ -197,7 +192,6 @@ class LogWindow:
 
         if self.remaining_tasks > 0:
             if self.target_finish_time and self.target_finish_time > now:
-                # IDM-Style Live Countdown Calculation
                 time_left_sec = max(
                     0, int((self.target_finish_time - now).total_seconds())
                 )
@@ -210,7 +204,6 @@ class LogWindow:
                 )
                 finish_clock_str = self.target_finish_time.strftime("%I:%M:%S %p")
 
-                # IDM Format: Elapsed | Time Left | Target Clock
                 display_text = (
                     f"  |  ⏱️ Elapsed: {elapsed_str}  |  ⏳ Time Left: {time_left_str}  "
                     f"|  🏁 Est. Finish: {finish_clock_str}"
@@ -227,7 +220,6 @@ class LogWindow:
         self.window.after(0, self._append_text, message)
 
     def update_telemetry(self, data: dict):
-        """Synchronizes backend speed metadata and updates target completion timestamp."""
         if not self.window.winfo_exists():
             return
 
@@ -268,7 +260,6 @@ class OCRManager:
         self._readers = {}
         self.max_cached_readers = max_cached_readers
 
-        # Optimize PyTorch CPU execution threads to prevent core thrashing
         try:
             import torch
 
@@ -299,7 +290,6 @@ class OCRManager:
         reader = easyocr.Reader(lang_list, gpu=False)
         self._readers[lang_label] = reader
         return reader
-
 
 # --- Interactive Snipping Tool Overlay ---
 class SnippingTool:
@@ -378,8 +368,6 @@ class SnippingTool:
 class LiquidGlassSpinner(tk.Canvas):
     """
     Custom Tkinter Canvas widget rendering a Liquid Glass orbital spinner.
-    Inspired by fluid progressive loading icons, featuring a dual-layer cyan arc,
-    a dark glass track, and a glowing orbital particle.
     """
 
     def __init__(
@@ -413,13 +401,11 @@ class LiquidGlassSpinner(tk.Canvas):
         self.radius = (size / 2.0) - 10.0
 
     def start(self):
-        """Starts the smooth non-blocking animation loop."""
         if not self.is_animating:
             self.is_animating = True
             self._animate()
 
     def stop(self):
-        """Stops the animation and cleans up canvas elements."""
         self.is_animating = False
         if self.anim_job:
             self.after_cancel(self.anim_job)
@@ -433,7 +419,6 @@ class LiquidGlassSpinner(tk.Canvas):
 
         self.delete("all")
 
-        # 1. Base Dark Glass Track Ring
         self.create_oval(
             self.cx - self.radius,
             self.cy - self.radius,
@@ -443,7 +428,6 @@ class LiquidGlassSpinner(tk.Canvas):
             width=5,
         )
 
-        # 2. Outer Liquid Glow Arc (Backdrop Blur Effect)
         self.create_arc(
             self.cx - self.radius,
             self.cy - self.radius,
@@ -456,7 +440,6 @@ class LiquidGlassSpinner(tk.Canvas):
             style=tk.ARC,
         )
 
-        # 3. Main Vibrant Cyan Arc Sweep
         self.create_arc(
             self.cx - self.radius,
             self.cy - self.radius,
@@ -469,13 +452,11 @@ class LiquidGlassSpinner(tk.Canvas):
             style=tk.ARC,
         )
 
-        # 4. Leading Orbital Glow Particle
         tip_angle_rad = math.radians(self.angle + self.extent)
         orb_x = self.cx + self.radius * math.cos(tip_angle_rad)
         orb_y = self.cy - self.radius * math.sin(tip_angle_rad)
         orb_r = 4.5
 
-        # Outer Glow
         self.create_oval(
             orb_x - orb_r - 2,
             orb_y - orb_r - 2,
@@ -484,7 +465,6 @@ class LiquidGlassSpinner(tk.Canvas):
             fill="#00e5ff",
             outline="",
         )
-        # Core Particle
         self.create_oval(
             orb_x - orb_r,
             orb_y - orb_r,
@@ -495,7 +475,6 @@ class LiquidGlassSpinner(tk.Canvas):
             width=1,
         )
 
-        # Rotate counter-clockwise at ~40 FPS
         self.angle = (self.angle - 8) % 360
         self.anim_job = self.after(25, self._animate)
 
@@ -602,7 +581,6 @@ class AnswerOverlay:
         self.label_telemetry.pack(pady=(2, 8))
 
     def open_full_image_modal(self):
-        """Opens an interactive, scrollable high-resolution modal viewer for long proof images."""
         if (
             not HAS_PIL
             or not self.current_image_path
@@ -643,7 +621,6 @@ class AnswerOverlay:
             canvas.create_image(0, 0, image=self._modal_photo, anchor="nw")
             canvas.config(scrollregion=(0, 0, w, h))
 
-            # Bind mousewheel scrolling
             canvas.bind_all(
                 "<MouseWheel>",
                 lambda e: canvas.yview_scroll(int(-1 * (e.delta / 120)), "units"),
@@ -900,30 +877,160 @@ class ROHelperApp:
         if not text:
             return ""
 
-        # Step 1: Normalize Unicode representations (NFC)
         text = unicodedata.normalize("NFC", text)
-
-        # Step 2: Strip leading noise, symbols, and isolated non-alphanumeric artifacts (e.g. "_ 3< ", "1.", "Q:")
         text = re.sub(r"^[\s\W_0-9]+", "", text)
-
-        # Step 3: Remove standard question prefix keywords
         clean = re.sub(
             r"^(?:Question|Q|ข้อที่|ข้อ)\s*\.?\d*[\.\:\s]*",
             "",
             text,
             flags=re.IGNORECASE,
         )
-
-        # Step 4: Retain alphanumeric characters, Thai Unicode block (\u0E00-\u0E7F), and spaces
         clean = re.sub(r"[^\w\s\u0E00-\u0E7F]", " ", clean)
-
-        # Step 5: Remove floating single non-Thai characters caused by noise artifacts
         clean = re.sub(r"\b[a-zA-Z]\b", " ", clean)
-
-        # Step 6: Collapse whitespace
         clean = " ".join(clean.lower().split())
 
         return clean
+
+    def _try_solve_math_expression(self, text: str) -> Optional[str]:
+        """Detects and evaluates arithmetic expressions, fractions, metric unit conversions, and geometric formula word problems (circle area, cube volume)."""
+        if not text:
+            return None
+
+        text_lower = text.lower()
+
+        # 1. Geometric Volume Word Problem Solver (e.g., Cube Volume: "A cube has an edge length of 5 cm. What is its volume...")
+        if (
+            "cube" in text_lower
+            and "edge length" in text_lower
+            and "volume" in text_lower
+        ):
+            try:
+                edge_match = re.search(r"edge length of\s*(\d+(?:\.\d+)?)", text_lower)
+                if not edge_match:
+                    edge_match = re.search(r"edge of\s*(\d+(?:\.\d+)?)", text_lower)
+                if not edge_match:
+                    edge_match = re.search(r"(\d+(?:\.\d+)?)\s*cm", text_lower)
+
+                if edge_match:
+                    s = float(edge_match.group(1))
+                    volume = s**3
+                    if volume.is_integer():
+                        return str(int(volume))
+                    return str(volume)
+            except Exception:
+                pass
+
+        # 2. Geometric Area Word Problem Solver (e.g., Circle Area: "The area of a circle is S=pi r^2. If r=5 cm and pi=3.14...")
+        if (
+            "area of a circle" in text_lower
+            or ("r =" in text_lower or "r=" in text_lower)
+            and ("pi" in text_lower or "π" in text_lower)
+        ):
+            try:
+                r_match = re.search(r"r\s*=\s*(\d+(?:\.\d+)?)", text_lower)
+                pi_match = re.search(r"(?:pi|π)\s*=\s*(\d+(?:\.\d+)?)", text_lower)
+
+                if r_match:
+                    r = float(r_match.group(1))
+                    pi = float(pi_match.group(1)) if pi_match else 3.14
+
+                    area = pi * (r**2)
+                    if area.is_integer():
+                        return str(int(area))
+                    return str(round(area, 1) if round(area, 1) == area else area)
+            except Exception:
+                pass
+
+        # 3. Metric Unit Conversion Solver (e.g., "4 decimeters equals how many meters?")
+        length_units = {
+            "mm": 0.001,
+            "millimeter": 0.001,
+            "millimeters": 0.001,
+            "มิลลิเมตร": 0.001,
+            "cm": 0.01,
+            "centimeter": 0.01,
+            "centimeters": 0.01,
+            "เซนติเมตร": 0.01,
+            "dm": 0.1,
+            "decimeter": 0.1,
+            "decimeters": 0.1,
+            "เดซิเมตร": 0.1,
+            "m": 1.0,
+            "meter": 1.0,
+            "meters": 1.0,
+            "เมตร": 1.0,
+            "km": 1000.0,
+            "kilometer": 1000.0,
+            "kilometers": 1000.0,
+            "กิโลเมตร": 1000.0,
+        }
+        mass_units = {
+            "mg": 0.001,
+            "milligram": 0.001,
+            "milligrams": 0.001,
+            "g": 1.0,
+            "gram": 1.0,
+            "grams": 1.0,
+            "กรัม": 1.0,
+            "kg": 1000.0,
+            "kilogram": 1000.0,
+            "kilograms": 1000.0,
+            "กิโลกรัม": 1000.0,
+        }
+
+        match = re.search(
+            r"(\d+(?:\.\d+)?)\s*([a-zA-Z\u0E00-\u0E7F]+).*?(?:to|how many|เป็น|เท่ากับ)?\s*([a-zA-Z\u0E00-\u0E7F]+)\?",
+            text_lower,
+        )
+        if match:
+            val_str, src_unit, tgt_unit = match.groups()
+            try:
+                val = float(val_str)
+                if src_unit in length_units and tgt_unit in length_units:
+                    base_val = val * length_units[src_unit]
+                    result = base_val / length_units[tgt_unit]
+                    if result.is_integer():
+                        return str(int(result))
+                    return str(result)
+                elif src_unit in mass_units and tgt_unit in mass_units:
+                    base_val = val * mass_units[src_unit]
+                    result = base_val / mass_units[tgt_unit]
+                    if result.is_integer():
+                        return str(int(result))
+                    return str(result)
+            except Exception:
+                pass
+
+        # 4. Standard Arithmetic & Fraction Expression Solver
+        clean = (
+            text.replace("×", "*")
+            .replace("x", "*")
+            .replace("X", "*")
+            .replace("÷", "/")
+            .replace("=", "")
+            .replace("?", "")
+            .strip()
+        )
+
+        if not any(op in clean for op in ["+", "-", "*", "/"]):
+            return None
+
+        if not re.match(r"^[\d\.\s\+\-\*\/\(\)]+$", clean):
+            return None
+
+        try:
+            result = eval(clean, {"__builtins__": {}}, {})
+            if isinstance(result, float) and result.is_integer():
+                result = int(result)
+                return str(result)
+            elif isinstance(result, float):
+                frac = Fraction(result).limit_denominator(20)
+                if frac.denominator != 1 and frac.denominator <= 20:
+                    return f"{result} ({frac.numerator}/{frac.denominator})"
+                return str(result)
+            return str(result)
+        except Exception:
+            return None
 
     def _build_normalized_cache(self):
         self.normalized_db_cache = {}
@@ -1222,11 +1329,6 @@ class ROHelperApp:
     def _preprocess_roi_image(
         self, img_bgra: np.ndarray
     ) -> Tuple[np.ndarray, np.ndarray]:
-        """
-        Transforms screen capture ROI into a high-contrast grayscale image optimized
-        for fast sub-500ms EasyOCR neural recognition, preserving fine Thai tone marks.
-        Returns a tuple of (enhanced_grayscale, adaptive_binary_fallback).
-        """
         if len(img_bgra.shape) == 3 and img_bgra.shape[2] == 4:
             gray = cv2.cvtColor(img_bgra, cv2.COLOR_BGRA2GRAY)
         elif len(img_bgra.shape) == 3 and img_bgra.shape[2] == 3:
@@ -1234,21 +1336,17 @@ class ROHelperApp:
         else:
             gray = img_bgra.copy()
 
-        # Optimal x1.5 Bicubic scaling: sharpens Thai glyphs without creating giant PyTorch tensors
         h, w = gray.shape[:2]
         scaled_gray = cv2.resize(
             gray, (int(w * 1.5), int(h * 1.5)), interpolation=cv2.INTER_CUBIC
         )
 
-        # CLAHE (Contrast Limited Adaptive Histogram Equalization) for dark game UI backgrounds
         clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
         enhanced_gray = clahe.apply(scaled_gray)
 
-        # Unsharp Masking kernel to accentuate thin Thai vowels/tone marks
         gaussian = cv2.GaussianBlur(enhanced_gray, (0, 0), sigmaX=1.5)
         sharpened_gray = cv2.addWeighted(enhanced_gray, 1.5, gaussian, -0.5, 0)
 
-        # Fast Adaptive Thresholding for fallback pass
         adaptive_bin = cv2.adaptiveThreshold(
             sharpened_gray,
             255,
@@ -1289,19 +1387,16 @@ class ROHelperApp:
 
             t_start_total = time.perf_counter()
 
-            # Stage 1: Fast Screen Capture
             t0_cap = time.perf_counter()
             with mss.mss() as sct:
                 sct_img = sct.grab(roi)
                 img = np.array(sct_img)
             t_capture_ms = (time.perf_counter() - t0_cap) * 1000.0
 
-            # Stage 2: Optimized Preprocessing
             t0_prep = time.perf_counter()
             enhanced_gray, adaptive_bin = self._preprocess_roi_image(img)
             t_prep_ms = (time.perf_counter() - t0_prep) * 1000.0
 
-            # Skip unchanged frames
             frame_hash = hash(enhanced_gray.tobytes())
             if frame_hash == self.last_frame_hash:
                 return
@@ -1321,11 +1416,9 @@ class ROHelperApp:
 
             primary_tuples = get_cached_tuples(selected_lang, selected_cat)
 
-            # Stage 3: Low-Latency EasyOCR Neural Inference
             t0_ocr = time.perf_counter()
             reader = self.ocr_manager.get_reader(selected_lang)
 
-            # Key Latency Fix: canvas_size=800 and mag_ratio=1.0 eliminate CPU PyTorch bottlenecks
             results = reader.readtext(
                 enhanced_gray,
                 detail=0,
@@ -1355,7 +1448,6 @@ class ROHelperApp:
                     captured_text = captured_text_bin
             t_ocr_ms = (time.perf_counter() - t0_ocr) * 1000.0
 
-            # Stage 4: Composite Fuzzy Matcher
             t0_match = time.perf_counter()
             best_match = None
             best_score = 0.0
@@ -1364,46 +1456,63 @@ class ROHelperApp:
             matched_lang = selected_lang
 
             if captured_text:
-                norm_captured = self._normalize_q(captured_text)
-                norm_captured_nospace = norm_captured.replace(" ", "")
-
-                def search_pool(tuple_list):
-                    nonlocal best_match, best_score, matched_answer, matched_img_path
-                    if not tuple_list or not norm_captured:
-                        return
-
-                    for q_raw, q_norm, a_raw, img_path in tuple_list:
-                        if not q_norm:
-                            continue
-
-                        score_token = fuzz.token_set_ratio(norm_captured, q_norm)
-                        score_wratio = fuzz.WRatio(norm_captured, q_norm)
-                        q_norm_nospace = q_norm.replace(" ", "")
-                        score_partial = (
-                            fuzz.partial_ratio(norm_captured_nospace, q_norm_nospace)
-                            if norm_captured_nospace and q_norm_nospace
-                            else 0
-                        )
-
-                        composite_score = max(score_token, score_wratio, score_partial)
-
-                        if composite_score > best_score:
-                            best_score = composite_score
-                            best_match = q_raw
-                            matched_answer = a_raw
+                # 1. Prioritize Math Expression Solver first to prevent false fuzzy matches
+                math_result = self._try_solve_math_expression(captured_text)
+                if math_result:
+                    best_match = captured_text
+                    matched_answer = math_result
+                    best_score = 100.0
+                    for q_raw, q_norm, a_raw, img_path in primary_tuples:
+                        if img_path and any(
+                            op in q_raw for op in ["+", "-", "*", "/", "x", "÷"]
+                        ):
                             matched_img_path = img_path
+                            break
+                else:
+                    norm_captured = self._normalize_q(captured_text)
+                    norm_captured_nospace = norm_captured.replace(" ", "")
 
-                search_pool(primary_tuples)
+                    def search_pool(tuple_list):
+                        nonlocal best_match, best_score, matched_answer, matched_img_path
+                        if not tuple_list or not norm_captured:
+                            return
 
-                if best_score < 55:
-                    for lang_name in self.normalized_db_cache.keys():
-                        if lang_name == selected_lang:
-                            continue
-                        fallback_tuples = get_cached_tuples(lang_name, selected_cat)
-                        prev_score = best_score
-                        search_pool(fallback_tuples)
-                        if best_score > prev_score:
-                            matched_lang = lang_name
+                        for q_raw, q_norm, a_raw, img_path in tuple_list:
+                            if not q_norm:
+                                continue
+
+                            score_token = fuzz.token_set_ratio(norm_captured, q_norm)
+                            score_wratio = fuzz.WRatio(norm_captured, q_norm)
+                            q_norm_nospace = q_norm.replace(" ", "")
+                            score_partial = (
+                                fuzz.partial_ratio(
+                                    norm_captured_nospace, q_norm_nospace
+                                )
+                                if norm_captured_nospace and q_norm_nospace
+                                else 0
+                            )
+
+                            composite_score = max(
+                                score_token, score_wratio, score_partial
+                            )
+
+                            if composite_score > best_score:
+                                best_score = composite_score
+                                best_match = q_raw
+                                matched_answer = a_raw
+                                matched_img_path = img_path
+
+                    search_pool(primary_tuples)
+
+                    if best_score < 70:
+                        for lang_name in self.normalized_db_cache.keys():
+                            if lang_name == selected_lang:
+                                continue
+                            fallback_tuples = get_cached_tuples(lang_name, selected_cat)
+                            prev_score = best_score
+                            search_pool(fallback_tuples)
+                            if best_score > prev_score:
+                                matched_lang = lang_name
 
             t_match_ms = (time.perf_counter() - t0_match) * 1000.0
             t_total_ms = (time.perf_counter() - t_start_total) * 1000.0
