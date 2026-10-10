@@ -291,6 +291,7 @@ class OCRManager:
         self._readers[lang_label] = reader
         return reader
 
+
 # --- Interactive Snipping Tool Overlay ---
 class SnippingTool:
     """Interactive screen region selector with relative coordinate mapping."""
@@ -718,31 +719,33 @@ class AnswerOverlay:
         else:
             self.label_telemetry.config(text="")
 
+        valid_img_rendered = False
         if HAS_PIL and image_path and os.path.exists(image_path):
             try:
-                with Image.open(image_path) as pil_img:
-                    w, h = pil_img.size
-                    max_w = 400
-                    max_h = 180
+                if os.path.getsize(image_path) > 100:
+                    with Image.open(image_path) as pil_img:
+                        w, h = pil_img.size
+                        max_w = 400
+                        max_h = 180
 
-                    scale = min(max_w / float(w), max_h / float(h), 1.0)
-                    new_w = max(10, int(w * scale))
-                    new_h = max(10, int(h * scale))
+                        scale = min(max_w / float(w), max_h / float(h), 1.0)
+                        new_w = max(10, int(w * scale))
+                        new_h = max(10, int(h * scale))
 
-                    resized_img = pil_img.resize(
-                        (new_w, new_h), Image.Resampling.LANCZOS
-                    )
-                    self._current_photo = ImageTk.PhotoImage(resized_img)
-                    resized_img.close()
+                        resized_img = pil_img.resize(
+                            (new_w, new_h), Image.Resampling.LANCZOS
+                        )
+                        self._current_photo = ImageTk.PhotoImage(resized_img)
+                        resized_img.close()
 
-                self.label_image.config(image=self._current_photo)
-                self.label_proof_title.pack(before=self.btn_copy, pady=(4, 2))
-                self.label_image.pack(before=self.btn_copy, pady=(2, 4), padx=10)
+                    self.label_image.config(image=self._current_photo)
+                    self.label_proof_title.pack(before=self.btn_copy, pady=(4, 2))
+                    self.label_image.pack(before=self.btn_copy, pady=(2, 4), padx=10)
+                    valid_img_rendered = True
             except Exception as img_err:
                 print(f"[Warning] Proof image render error: {img_err}")
-                self.label_proof_title.pack_forget()
-                self.label_image.pack_forget()
-        else:
+
+        if not valid_img_rendered:
             self.label_proof_title.pack_forget()
             self.label_image.pack_forget()
 
@@ -892,13 +895,13 @@ class ROHelperApp:
         return clean
 
     def _try_solve_math_expression(self, text: str) -> Optional[str]:
-        """Detects and evaluates arithmetic expressions, fractions, metric unit conversions, and geometric formula word problems (circle area, cube volume)."""
+        """Detects and evaluates arithmetic expressions, fractions, metric unit conversions, and word problems with intelligent quotient inference."""
         if not text:
             return None
 
         text_lower = text.lower()
 
-        # 1. Geometric Volume Word Problem Solver (e.g., Cube Volume: "A cube has an edge length of 5 cm. What is its volume...")
+        # 1. Geometric Volume Word Problem Solver (Cube Edge Length -> Volume: s^3)
         if (
             "cube" in text_lower
             and "edge length" in text_lower
@@ -920,7 +923,127 @@ class ROHelperApp:
             except Exception:
                 pass
 
-        # 2. Geometric Area Word Problem Solver (e.g., Circle Area: "The area of a circle is S=pi r^2. If r=5 cm and pi=3.14...")
+        # 2. Cube Edge Length from Volume Solver (Volume -> Edge Length: cube root)
+        if (
+            "cube" in text_lower
+            and "volume of" in text_lower
+            and ("edge" in text_lower or "length" in text_lower)
+        ):
+            try:
+                vol_match = re.search(r"volume of\s*(\d+(?:\.\d+)?)", text_lower)
+                if vol_match:
+                    vol = float(vol_match.group(1))
+                    edge = round(vol ** (1 / 3), 4)
+                    if abs(round(edge) ** 3 - vol) < 0.001:
+                        edge = round(edge)
+                    if isinstance(edge, float) and edge.is_integer():
+                        return str(int(edge))
+                    return str(edge)
+            except Exception:
+                pass
+
+        # 3. Unit Cost / Pricing Multiplication Word Problem Solver
+        if "cost" in text_lower or "costs" in text_lower or "price" in text_lower:
+            try:
+                nums = re.findall(r"(\d+(?:\.\d+)?)", text_lower)
+                if len(nums) >= 2:
+                    v1, v2 = float(nums[0]), float(nums[1])
+                    res = v1 * v2
+                    if res.is_integer():
+                        return str(int(res))
+                    return str(round(res, 2))
+            except Exception:
+                pass
+
+        # 4. Transport / Trip Division Word Problem Solver
+        if (
+            "transport" in text_lower
+            or "trip" in text_lower
+            or "per trip" in text_lower
+            or "how many trips" in text_lower
+        ):
+            try:
+                nums = re.findall(r"(\d+(?:\.\d+)?)", text_lower)
+                if len(nums) >= 2:
+                    v1, v2 = float(nums[0]), float(nums[1])
+                    if v2 != 0:
+                        res = v1 / v2
+                        if res.is_integer():
+                            return str(int(res))
+                        return str(round(res, 4))
+            except Exception:
+                pass
+
+        # 5. Compound Metric Unit Addition Solver
+        compound_match = re.search(
+            r"(\d+(?:\.\d+)?)\s*([a-zA-Z\u0E00-\u0E7F]+)\s+and\s+(\d+(?:\.\d+)?)\s*([a-zA-Z\u0E00-\u0E7F]+)\s+(?:equals|is|are|to|เป็น|เท่า|เท่ากับ)\s+(?:how many\s+)?([a-zA-Z\u0E00-\u0E7F]+)\?",
+            text_lower,
+        )
+        if compound_match:
+            val1_str, unit1, val2_str, unit2, tgt_unit = compound_match.groups()
+            all_units = {
+                "ml": 0.001,
+                "milliliter": 0.001,
+                "milliliters": 0.001,
+                "มิลลิลิตร": 0.001,
+                "l": 1.0,
+                "liter": 1.0,
+                "liters": 1.0,
+                "litre": 1.0,
+                "litres": 1.0,
+                "ลิตร": 1.0,
+                "mm": 0.001,
+                "millimeter": 0.001,
+                "millimeters": 0.001,
+                "มิลลิเมตร": 0.001,
+                "cm": 0.01,
+                "centimeter": 0.01,
+                "centimeters": 0.01,
+                "เซนติเมตร": 0.01,
+                "m": 1.0,
+                "meter": 1.0,
+                "meters": 1.0,
+                "เมตร": 1.0,
+                "km": 1000.0,
+                "kilometer": 1000.0,
+                "kilometers": 1000.0,
+                "กิโลเมตร": 1000.0,
+                "g": 1.0,
+                "gram": 1.0,
+                "grams": 1.0,
+                "กรัม": 1.0,
+                "kg": 1000.0,
+                "kilogram": 1000.0,
+                "kilograms": 1000.0,
+                "กิโลกรัม": 1000.0,
+            }
+            if unit1 in all_units and unit2 in all_units and tgt_unit in all_units:
+                try:
+                    base_val = (float(val1_str) * all_units[unit1]) + (
+                        float(val2_str) * all_units[unit2]
+                    )
+                    result = base_val / all_units[tgt_unit]
+                    if result.is_integer():
+                        return str(int(result))
+                    return str(result)
+                except Exception:
+                    pass
+
+        # 6. Rectangle Area Word Problem Solver
+        if "rectangle" in text_lower and "area" in text_lower:
+            try:
+                nums = re.findall(r"(\d+(?:\.\d+)?)", text_lower)
+                if len(nums) >= 2:
+                    val1 = float(nums[0])
+                    val2 = float(nums[1])
+                    area = val1 * val2
+                    if area.is_integer():
+                        return str(int(area))
+                    return str(round(area, 4))
+            except Exception:
+                pass
+
+        # 7. Geometric Area Word Problem Solver (Circle)
         if (
             "area of a circle" in text_lower
             or ("r =" in text_lower or "r=" in text_lower)
@@ -941,7 +1064,7 @@ class ROHelperApp:
             except Exception:
                 pass
 
-        # 3. Metric Unit Conversion Solver (e.g., "4 decimeters equals how many meters?")
+        # 8. Metric Unit Conversion Solver
         length_units = {
             "mm": 0.001,
             "millimeter": 0.001,
@@ -978,12 +1101,35 @@ class ROHelperApp:
             "กิโลกรัม": 1000.0,
         }
 
-        match = re.search(
-            r"(\d+(?:\.\d+)?)\s*([a-zA-Z\u0E00-\u0E7F]+).*?(?:to|how many|เป็น|เท่ากับ)?\s*([a-zA-Z\u0E00-\u0E7F]+)\?",
+        match_a = re.search(
+            r"(\d+(?:\.\d+)?)\s*([a-zA-Z\u0E00-\u0E7F]+)\s+(?:equals|is|are|to|เป็น|เท่า|เท่ากับ)\s+(?:how many\s+)?([a-zA-Z\u0E00-\u0E7F]+)\?",
             text_lower,
         )
-        if match:
-            val_str, src_unit, tgt_unit = match.groups()
+        match_b = re.search(
+            r"how many\s+([a-zA-Z\u0E00-\u0E7F]+)\s+(?:in|are|is)\s+(\d+(?:\.\d+)?)\s*([a-zA-Z\u0E00-\u0E7F]+)\?",
+            text_lower,
+        )
+
+        if match_a:
+            val_str, src_unit, tgt_unit = match_a.groups()
+            try:
+                val = float(val_str)
+                if src_unit in length_units and tgt_unit in length_units:
+                    base_val = val * length_units[src_unit]
+                    result = base_val / length_units[tgt_unit]
+                    if result.is_integer():
+                        return str(int(result))
+                    return str(result)
+                elif src_unit in mass_units and tgt_unit in mass_units:
+                    base_val = val * mass_units[src_unit]
+                    result = base_val / mass_units[tgt_unit]
+                    if result.is_integer():
+                        return str(int(result))
+                    return str(result)
+            except Exception:
+                pass
+        elif match_b:
+            tgt_unit, val_str, src_unit = match_b.groups()
             try:
                 val = float(val_str)
                 if src_unit in length_units and tgt_unit in length_units:
@@ -1001,16 +1147,33 @@ class ROHelperApp:
             except Exception:
                 pass
 
-        # 4. Standard Arithmetic & Fraction Expression Solver
+        # 9. Standard Arithmetic & Fraction Expression Solver with Smart Quotient Inference
         clean = (
             text.replace("×", "*")
             .replace("x", "*")
             .replace("X", "*")
             .replace("÷", "/")
+            .replace("➗", "/")
+            .replace(":", "/")
             .replace("=", "")
             .replace("?", "")
             .strip()
         )
+
+        nums_in_text = re.findall(r"(\d+(?:\.\d+)?)", clean)
+        if len(nums_in_text) == 2:
+            try:
+                n1, n2 = float(nums_in_text[0]), float(nums_in_text[1])
+                if n2 != 0:
+                    quotient = n1 / n2
+                    if (
+                        quotient.is_integer()
+                        or (quotient * 10).is_integer()
+                        or (quotient * 100).is_integer()
+                    ):
+                        clean = f"{nums_in_text[0]} / {nums_in_text[1]}"
+            except Exception:
+                pass
 
         if not any(op in clean for op in ["+", "-", "*", "/"]):
             return None
@@ -1020,14 +1183,16 @@ class ROHelperApp:
 
         try:
             result = eval(clean, {"__builtins__": {}}, {})
-            if isinstance(result, float) and result.is_integer():
-                result = int(result)
-                return str(result)
-            elif isinstance(result, float):
+            if isinstance(result, float):
+                if result.is_integer():
+                    return str(int(result))
+                rounded = round(result, 6)
+                if rounded.is_integer():
+                    return str(int(rounded))
                 frac = Fraction(result).limit_denominator(20)
                 if frac.denominator != 1 and frac.denominator <= 20:
-                    return f"{result} ({frac.numerator}/{frac.denominator})"
-                return str(result)
+                    return f"{rounded} ({frac.numerator}/{frac.denominator})"
+                return str(rounded)
             return str(result)
         except Exception:
             return None
@@ -1462,12 +1627,7 @@ class ROHelperApp:
                     best_match = captured_text
                     matched_answer = math_result
                     best_score = 100.0
-                    for q_raw, q_norm, a_raw, img_path in primary_tuples:
-                        if img_path and any(
-                            op in q_raw for op in ["+", "-", "*", "/", "x", "÷"]
-                        ):
-                            matched_img_path = img_path
-                            break
+                    matched_img_path = ""  # Prevent pulling random unrelated images from other database entries
                 else:
                     norm_captured = self._normalize_q(captured_text)
                     norm_captured_nospace = norm_captured.replace(" ", "")

@@ -45,7 +45,7 @@ INVALID_ANSWER_PATTERNS = [
     r"^\d+$",
 ]
 
-MAX_CONCURRENT_WORKERS = 6  # 6 Parallel workers to process all heavy tasks at t=0
+MAX_CONCURRENT_WORKERS = 2
 
 
 def format_duration(seconds: float) -> str:
@@ -78,6 +78,221 @@ def is_invalid_answer(answer_str: str) -> bool:
         if re.search(pattern, clean, re.IGNORECASE):
             return True
     return False
+
+
+def _solve_math_question(text: str) -> Optional[str]:
+    """Automatically computes correct answers for arithmetic and word problems during database sanitization."""
+    if not text:
+        return None
+    text_lower = text.lower()
+
+    # 1. Geometric Volume Word Problem Solver (Cube Edge Length -> Volume: s^3)
+    if "cube" in text_lower and "edge length" in text_lower and "volume" in text_lower:
+        try:
+            edge_match = re.search(r"edge length of\s*(\d+(?:\.\d+)?)", text_lower)
+            if not edge_match:
+                edge_match = re.search(r"edge of\s*(\d+(?:\.\d+)?)", text_lower)
+            if not edge_match:
+                edge_match = re.search(r"(\d+(?:\.\d+)?)\s*cm", text_lower)
+
+            if edge_match:
+                s = float(edge_match.group(1))
+                volume = s**3
+                if volume.is_integer():
+                    return str(int(volume))
+                return str(volume)
+        except Exception:
+            pass
+
+    # 2. Cube Edge Length from Volume Solver (Volume -> Edge Length: cube root)
+    if (
+        "cube" in text_lower
+        and "volume of" in text_lower
+        and ("edge" in text_lower or "length" in text_lower)
+    ):
+        try:
+            vol_match = re.search(r"volume of\s*(\d+(?:\.\d+)?)", text_lower)
+            if vol_match:
+                vol = float(vol_match.group(1))
+                edge = round(vol ** (1 / 3), 4)
+                if abs(round(edge) ** 3 - vol) < 0.001:
+                    edge = round(edge)
+                if isinstance(edge, float) and edge.is_integer():
+                    return str(int(edge))
+                return str(edge)
+        except Exception:
+            pass
+
+    # 3. Unit Cost / Pricing Multiplication Word Problem Solver
+    if "cost" in text_lower or "costs" in text_lower or "price" in text_lower:
+        try:
+            nums = re.findall(r"(\d+(?:\.\d+)?)", text_lower)
+            if len(nums) >= 2:
+                v1, v2 = float(nums[0]), float(nums[1])
+                res = v1 * v2
+                if res.is_integer():
+                    return str(int(res))
+                return str(round(res, 2))
+        except Exception:
+            pass
+
+    # 4. Transport / Trip Division Word Problem Solver
+    if (
+        "transport" in text_lower
+        or "trip" in text_lower
+        or "per trip" in text_lower
+        or "how many trips" in text_lower
+    ):
+        try:
+            nums = re.findall(r"(\d+(?:\.\d+)?)", text_lower)
+            if len(nums) >= 2:
+                v1, v2 = float(nums[0]), float(nums[1])
+                if v2 != 0:
+                    res = v1 / v2
+                    if res.is_integer():
+                        return str(int(res))
+                    return str(round(res, 4))
+        except Exception:
+            pass
+
+    # 5. Compound Metric Unit Addition Solver
+    compound_match = re.search(
+        r"(\d+(?:\.\d+)?)\s*([a-zA-Z\u0E00-\u0E7F]+)\s+and\s+(\d+(?:\.\d+)?)\s*([a-zA-Z\u0E00-\u0E7F]+)\s+(?:equals|is|are|to|เป็น|เท่า|เท่ากับ)\s+(?:how many\s+)?([a-zA-Z\u0E00-\u0E7F]+)\?",
+        text_lower,
+    )
+    if compound_match:
+        val1_str, unit1, val2_str, unit2, tgt_unit = compound_match.groups()
+        all_units = {
+            "ml": 0.001,
+            "milliliter": 0.001,
+            "milliliters": 0.001,
+            "มิลลิลิตร": 0.001,
+            "l": 1.0,
+            "liter": 1.0,
+            "liters": 1.0,
+            "litre": 1.0,
+            "litres": 1.0,
+            "ลิตร": 1.0,
+            "mm": 0.001,
+            "millimeter": 0.001,
+            "millimeters": 0.001,
+            "มิลลิเมตร": 0.001,
+            "cm": 0.01,
+            "centimeter": 0.01,
+            "centimeters": 0.01,
+            "เซนติเมตร": 0.01,
+            "m": 1.0,
+            "meter": 1.0,
+            "meters": 1.0,
+            "เมตร": 1.0,
+            "km": 1000.0,
+            "kilometer": 1000.0,
+            "kilometers": 1000.0,
+            "กิโลเมตร": 1000.0,
+            "g": 1.0,
+            "gram": 1.0,
+            "grams": 1.0,
+            "กรัม": 1.0,
+            "kg": 1000.0,
+            "kilogram": 1000.0,
+            "kilograms": 1000.0,
+            "กิโลกรัม": 1000.0,
+        }
+        if unit1 in all_units and unit2 in all_units and tgt_unit in all_units:
+            try:
+                base_val = (float(val1_str) * all_units[unit1]) + (
+                    float(val2_str) * all_units[unit2]
+                )
+                result = base_val / all_units[tgt_unit]
+                if result.is_integer():
+                    return str(int(result))
+                return str(result)
+            except Exception:
+                pass
+
+    # 6. Greater than word problems (e.g., "What number is 1.8 greater than 7.2?")
+    match_greater = re.search(
+        r"(\d+(?:\.\d+)?)\s*greater than\s*(\d+(?:\.\d+)?)", text_lower
+    )
+    if match_greater:
+        try:
+            v1, v2 = float(match_greater.group(1)), float(match_greater.group(2))
+            res = v1 + v2
+            if res.is_integer():
+                return str(int(res))
+            return str(round(res, 4))
+        except Exception:
+            pass
+
+    # 7. Less than word problems (e.g., "What number is 2.5 less than 10?")
+    match_less = re.search(r"(\d+(?:\.\d+)?)\s*less than\s*(\d+(?:\.\d+)?)", text_lower)
+    if match_less:
+        try:
+            v1, v2 = float(match_less.group(1)), float(match_less.group(2))
+            res = v2 - v1
+            if res.is_integer():
+                return str(int(res))
+            return str(round(res, 4))
+        except Exception:
+            pass
+
+    # 8. Rectangle Area word problems
+    if "rectangle" in text_lower and "area" in text_lower:
+        try:
+            nums = re.findall(r"(\d+(?:\.\d+)?)", text_lower)
+            if len(nums) >= 2:
+                res = float(nums[0]) * float(nums[1])
+                if res.is_integer():
+                    return str(int(res))
+                return str(round(res, 4))
+        except Exception:
+            pass
+
+    # 9. Standard Arithmetic Expressions with Smart Quotient Inference
+    clean = (
+        text.replace("×", "*")
+        .replace("x", "*")
+        .replace("X", "*")
+        .replace("÷", "/")
+        .replace("➗", "/")
+        .replace(":", "/")
+        .replace("=", "")
+        .replace("?", "")
+        .strip()
+    )
+
+    nums_in_text = re.findall(r"(\d+(?:\.\d+)?)", clean)
+    if len(nums_in_text) == 2:
+        try:
+            n1, n2 = float(nums_in_text[0]), float(nums_in_text[1])
+            if n2 != 0:
+                quotient = n1 / n2
+                if (
+                    quotient.is_integer()
+                    or (quotient * 10).is_integer()
+                    or (quotient * 100).is_integer()
+                ):
+                    clean = f"{nums_in_text[0]} / {nums_in_text[1]}"
+        except Exception:
+            pass
+
+    if any(op in clean for op in ["+", "-", "*", "/"]) and re.match(
+        r"^[\d\.\s\+\-\*\/\(\)]+$", clean
+    ):
+        try:
+            result = eval(clean, {"__builtins__": {}}, {})
+            if isinstance(result, float):
+                if result.is_integer():
+                    return str(int(result))
+                rounded = round(result, 6)
+                if rounded.is_integer():
+                    return str(int(rounded))
+                return str(rounded)
+            return str(result)
+        except Exception:
+            pass
+
+    return None
 
 
 async def _async_fetch_multilingual_database(
@@ -208,7 +423,9 @@ async def _async_fetch_multilingual_database(
                         await asyncio.sleep(0.5)
 
             if not nav_success:
-                log(f"❌ [Task {current_start_num}/{total_tasks}] Navigation failed for '{cat_name}' [{lang_name}]. Skipping.")
+                log(
+                    f"❌ [Task {current_start_num}/{total_tasks}] Navigation failed for '{cat_name}' [{lang_name}]. Skipping."
+                )
                 all_db[lang_name][cat_name] = []
                 async with telemetry_lock:
                     completed_task_count += 1
@@ -249,6 +466,7 @@ async def _async_fetch_multilingual_database(
                 "moon-riddle": 1,
             }
             estimated_total_passes = estimated_passes_map.get(cat_id, 10)
+            last_logged_pct = 0
             logged_milestones = set()
 
             while scroll_pass < max_passes and unchanged_passes < 3:
@@ -281,6 +499,9 @@ async def _async_fetch_multilingual_database(
                     r"""
                 () => {
                     const results = [];
+                    const passNum = """
+                    + str(scroll_pass)
+                    + r""";
                     const invalidPatterns = [
                         /คลิกเพื่อ/i, /ซ่อน/i, /แสดงคำตอบ/i, /点击隐藏/i, /点击显示/i,
                         /click\s*to/i, /hide\s*answer/i, /show\s*answer/i, /\?\?\?/
@@ -400,7 +621,7 @@ async def _async_fetch_multilingual_database(
                         }
 
                         const qKey = question.toLowerCase().replace(/\s+/g, '');
-                        const cardId = 'stream-card-' + cardIndex;
+                        const cardId = 'qa-pass-' + passNum + '-' + cardIndex;
                         card.setAttribute('data-qa-index', cardId);
                         results.push({ qKey, index: cardId, question, answer });
                         cardIndex++;
@@ -416,8 +637,11 @@ async def _async_fetch_multilingual_database(
                     try:
                         loc = page.locator(f'[data-qa-index="{idx_tag}"]')
                         if await loc.count() > 0:
-                            await loc.first.screenshot(path=rel_p, timeout=500)
-                            return True
+                            await loc.first.scroll_into_view_if_needed(timeout=1500)
+                            await asyncio.sleep(0.08)
+                            await loc.first.screenshot(path=rel_p, timeout=3000)
+                            if os.path.exists(rel_p) and os.path.getsize(rel_p) > 100:
+                                return True
                     except Exception:
                         pass
                     return False
@@ -429,15 +653,16 @@ async def _async_fetch_multilingual_database(
                     a_text = item["answer"]
                     idx_tag = item["index"]
 
+                    q_hash = hashlib.md5(q_text.encode("utf-8")).hexdigest()[:10]
+                    img_filename = f"q_{q_hash}.png"
+                    rel_img_path = os.path.join(img_dir, img_filename)
+
                     if (
                         q_key not in accumulated_qa
                         or accumulated_qa[q_key]["answer"]
                         == "See Proof Image / คลิกเพื่อดูเฉลย"
+                        or not accumulated_qa[q_key].get("image_path")
                     ):
-                        q_hash = hashlib.md5(q_text.encode("utf-8")).hexdigest()[:10]
-                        img_filename = f"q_{q_hash}.png"
-                        rel_img_path = os.path.join(img_dir, img_filename)
-
                         screenshot_promises.append(
                             capture_single_screenshot((idx_tag, rel_img_path))
                         )
@@ -456,6 +681,11 @@ async def _async_fetch_multilingual_database(
                     saved_screenshots += sum(
                         1 for r in shot_results if isinstance(r, bool) and r is True
                     )
+
+                for q_key, data in accumulated_qa.items():
+                    p = data.get("image_path", "")
+                    if p and (not os.path.exists(p) or os.path.getsize(p) <= 100):
+                        data["image_path"] = ""
 
                 await page.evaluate("window.scrollBy(0, 1500);")
                 await asyncio.sleep(0.06)
@@ -479,19 +709,17 @@ async def _async_fetch_multilingual_database(
 
                 if estimated_total_passes > 2:
                     current_pct = min(
-                        90, int((scroll_pass / estimated_total_passes) * 100)
+                        95, int((scroll_pass / estimated_total_passes) * 100)
                     )
-                    milestone = (current_pct // 25) * 25
-                    if milestone in [25, 50, 75] and milestone not in logged_milestones:
-                        logged_milestones.add(milestone)
-                        log(
-                            f"⏳ [Task {current_start_num}/{total_tasks}] {get_loading_bar(milestone)} Running '{cat_name}' [{lang_name}]... ({len(accumulated_qa)} items)"
-                        )
+                    if current_pct > last_logged_pct:
+                        last_logged_pct = current_pct
+                        bar_str = get_loading_bar(current_pct)
+                        status_line = f"\r⏳ [Task {current_start_num}/{total_tasks}] {bar_str} Running '{cat_name}' [{lang_name}]... ({len(accumulated_qa)} items)   "
+                        async with telemetry_lock:
+                            import sys
 
-                async with telemetry_lock:
-                    task_progress_tracker[task_key] = min(
-                        0.95, scroll_pass / max_passes
-                    )
+                            sys.stdout.write(status_line)
+                            sys.stdout.flush()
                 await emit_progress()
 
             final_list = list(accumulated_qa.values())
@@ -499,14 +727,14 @@ async def _async_fetch_multilingual_database(
 
             task_duration = time.perf_counter() - task_start_time
             async with telemetry_lock:
-                completed_task_count += 1
-                task_progress_tracker[task_key] = 0.0
-            await emit_progress()
+                import sys
 
-            log(
-                f"   ✅ [Done {current_start_num}/{total_tasks}] '{cat_name}' [{lang_name}] in {format_duration(task_duration)} "
-                f"({len(final_list)} items | {saved_screenshots} screenshots)"
-            )
+                sys.stdout.write("\r" + " " * 100 + "\r")
+                sys.stdout.flush()
+                log(
+                    f"   ✅ [Done {current_start_num}/{total_tasks}] '{cat_name}' [{lang_name}] in {format_duration(task_duration)} "
+                    f"({len(final_list)} items | {saved_screenshots} screenshots)"
+                )
             await context.close()
 
     try:
@@ -561,7 +789,18 @@ async def _async_fetch_multilingual_database(
                         r"^(?:Ans\s*:\s*|\d+[\.\:\)]\s*|[A-Da-d][\.\:\)]\s*)", "", a
                     ).strip()
 
-                    if a and q.lower() != a.lower():
+                    # If answer is missing or placeholder, resolve via robust automated math/word problem solvers
+                    if (
+                        not a
+                        or is_invalid_answer(a)
+                        or "See Proof Image" in a
+                        or "คลิกเพื่อ" in a
+                    ):
+                        solved_ans = _solve_math_question(q)
+                        if solved_ans:
+                            a = solved_ans
+
+                    if a and q.lower() != a.lower() and not "See Proof Image" in a:
                         clean_list.append(
                             {"question": q, "answer": a, "image_path": img_p}
                         )
@@ -575,13 +814,18 @@ async def _async_fetch_multilingual_database(
 
         target_path = "qa_database.json"
         dir_name = os.path.dirname(os.path.abspath(target_path)) or "."
-        temp_fd, temp_path = tempfile.mkstemp(dir=dir_name, suffix=".tmp")
+
         file_written = False
+        temp_path = None
         try:
-            with os.fdopen(temp_fd, "w", encoding="utf-8") as tf:
+            with tempfile.NamedTemporaryFile(
+                mode="w", encoding="utf-8", dir=dir_name, suffix=".tmp", delete=False
+            ) as tf:
+                temp_path = tf.name
                 json.dump(sanitized_db, tf, ensure_ascii=False, indent=2)
-            file_written = True
+
             os.replace(temp_path, target_path)
+            file_written = True
             log("==================================================")
             log("🎉 Database and proof images update complete!")
             log(f"⏱️ Total Running Time: {format_duration(global_total_time)}")
@@ -592,12 +836,7 @@ async def _async_fetch_multilingual_database(
             log(f"❌ Failed to write JSON database: {write_err}")
             return False
         finally:
-            if not file_written:
-                try:
-                    os.close(temp_fd)
-                except OSError:
-                    pass
-            if os.path.exists(temp_path):
+            if not file_written and temp_path and os.path.exists(temp_path):
                 try:
                     os.remove(temp_path)
                 except OSError:
