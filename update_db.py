@@ -1,3 +1,4 @@
+import asyncio
 import hashlib
 import json
 import os
@@ -5,8 +6,11 @@ import re
 import tempfile
 import time
 from datetime import datetime, timedelta
-from typing import Callable, Optional
-from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeoutError
+from typing import Callable, Dict, List, Optional
+from playwright.async_api import (
+    async_playwright,
+    TimeoutError as PlaywrightTimeoutError,
+)
 
 SUPPORTED_LANGUAGES = [
     {"code": "th-TH", "name": "ไทย (TH)"},
@@ -41,9 +45,11 @@ INVALID_ANSWER_PATTERNS = [
     r"^\d+$",
 ]
 
+MAX_CONCURRENT_WORKERS = 6  # 6 Parallel workers to process all heavy tasks at t=0
+
 
 def format_duration(seconds: float) -> str:
-    """Formats raw seconds into human-readable duration string (e.g. '02m 15s' or '01h 04m 12s')."""
+    """Formats raw seconds into human-readable duration string."""
     total_sec = max(0, int(round(seconds)))
     hours = total_sec // 3600
     minutes = (total_sec % 3600) // 60
@@ -66,402 +72,449 @@ def is_invalid_answer(answer_str: str) -> bool:
     return False
 
 
-def fetch_multilingual_database(
+async def _async_fetch_multilingual_database(
     log_fn: Optional[Callable[[str], None]] = None,
     progress_fn: Optional[Callable[[dict], None]] = None,
 ) -> bool:
-    """Executes multi-language web extraction with real-time runtime tracking and telemetry callbacks."""
+    """Sub-60s multi-worker priority scraper with accurate atomic task logging."""
 
     def log(msg: str):
         if log_fn:
             log_fn(msg)
         print(msg)
 
-    def emit_progress(running_sec: float, completed: int, total: int):
+    total_tasks = len(SUPPORTED_LANGUAGES) * len(CATEGORIES)
+    global_start_time = time.perf_counter()
+    telemetry_lock = asyncio.Lock()
+
+    completed_task_count = 0
+    started_task_count = 0  # Atomic tracker for active execution order
+    task_progress_tracker: Dict[str, float] = {}
+
+    async def emit_progress():
         if not progress_fn:
             return
-        remaining = total - completed
-        avg_sec = running_sec / max(1, completed)
-        eta_sec = avg_sec * remaining
-        finish_dt = datetime.now() + timedelta(seconds=eta_sec)
+        async with telemetry_lock:
+            running_sec = time.perf_counter() - global_start_time
+            fractional_completed = completed_task_count + sum(
+                task_progress_tracker.values()
+            )
+            fractional_completed = max(
+                0.01, min(float(fractional_completed), float(total_tasks))
+            )
 
-        progress_fn(
-            {
-                "running_time": format_duration(running_sec),
-                "remaining_tasks": remaining,
-                "completed_tasks": completed,
-                "total_tasks": total,
-                "percent": int((completed / total) * 100),
-                "eta_duration": (
-                    format_duration(eta_sec) if remaining > 0 else "00m 00s"
-                ),
-                "eta_clock": (
-                    finish_dt.strftime("%I:%M:%S %p") if remaining > 0 else "Complete"
-                ),
-            }
-        )
+            percent = int((fractional_completed / total_tasks) * 100)
+            remaining_tasks_display = max(0, total_tasks - int(fractional_completed))
+
+            velocity_sec_per_task = running_sec / fractional_completed
+            remaining_fraction = max(0.0, total_tasks - fractional_completed)
+            eta_sec = velocity_sec_per_task * remaining_fraction
+
+            finish_dt = datetime.now() + timedelta(seconds=eta_sec)
+
+            progress_fn(
+                {
+                    "running_time": format_duration(running_sec),
+                    "remaining_tasks": remaining_tasks_display,
+                    "completed_tasks": int(fractional_completed),
+                    "total_tasks": total_tasks,
+                    "percent": min(100, percent),
+                    "eta_seconds": eta_sec,
+                    "eta_duration": (
+                        format_duration(eta_sec)
+                        if remaining_fraction > 0.05
+                        else "00m 00s"
+                    ),
+                    "eta_clock": (
+                        finish_dt.strftime("%I:%M:%S %p")
+                        if remaining_fraction > 0.05
+                        else "Complete"
+                    ),
+                }
+            )
 
     base_url = "https://roworlddb.com/sea/study/"
-    all_db = {}
-
-    total_tasks = len(SUPPORTED_LANGUAGES) * len(CATEGORIES)
-    completed_tasks = 0
-    global_start_time = time.perf_counter()
+    all_db: Dict[str, Dict[str, List[dict]]] = {
+        lang["name"]: {} for lang in SUPPORTED_LANGUAGES
+    }
 
     log("==================================================")
-    log(f"🚀 Starting Database Scrape ({total_tasks} Total Categories)")
+    log(
+        f"🚀 High-Speed Priority Scrape ({total_tasks} Tasks | {MAX_CONCURRENT_WORKERS} Workers)"
+    )
     log(f"⏰ Start Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     log("==================================================")
 
-    try:
-        with sync_playwright() as p:
-            log("🌐 Launching Chromium Browser (Headless Mode)...")
-            browser = p.chromium.launch(headless=True)
-            try:
-                context = browser.new_context(viewport={"width": 1280, "height": 1000})
-                page = context.new_page()
-                page.set_default_navigation_timeout(35000)
+    semaphore = asyncio.Semaphore(MAX_CONCURRENT_WORKERS)
 
-                for lang in SUPPORTED_LANGUAGES:
-                    lang_code = lang["code"]
-                    lang_name = lang["name"]
-                    all_db[lang_name] = {}
+    async def scrape_category_task(browser, lang: dict, cat: dict):
+        nonlocal completed_task_count, started_task_count
+        lang_code = lang["code"]
+        lang_name = lang["name"]
+        cat_id = cat["id"]
+        cat_name = cat["name"]
+        task_key = f"{lang_code}_{cat_id}"
 
-                    log("\n--------------------------------------------------")
-                    log(f"🌐 Language Route: {lang_name} [{lang_code}]")
-                    log("--------------------------------------------------")
+        event_url = f"{base_url}?lang={lang_code}#event={cat_id}&reveal=1"
+        img_dir = os.path.join("qa_images", lang_code, cat_id)
+        os.makedirs(img_dir, exist_ok=True)
 
-                    for cat in CATEGORIES:
-                        cat_id = cat["id"]
-                        cat_name = cat["name"]
-                        event_url = (
-                            f"{base_url}?lang={lang_code}#event={cat_id}&reveal=1"
+        async with semaphore:
+            async with telemetry_lock:
+                started_task_count += 1
+                current_start_num = started_task_count
+
+            task_start_time = time.perf_counter()
+            log(
+                f"📂 [Task {current_start_num}/{total_tasks}] Starting '{cat_name}' [{lang_name}]"
+            )
+
+            context = await browser.new_context(
+                viewport={"width": 1280, "height": 1000}
+            )
+            page = await context.new_page()
+            page.set_default_navigation_timeout(15000)
+
+            await page.route(
+                "**/*.{mp4,webm,avi,woff,woff2,ttf,otf,analytics,google-analytics,doubleclick,facebook}*",
+                lambda route: route.abort(),
+            )
+
+            nav_success = False
+            for attempt in range(1, 4):
+                try:
+                    await page.goto(
+                        event_url, wait_until="domcontentloaded", timeout=12000
+                    )
+                    try:
+                        await page.wait_for_selector(
+                            ".card, article, tr, li, [class*='question']",
+                            timeout=2500,
                         )
-                        task_start_time = time.perf_counter()
-                        remaining_categories = total_tasks - completed_tasks
+                    except Exception:
+                        pass
+                    nav_success = True
+                    break
+                except Exception:
+                    if attempt < 3:
+                        await asyncio.sleep(0.5)
 
-                        log(
-                            f"\n📂 [{completed_tasks + 1}/{total_tasks}] Category: '{cat_name}' ({remaining_categories} remaining)"
-                        )
-                        log(f"   ↳ URL: {event_url}")
+            if not nav_success:
+                log(f"❌ Navigation failed for '{cat_name}' [{lang_name}]. Skipping.")
+                all_db[lang_name][cat_name] = []
+                async with telemetry_lock:
+                    completed_task_count += 1
+                    task_progress_tracker[task_key] = 0.0
+                await emit_progress()
+                await context.close()
+                return
 
-                        img_dir = os.path.join("qa_images", lang_code, cat_id)
-                        os.makedirs(img_dir, exist_ok=True)
+            await page.evaluate(
+                f"""
+                () => {{
+                    const selects = Array.from(document.querySelectorAll('select'));
+                    for (const s of selects) {{
+                        const opt = Array.from(s.options).find(o => o.value === '{cat_id}' || o.value.includes('{cat_id}'));
+                        if (opt) {{
+                            s.value = opt.value;
+                            s.dispatchEvent(new Event('input', {{ bubbles: true }}));
+                            s.dispatchEvent(new Event('change', {{ bubbles: true }}));
+                            break;
+                        }}
+                    }}
+                }}
+            """
+            )
+            await asyncio.sleep(0.15)
 
-                        # Auto-retry navigation loop
-                        nav_success = False
-                        for attempt in range(1, 4):
-                            try:
-                                log(
-                                    f"   [Step 1/5] Navigating to route (Attempt {attempt}/3)..."
-                                )
-                                page.goto(
-                                    event_url,
-                                    wait_until="domcontentloaded",
-                                    timeout=30000,
-                                )
-                                page.wait_for_timeout(1500)
-                                nav_success = True
-                                break
-                            except Exception as nav_err:
-                                log(
-                                    f"   ⚠️ Navigation attempt {attempt} failed: {nav_err}"
-                                )
-                                if attempt < 3:
-                                    time.sleep(2)
+            accumulated_qa = {}
+            saved_screenshots = 0
+            scroll_pass = 0
+            unchanged_passes = 0
+            last_y = -1
+            max_passes = 35
 
-                        if not nav_success:
-                            log(f"   ❌ Navigation failed for '{cat_name}'. Skipping.")
-                            all_db[lang_name][cat_name] = []
-                            completed_tasks += 1
-                            emit_progress(
-                                time.perf_counter() - global_start_time,
-                                completed_tasks,
-                                total_tasks,
-                            )
-                            continue
+            while scroll_pass < max_passes and unchanged_passes < 3:
+                scroll_pass += 1
 
-                        log("   [Step 2/5] Synchronizing SPA dropdown state...")
-                        page.evaluate(
-                            f"""
-                            () => {{
-                                const selects = Array.from(document.querySelectorAll('select'));
-                                for (const s of selects) {{
-                                    const opt = Array.from(s.options).find(o => o.value === '{cat_id}' || o.value.includes('{cat_id}'));
-                                    if (opt) {{
-                                        s.value = opt.value;
-                                        s.dispatchEvent(new Event('input', {{ bubbles: true }}));
-                                        s.dispatchEvent(new Event('change', {{ bubbles: true }}));
-                                        s.dispatchEvent(new Event('blur', {{ bubbles: true }}));
-                                        break;
-                                    }}
-                                }}
-                            }}
-                        """
-                        )
-                        page.wait_for_timeout(1500)
-                        page.evaluate("window.scrollTo(0, 0);")
-                        page.wait_for_timeout(500)
-
-                        log(
-                            "   [Step 3/5] Streaming extraction with real-time telemetry..."
-                        )
-                        accumulated_qa = {}
-                        saved_screenshots = 0
-                        scroll_pass = 0
-                        at_bottom = False
-                        last_y = -1
-
-                        while scroll_pass < 120 and not at_bottom:
-                            scroll_pass += 1
-
-                            # Unmask visible answer overlays
-                            page.evaluate(
-                                """
-                                () => {
-                                    document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
-                                        if (!cb.checked) { cb.click(); }
-                                    });
-                                    document.querySelectorAll('div, button, span, a, p').forEach(d => {
-                                        const txt = (d.innerText || d.textContent || '').trim().toLowerCase();
-                                        if (
-                                            txt === '???' || 
-                                            txt.includes('แสดงคำตอบ') || 
-                                            txt.includes('click') || 
-                                            txt.includes('show') || 
-                                            txt.includes('reveal') || 
-                                            txt.includes('点击') || 
-                                            txt.includes('显示') || 
-                                            txt.includes('คลิก') || 
-                                            txt.includes('lihat')
-                                        ) {
-                                            try { d.click(); } catch(e) {}
-                                        }
-                                    });
-                                }
-                            """
-                            )
-
-                            # Stream-extract cards currently mounted in the viewport
-                            current_batch = page.evaluate(
-                                r"""
-                            () => {
-                                const results = [];
-                                const cleanText = (str) => {
-                                    if (!str) return '';
-                                    return str
-                                        .replace(/[\uE000-\uF8FF\u2700-\u27BF\u2600-\u26FF✓✔✅]/g, '')
-                                        .replace(/^(?:Ans|Answer|Option)\s*[\:\.-]?\s*/i, '')
-                                        .replace(/^\d+[\.\:\)\s]+\s*/, '')
-                                        .trim();
-                                };
-
-                                const candidates = Array.from(document.querySelectorAll('*')).filter(el => {
-                                    const txt = (el.innerText || '').trim();
-                                    const lines = txt.split('\n').map(l => l.trim()).filter(l => l.length > 0);
-                                    return /(?:Q\s*\.?\s*\d+|第?\s*\d+\s*[题條\.、\:\-]|^\s*\d+[\.\、\:\-\s])/i.test(txt) && lines.length >= 2;
-                                });
-
-                                const qMap = new Map();
-                                candidates.forEach(el => {
-                                    const txt = (el.innerText || '').trim();
-                                    const match = txt.match(/Q\s*(\d+)/i) || txt.match(/(?:第?\s*(\d+)\s*[题條\.、\:\-]|^\s*(\d+)[\.\、\:\-\s])/i);
-                                    if (!match) return;
-
-                                    const numStr = match[1] || match[2];
-                                    if (!numStr) return;
-                                    const qKey = 'Q' + parseInt(numStr, 10);
-
-                                    if (!qMap.has(qKey) || el.querySelectorAll('*').length < qMap.get(qKey).querySelectorAll('*').length) {
-                                        qMap.set(qKey, el);
-                                    }
-                                });
-
-                                let passIdx = 0;
-                                qMap.forEach((card, qKey) => {
-                                    const rawText = card.innerText || '';
-                                    const lines = rawText.split('\n').map(l => l.trim()).filter(l => l.length > 0);
-
-                                    let qLineIdx = lines.findIndex(l => /(?:Q\s*\.?\s*\d+|第?\s*\d+\s*[题條\.、\:\-]|^\s*\d+[\.\、\:\-\s])/i.test(l));
-                                    let question = "";
-                                    let startIdx = 1;
-
-                                    if (qLineIdx !== -1) {
-                                        question = lines[qLineIdx]
-                                            .replace(/^.*?Q\s*\.?\s*\d+[\.\s\:]*/i, '')
-                                            .replace(/^(?:第?\s*\d+\s*[题條\.、\:\-]|^\s*\d+[\.\、\:\-\s])\s*/i, '')
-                                            .trim();
-                                        startIdx = qLineIdx + 1;
-                                        if (!question && startIdx < lines.length) {
-                                            question = lines[startIdx];
-                                            startIdx++;
-                                        }
-                                    }
-
-                                    if (!question) {
-                                        question = lines[0].trim();
-                                        startIdx = 1;
-                                    }
-
-                                    question = question.trim();
-                                    if (question.length < 2) return;
-
-                                    let answer = "";
-                                    const childElems = Array.from(card.querySelectorAll('*'));
-                                    for (const el of childElems) {
-                                        const style = window.getComputedStyle(el);
-                                        const color = style.color || '';
-                                        const classStr = (el.className || '').toString();
-
-                                        let isG = false;
-                                        if (classStr && (
-                                            classStr.includes('green') || classStr.includes('emerald') ||
-                                            classStr.includes('teal') || classStr.includes('success') || classStr.includes('correct')
-                                        )) {
-                                            isG = true;
-                                        } else if (color.startsWith('rgb')) {
-                                            const rgb = color.match(/\d+/g);
-                                            if (rgb && rgb.length >= 3) {
-                                                const r = parseInt(rgb[0]), g = parseInt(rgb[1]), b = parseInt(rgb[2]);
-                                                if (g > 120 && g > r * 1.15 && g > b * 1.15) isG = true;
-                                            }
-                                        }
-
-                                        if (isG) {
-                                            let candidate = cleanText(el.innerText || el.textContent || '');
-                                            if (candidate && candidate !== question && !/Q\s*\d+/i.test(candidate) && candidate.length > 1) {
-                                                answer = candidate;
-                                                break;
-                                            }
-                                        }
-                                    }
-
-                                    if (!answer) {
-                                        for (let i = startIdx; i < lines.length; i++) {
-                                            const cleanL = cleanText(lines[i]);
-                                            if (['จริง', 'O', 'True', '正确', 'Benar'].includes(cleanL)) {
-                                                answer = 'จริง / True (O)';
-                                                break;
-                                            } else if (['เท็จ', 'X', 'False', '錯誤', 'Salah'].includes(cleanL)) {
-                                                answer = 'เท็จ / False (X)';
-                                                break;
-                                            }
-                                        }
-                                    }
-
-                                    if (!answer) {
-                                        const candidates = lines.slice(startIdx)
-                                            .map(l => cleanText(l))
-                                            .filter(l => l && l !== question && !/^\d+$/.test(l) && l.length > 1);
-                                        if (candidates.length > 0) {
-                                            answer = candidates[0];
-                                        }
-                                    }
-
-                                    if (!answer) {
-                                        answer = "See Proof Image / คลิกเพื่อดูเฉลย";
-                                    }
-
-                                    const cardId = 'stream-card-' + qKey + '-' + passIdx;
-                                    card.setAttribute('data-qa-index', cardId);
-                                    results.push({ qKey, index: cardId, question, answer });
-                                    passIdx++;
-                                });
-
-                                return results;
+                await page.evaluate(
+                    """
+                    () => {
+                        document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+                            if (!cb.checked) { cb.click(); }
+                        });
+                        document.querySelectorAll('div, button, span, a, p').forEach(d => {
+                            const txt = (d.innerText || d.textContent || '').trim().toLowerCase();
+                            if (txt.includes('hide') || txt.includes('ซ่อน') || txt.includes('隐藏')) return;
+                            if (
+                                txt === '???' || 
+                                txt.includes('แสดงคำตอบ') || 
+                                txt.includes('show answer') || 
+                                txt.includes('click to show') || 
+                                txt.includes('点击显示')
+                            ) {
+                                try { d.click(); } catch(e) {}
                             }
-                            """
-                            )
+                        });
+                    }
+                """
+                )
 
-                            # Accumulate batch & save proof images
-                            for item in current_batch:
-                                q_key = item["qKey"]
-                                q_text = item["question"]
-                                a_text = item["answer"]
-                                idx_tag = item["index"]
+                current_batch = await page.evaluate(
+                    r"""
+                () => {
+                    const results = [];
+                    const invalidPatterns = [
+                        /คลิกเพื่อ/i, /ซ่อน/i, /แสดงคำตอบ/i, /点击隐藏/i, /点击显示/i,
+                        /click\s*to/i, /hide\s*answer/i, /show\s*answer/i, /\?\?\?/
+                    ];
 
-                                if (
-                                    q_key not in accumulated_qa
-                                    or accumulated_qa[q_key]["answer"]
-                                    == "See Proof Image / คลิกเพื่อดูเฉลย"
-                                ):
-                                    q_hash = hashlib.md5(
-                                        q_text.encode("utf-8")
-                                    ).hexdigest()[:10]
-                                    img_filename = f"q_{q_hash}.png"
-                                    rel_img_path = os.path.join(img_dir, img_filename)
+                    const isInvalid = (str) => {
+                        if (!str || str.trim().length <= 1) return true;
+                        return invalidPatterns.some(pat => pat.test(str));
+                    };
 
-                                    try:
-                                        loc = page.locator(
-                                            f'[data-qa-index="{idx_tag}"]'
-                                        )
-                                        if loc.count() > 0:
-                                            loc.first.scroll_into_view_if_needed(
-                                                timeout=1000
-                                            )
-                                            loc.first.screenshot(
-                                                path=rel_img_path, timeout=1500
-                                            )
-                                            saved_screenshots += 1
-                                        else:
-                                            rel_img_path = ""
-                                    except Exception:
-                                        rel_img_path = ""
+                    const cleanText = (str) => {
+                        if (!str) return '';
+                        return str
+                            .replace(/[\uE000-\uF8FF\u2700-\u27BF\u2600-\u26FF✓✔✅]/g, '')
+                            .replace(/^(?:Ans|Answer|Option|เฉลย|คำตอบ)\s*[\:\.-]?\s*/i, '')
+                            .replace(/^\d+[\.\:\)\s]+\s*/, '')
+                            .trim();
+                    };
 
-                                    accumulated_qa[q_key] = {
-                                        "qKey": q_key,
-                                        "question": q_text,
-                                        "answer": a_text,
-                                        "image_path": rel_img_path,
-                                    }
+                    let cardElements = Array.from(document.querySelectorAll(
+                        '.card, .q-card, .qa-card, .question-card, [class*="card"], [class*="item"], [class*="question"], article, tr, li'
+                    ));
 
-                            page.evaluate("window.scrollBy(0, 500);")
-                            page.wait_for_timeout(200)
+                    if (cardElements.length === 0) {
+                        cardElements = Array.from(document.querySelectorAll('div')).filter(el => {
+                            const txt = (el.innerText || '').trim();
+                            const lines = txt.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+                            return lines.length >= 2 && lines.length <= 20;
+                        });
+                    }
 
-                            pos = page.evaluate(
-                                """
-                                () => {
-                                    const scrollY = window.scrollY || window.pageYOffset || 0;
-                                    const innerH = window.innerHeight || 0;
-                                    const totalH = document.body.scrollHeight || 0;
-                                    const reached = (scrollY + innerH) >= (totalH - 50);
-                                    return { scrollY, totalH, reached };
+                    let cardIndex = 0;
+                    cardElements.forEach(card => {
+                        const rawText = (card.innerText || '').trim();
+                        if (!rawText || rawText.length < 4) return;
+
+                        const lines = rawText.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+                        if (lines.length < 2) return;
+
+                        let question = "";
+                        let startIdx = 1;
+
+                        let qLineIdx = lines.findIndex(l => 
+                            /(?:Q\s*\.?\s*\d+|ข้อ\s*\d+|第?\s*\d+\s*[题條\.、\:\-]|^\s*\d+[\.\、\:\-\s]|\?|อะไร|คือ|ข้อใด)/i.test(l)
+                        );
+
+                        if (qLineIdx !== -1) {
+                            question = lines[qLineIdx]
+                                .replace(/^.*?Q\s*\.?\s*\d+[\.\s\:]*/i, '')
+                                .replace(/^(?:ข้อ\s*\d+|第?\s*\d+\s*[题條\.、\:\-]|^\s*\d+[\.\、\:\-\s])\s*/i, '')
+                                .trim();
+                            startIdx = qLineIdx + 1;
+                            if (!question && startIdx < lines.length) {
+                                question = lines[startIdx];
+                                startIdx++;
+                            }
+                        }
+
+                        if (!question) {
+                            question = lines[0].replace(/^\d+[\.\:\)\s]+\s*/, '').trim();
+                            startIdx = 1;
+                        }
+
+                        if (question.length < 2 || isInvalid(question)) return;
+
+                        let answer = "";
+                        const childElems = Array.from(card.querySelectorAll('*'));
+                        for (const el of childElems) {
+                            const style = window.getComputedStyle(el);
+                            const color = style.color || '';
+                            const classStr = (el.className || '').toString();
+
+                            let isGreen = false;
+                            if (classStr && (
+                                classStr.includes('green') || classStr.includes('emerald') ||
+                                classStr.includes('teal') || classStr.includes('success') || 
+                                classStr.includes('correct') || classStr.includes('ans')
+                            )) {
+                                isGreen = true;
+                            } else if (color.startsWith('rgb')) {
+                                const rgb = color.match(/\d+/g);
+                                if (rgb && rgb.length >= 3) {
+                                    const r = parseInt(rgb[0]), g = parseInt(rgb[1]), b = parseInt(rgb[2]);
+                                    if (g > 120 && g > r * 1.15 && g > b * 1.15) isGreen = true;
                                 }
-                            """
-                            )
+                            }
 
-                            current_elapsed = time.perf_counter() - global_start_time
-                            log(
-                                f"   ↳ Pass {scroll_pass:02d}: Pos = {pos['scrollY'] + 1000}px / {pos['totalH']}px | "
-                                f"Streamed = {len(accumulated_qa)} items | Running Time = {format_duration(current_elapsed)}"
-                            )
-                            emit_progress(current_elapsed, completed_tasks, total_tasks)
+                            if (isGreen) {
+                                let candidate = cleanText(el.innerText || el.textContent || '');
+                                if (candidate && candidate !== question && !isInvalid(candidate)) {
+                                    answer = candidate;
+                                    break;
+                                }
+                            }
+                        }
 
-                            if (pos["reached"] or pos["scrollY"] == last_y) and pos[
-                                "totalH"
-                            ] > 1200:
-                                at_bottom = True
+                        if (!answer) {
+                            for (let i = startIdx; i < lines.length; i++) {
+                                const cleanL = cleanText(lines[i]);
+                                if (!isInvalid(cleanL) && cleanL !== question) {
+                                    if (['จริง', 'O', 'True', '正确', 'Benar'].includes(cleanL)) {
+                                        answer = 'จริง / True (O)';
+                                        break;
+                                    } else if (['เท็จ', 'X', 'False', '錯誤', 'Salah'].includes(cleanL)) {
+                                        answer = 'เท็จ / False (X)';
+                                        break;
+                                    } else if (cleanL.length >= 1) {
+                                        answer = cleanL;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
 
-                            last_y = pos["scrollY"]
+                        if (!answer || isInvalid(answer)) {
+                            answer = "See Proof Image / คลิกเพื่อดูเฉลย";
+                        }
 
-                        final_list = list(accumulated_qa.values())
-                        all_db[lang_name][cat_name] = final_list
+                        const qKey = question.toLowerCase().replace(/\s+/g, '');
+                        const cardId = 'stream-card-' + cardIndex;
+                        card.setAttribute('data-qa-index', cardId);
+                        results.push({ qKey, index: cardId, question, answer });
+                        cardIndex++;
+                    });
 
-                        task_duration = time.perf_counter() - task_start_time
-                        completed_tasks += 1
-                        total_elapsed = time.perf_counter() - global_start_time
+                    return results;
+                }
+                """
+                )
 
-                        emit_progress(total_elapsed, completed_tasks, total_tasks)
+                async def capture_single_screenshot(item_data):
+                    idx_tag, rel_p = item_data
+                    try:
+                        loc = page.locator(f'[data-qa-index="{idx_tag}"]')
+                        if await loc.count() > 0:
+                            await loc.first.screenshot(path=rel_p, timeout=500)
+                            return True
+                    except Exception:
+                        pass
+                    return False
 
-                        log(
-                            f"   ✅ Category '{cat_name}' Complete in {format_duration(task_duration)}"
+                screenshot_promises = []
+                for item in current_batch:
+                    q_key = item["qKey"]
+                    q_text = item["question"]
+                    a_text = item["answer"]
+                    idx_tag = item["index"]
+
+                    if (
+                        q_key not in accumulated_qa
+                        or accumulated_qa[q_key]["answer"]
+                        == "See Proof Image / คลิกเพื่อดูเฉลย"
+                    ):
+                        q_hash = hashlib.md5(q_text.encode("utf-8")).hexdigest()[:10]
+                        img_filename = f"q_{q_hash}.png"
+                        rel_img_path = os.path.join(img_dir, img_filename)
+
+                        screenshot_promises.append(
+                            capture_single_screenshot((idx_tag, rel_img_path))
                         )
-                        log(
-                            f"   📊 Yield: {len(final_list)} items extracted | {saved_screenshots} screenshots saved"
-                        )
 
+                        accumulated_qa[q_key] = {
+                            "qKey": q_key,
+                            "question": q_text,
+                            "answer": a_text,
+                            "image_path": rel_img_path,
+                        }
+
+                if screenshot_promises:
+                    shot_results = await asyncio.gather(
+                        *screenshot_promises, return_exceptions=True
+                    )
+                    saved_screenshots += sum(
+                        1 for r in shot_results if isinstance(r, bool) and r is True
+                    )
+
+                await page.evaluate("window.scrollBy(0, 1500);")
+                await asyncio.sleep(0.06)
+
+                pos = await page.evaluate(
+                    """
+                    () => {
+                        const scrollY = window.scrollY || window.pageYOffset || 0;
+                        const totalH = document.body.scrollHeight || 0;
+                        return { scrollY, totalH };
+                    }
+                """
+                )
+
+                if pos["scrollY"] == last_y:
+                    unchanged_passes += 1
+                else:
+                    unchanged_passes = 0
+
+                last_y = pos["scrollY"]
+
+                async with telemetry_lock:
+                    task_progress_tracker[task_key] = min(
+                        0.95, scroll_pass / max_passes
+                    )
+                await emit_progress()
+
+            final_list = list(accumulated_qa.values())
+            all_db[lang_name][cat_name] = final_list
+
+            task_duration = time.perf_counter() - task_start_time
+            async with telemetry_lock:
+                completed_task_count += 1
+                curr_done = completed_task_count
+                task_progress_tracker[task_key] = 0.0
+            await emit_progress()
+
+            log(
+                f"   ✅ [Done {curr_done}/{total_tasks}] '{cat_name}' [{lang_name}] in {format_duration(task_duration)} "
+                f"({len(final_list)} items | {saved_screenshots} screenshots)"
+            )
+            await context.close()
+
+    try:
+        async with async_playwright() as p:
+            log("🌐 Launching Chromium Async Engine...")
+            browser = await p.chromium.launch(headless=True)
+            try:
+
+                def get_task_priority(item):
+                    lang, cat = item
+                    priority = 0
+                    if cat["id"] == "scholar-exam":
+                        priority += 100
+                    if cat["id"] == "lucky-rabbit" and lang["code"] == "zh-CN":
+                        priority += 80
+                    if cat["id"] == "lucky-rabbit":
+                        priority += 40
+                    if cat["id"] == "guild-banquet":
+                        priority += 20
+                    return priority
+
+                task_pairs = []
+                for cat in CATEGORIES:
+                    for lang in SUPPORTED_LANGUAGES:
+                        task_pairs.append((lang, cat))
+
+                task_pairs.sort(key=get_task_priority, reverse=True)
+
+                tasks = []
+                for lang, cat in task_pairs:
+                    tasks.append(scrape_category_task(browser, lang, cat))
+
+                await asyncio.gather(*tasks)
             finally:
-                browser.close()
+                await browser.close()
 
         log("\n🧹 Sanitizing extracted database records...")
         sanitized_db = {}
@@ -526,6 +579,14 @@ def fetch_multilingual_database(
     except Exception as e:
         log(f"\n❌ Scraping exception: {e}")
         return False
+
+
+def fetch_multilingual_database(
+    log_fn: Optional[Callable[[str], None]] = None,
+    progress_fn: Optional[Callable[[dict], None]] = None,
+) -> bool:
+    """Synchronous entry point that executes the asynchronous scraper event loop."""
+    return asyncio.run(_async_fetch_multilingual_database(log_fn, progress_fn))
 
 
 if __name__ == "__main__":

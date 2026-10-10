@@ -8,14 +8,17 @@ import threading
 import time
 import tkinter as tk
 from tkinter import messagebox, ttk
+import unicodedata
+import math
+from datetime import datetime, timedelta
+from typing import Callable, Dict, List, Optional, Tuple
+
 import cv2
 import easyocr
 import mss
 import numpy as np
 import pygetwindow as gw
 from rapidfuzz import fuzz, process
-from typing import Dict, List, Tuple, Callable, Optional
-from datetime import datetime, timedelta
 
 # Pillow Image Processing Engine
 try:
@@ -58,12 +61,12 @@ CATEGORIES = [
 
 # --- Live Scraper Log Window ---
 class LogWindow:
-    """Live system log window rendering real-time web scraping progress and continuous header telemetry."""
+    """Live system log window rendering real-time web scraping progress, copy logs button, and IDM-style continuous telemetry."""
 
     def __init__(self, parent: tk.Tk):
         self.window = tk.Toplevel(parent)
         self.window.title("📋 Live System Logs - Update & Audit")
-        self.window.geometry("680x440+100+100")
+        self.window.geometry("780x480+100+100")
         self.window.configure(bg="#13151f")
         self.window.attributes("-topmost", True)
 
@@ -71,7 +74,7 @@ class LogWindow:
         self.is_running = False
         self.remaining_tasks = 16
         self.total_tasks = 16
-        self.eta_seconds = 0
+        self.target_finish_time: Optional[datetime] = None
         self.timer_job = None
 
         card = tk.Frame(
@@ -94,14 +97,33 @@ class LogWindow:
         )
         lbl_title.pack(side="left")
 
+        # IDM-style Live Telemetry Label
         self.lbl_telemetry = tk.Label(
             header_frame,
-            text="  |  ⏱️ Running: 00m 00s  |  ⏳ Est. Finish: --:--",
+            text="  |  ⏱️ Elapsed: 00m 00s  |  ⏳ Time Left: Calculating...",
             fg="#a0aec0",
             bg="#1c1f2e",
             font=("Segoe UI", 10, "bold"),
         )
         self.lbl_telemetry.pack(side="left", padx=(8, 0))
+
+        # Copy Logs Button
+        self.btn_copy_logs = tk.Button(
+            header_frame,
+            text="📋 Copy Logs",
+            command=self.copy_logs,
+            bg="#252a3e",
+            fg="#00e5ff",
+            activebackground="#2e354f",
+            activeforeground="#00e5ff",
+            font=("Segoe UI", 9, "bold"),
+            relief="flat",
+            bd=0,
+            cursor="hand2",
+            padx=10,
+            pady=2,
+        )
+        self.btn_copy_logs.pack(side="right")
 
         self.text_area = tk.Text(
             card,
@@ -124,13 +146,31 @@ class LogWindow:
         self.text_area.tag_config("WARN", foreground="#ffb74d")
         self.text_area.tag_config("DEFAULT", foreground="#d1d5db")
 
+    def copy_logs(self):
+        """Copies all text from the log window to the clipboard."""
+        if not self.window.winfo_exists():
+            return
+        logs_text = self.text_area.get("1.0", tk.END).strip()
+        if logs_text:
+            self.window.clipboard_clear()
+            self.window.clipboard_append(logs_text)
+            self.btn_copy_logs.config(text="✓ Copied!", fg="#00e676")
+            self.window.after(
+                1500,
+                lambda: (
+                    self.btn_copy_logs.config(text="📋 Copy Logs", fg="#00e5ff")
+                    if self.window.winfo_exists()
+                    else None
+                ),
+            )
+
     def start_timer(self, total_tasks: int = 16):
         """Starts the continuous 1-second GUI ticker."""
         self.start_time = time.time()
         self.is_running = True
         self.total_tasks = total_tasks
         self.remaining_tasks = total_tasks
-        self.eta_seconds = 0
+        self.target_finish_time = None
         self._tick_timer()
 
     def stop_timer(self):
@@ -141,28 +181,44 @@ class LogWindow:
             self.timer_job = None
 
     def _tick_timer(self):
-        """Ticks continuously every 1 second directly on the Tkinter main thread."""
+        """IDM-Style continuous 1-second ticker calculating live Time Left countdown."""
         if not self.window.winfo_exists() or not self.is_running:
             return
 
+        now = datetime.now()
         elapsed = int(time.time() - self.start_time)
         mins, secs = divmod(elapsed, 60)
         hrs, mins = divmod(mins, 60)
-        running_str = (
+        elapsed_str = (
             f"{hrs:02d}h {mins:02d}m {secs:02d}s"
             if hrs > 0
             else f"{mins:02d}m {secs:02d}s"
         )
 
         if self.remaining_tasks > 0:
-            if self.eta_seconds > 0:
-                finish_dt = datetime.now() + timedelta(seconds=self.eta_seconds)
-                clock_str = finish_dt.strftime("%I:%M:%S %p")
+            if self.target_finish_time and self.target_finish_time > now:
+                # IDM-Style Live Countdown Calculation
+                time_left_sec = max(
+                    0, int((self.target_finish_time - now).total_seconds())
+                )
+                r_mins, r_secs = divmod(time_left_sec, 60)
+                r_hrs, r_mins = divmod(r_mins, 60)
+                time_left_str = (
+                    f"{r_hrs:02d}h {r_mins:02d}m {r_secs:02d}s"
+                    if r_hrs > 0
+                    else f"{r_mins:02d}m {r_secs:02d}s"
+                )
+                finish_clock_str = self.target_finish_time.strftime("%I:%M:%S %p")
+
+                # IDM Format: Elapsed | Time Left | Target Clock
+                display_text = (
+                    f"  |  ⏱️ Elapsed: {elapsed_str}  |  ⏳ Time Left: {time_left_str}  "
+                    f"|  🏁 Est. Finish: {finish_clock_str}"
+                )
             else:
-                clock_str = "--:--"
-            display_text = f"  |  ⏱️ {running_str}  |  ⏳ Est. Finish: {clock_str} ({self.remaining_tasks} left)"
+                display_text = f"  |  ⏱️ Elapsed: {elapsed_str}  |  ⏳ Time Left: Estimating speed..."
         else:
-            display_text = f"  |  ⏱️ Total: {running_str}  |  ✅ Complete"
+            display_text = f"  |  ⏱️ Total Time: {elapsed_str}  |  ✅ Complete"
 
         self.lbl_telemetry.config(text=display_text)
         self.timer_job = self.window.after(1000, self._tick_timer)
@@ -171,18 +227,17 @@ class LogWindow:
         self.window.after(0, self._append_text, message)
 
     def update_telemetry(self, data: dict):
-        """Synchronizes backend metadata without interrupting the 1-second GUI ticker loop."""
+        """Synchronizes backend speed metadata and updates target completion timestamp."""
         if not self.window.winfo_exists():
             return
 
         def _apply():
             self.remaining_tasks = data.get("remaining_tasks", self.remaining_tasks)
             self.total_tasks = data.get("total_tasks", self.total_tasks)
-            completed = data.get("completed_tasks", 0)
-            if completed > 0 and self.start_time:
-                elapsed = time.time() - self.start_time
-                avg_sec = elapsed / completed
-                self.eta_seconds = avg_sec * self.remaining_tasks
+
+            eta_sec = data.get("eta_seconds", None)
+            if eta_sec is not None and eta_sec > 0:
+                self.target_finish_time = datetime.now() + timedelta(seconds=eta_sec)
 
         self.window.after(0, _apply)
 
@@ -207,11 +262,19 @@ class LogWindow:
 
 # --- Bounded OCR Manager ---
 class OCRManager:
-    """Bounded, memory-aware loader and cache for EasyOCR instances."""
+    """Bounded, memory-aware loader and CPU-optimized cache for EasyOCR instances."""
 
     def __init__(self, max_cached_readers: int = 2):
         self._readers = {}
         self.max_cached_readers = max_cached_readers
+
+        # Optimize PyTorch CPU execution threads to prevent core thrashing
+        try:
+            import torch
+
+            torch.set_num_threads(max(1, min(4, os.cpu_count() or 4)))
+        except Exception:
+            pass
 
     def get_reader(self, lang_label: str) -> easyocr.Reader:
         if lang_label in self._readers:
@@ -310,8 +373,135 @@ class SnippingTool:
 
 
 # --- Liquid Glass Answer Overlay GUI ---
+
+
+class LiquidGlassSpinner(tk.Canvas):
+    """
+    Custom Tkinter Canvas widget rendering a Liquid Glass orbital spinner.
+    Inspired by fluid progressive loading icons, featuring a dual-layer cyan arc,
+    a dark glass track, and a glowing orbital particle.
+    """
+
+    def __init__(
+        self,
+        parent,
+        size: int = 70,
+        bg: str = "#1c1f2e",
+        cyan_color: str = "#00e5ff",
+        track_color: str = "#2b3044",
+        **kwargs,
+    ):
+        super().__init__(
+            parent,
+            width=size,
+            height=size,
+            bg=bg,
+            highlightthickness=0,
+            bd=0,
+            **kwargs,
+        )
+        self.size = size
+        self.cyan_color = cyan_color
+        self.track_color = track_color
+        self.angle = 0
+        self.extent = 90
+        self.anim_job: Optional[str] = None
+        self.is_animating = False
+
+        self.cx = size / 2.0
+        self.cy = size / 2.0
+        self.radius = (size / 2.0) - 10.0
+
+    def start(self):
+        """Starts the smooth non-blocking animation loop."""
+        if not self.is_animating:
+            self.is_animating = True
+            self._animate()
+
+    def stop(self):
+        """Stops the animation and cleans up canvas elements."""
+        self.is_animating = False
+        if self.anim_job:
+            self.after_cancel(self.anim_job)
+            self.anim_job = None
+        if self.winfo_exists():
+            self.delete("all")
+
+    def _animate(self):
+        if not self.winfo_exists() or not self.is_animating:
+            return
+
+        self.delete("all")
+
+        # 1. Base Dark Glass Track Ring
+        self.create_oval(
+            self.cx - self.radius,
+            self.cy - self.radius,
+            self.cx + self.radius,
+            self.cy + self.radius,
+            outline=self.track_color,
+            width=5,
+        )
+
+        # 2. Outer Liquid Glow Arc (Backdrop Blur Effect)
+        self.create_arc(
+            self.cx - self.radius,
+            self.cy - self.radius,
+            self.cx + self.radius,
+            self.cy + self.radius,
+            start=self.angle,
+            extent=self.extent,
+            outline="#005b66",
+            width=9,
+            style=tk.ARC,
+        )
+
+        # 3. Main Vibrant Cyan Arc Sweep
+        self.create_arc(
+            self.cx - self.radius,
+            self.cy - self.radius,
+            self.cx + self.radius,
+            self.cy + self.radius,
+            start=self.angle,
+            extent=self.extent,
+            outline=self.cyan_color,
+            width=5,
+            style=tk.ARC,
+        )
+
+        # 4. Leading Orbital Glow Particle
+        tip_angle_rad = math.radians(self.angle + self.extent)
+        orb_x = self.cx + self.radius * math.cos(tip_angle_rad)
+        orb_y = self.cy - self.radius * math.sin(tip_angle_rad)
+        orb_r = 4.5
+
+        # Outer Glow
+        self.create_oval(
+            orb_x - orb_r - 2,
+            orb_y - orb_r - 2,
+            orb_x + orb_r + 2,
+            orb_y + orb_r + 2,
+            fill="#00e5ff",
+            outline="",
+        )
+        # Core Particle
+        self.create_oval(
+            orb_x - orb_r,
+            orb_y - orb_r,
+            orb_x + orb_r,
+            orb_y + orb_r,
+            fill="#ffffff",
+            outline=self.cyan_color,
+            width=1,
+        )
+
+        # Rotate counter-clockwise at ~40 FPS
+        self.angle = (self.angle - 8) % 360
+        self.anim_job = self.after(25, self._animate)
+
+
 class AnswerOverlay:
-    """Thread-safe UI overlay displaying OCR question, matched answer, and live website proof screenshot."""
+    """Thread-safe liquid glass overlay displaying OCR results, answers, proof screenshots, and live benchmarks."""
 
     def __init__(self, parent: tk.Tk, initial_geometry: str = None):
         self.parent = parent
@@ -322,28 +512,33 @@ class AnswerOverlay:
             try:
                 self.window.geometry(initial_geometry)
             except Exception:
-                self.window.geometry("460x380+50+50")
+                self.window.geometry("460x440+50+50")
         else:
-            self.window.geometry("460x380+50+50")
+            self.window.geometry("460x440+50+50")
 
         self.window.attributes("-topmost", True)
         self.window.configure(bg="#13151f")
         self.window.protocol("WM_DELETE_WINDOW", self.hide_window)
 
         self.current_question_text = ""
+        self.current_image_path = ""
         self._current_photo = None
+        self._modal_photo = None
+        self.last_telemetry_str = ""
         font_family = "Segoe UI"
 
-        card_frame = tk.Frame(
+        self.card_frame = tk.Frame(
             self.window,
             bg="#1c1f2e",
             highlightbackground="#2e344d",
             highlightthickness=1,
         )
-        card_frame.pack(fill="both", expand=True, padx=12, pady=12)
+        self.card_frame.pack(fill="both", expand=True, padx=12, pady=12)
+
+        self.spinner = LiquidGlassSpinner(self.card_frame, size=65, bg="#1c1f2e")
 
         self.label_question = tk.Label(
-            card_frame,
+            self.card_frame,
             text="Question: -",
             fg="#8e9bb0",
             bg="#1c1f2e",
@@ -354,7 +549,7 @@ class AnswerOverlay:
         self.label_question.pack(pady=(12, 4), padx=10)
 
         self.label_answer = tk.Label(
-            card_frame,
+            self.card_frame,
             text="Awaiting scan...",
             fg="#00e676",
             bg="#1c1f2e",
@@ -365,17 +560,22 @@ class AnswerOverlay:
         self.label_answer.pack(pady=4, padx=10)
 
         self.label_proof_title = tk.Label(
-            card_frame,
-            text="📷 Website Source Proof:",
+            self.card_frame,
+            text="📷 Website Source Proof (Click image to expand):",
             fg="#00e5ff",
             bg="#1c1f2e",
             font=(font_family, 9, "bold"),
+            cursor="hand2",
         )
 
-        self.label_image = tk.Label(card_frame, bg="#1c1f2e")
+        self.label_image = tk.Label(self.card_frame, bg="#1c1f2e", cursor="hand2")
+        self.label_image.bind("<Button-1>", lambda e: self.open_full_image_modal())
+        self.label_proof_title.bind(
+            "<Button-1>", lambda e: self.open_full_image_modal()
+        )
 
         self.btn_copy = tk.Button(
-            card_frame,
+            self.card_frame,
             text="📋 Copy Question",
             command=self.copy_to_clipboard,
             bg="#252a3e",
@@ -389,7 +589,84 @@ class AnswerOverlay:
             padx=12,
             pady=4,
         )
-        self.btn_copy.pack(pady=(6, 12))
+        self.btn_copy.pack(pady=(6, 4))
+
+        self.label_telemetry = tk.Label(
+            self.card_frame,
+            text="",
+            fg="#a0aec0",
+            bg="#1c1f2e",
+            font=("Consolas", 8),
+            justify="center",
+        )
+        self.label_telemetry.pack(pady=(2, 8))
+
+    def open_full_image_modal(self):
+        """Opens an interactive, scrollable high-resolution modal viewer for long proof images."""
+        if (
+            not HAS_PIL
+            or not self.current_image_path
+            or not os.path.exists(self.current_image_path)
+        ):
+            return
+
+        modal = tk.Toplevel(self.window)
+        modal.title("🔍 Full Proof Image Viewer")
+        modal.geometry("640x600")
+        modal.configure(bg="#13151f")
+        modal.attributes("-topmost", True)
+
+        try:
+            with Image.open(self.current_image_path) as full_img:
+                w, h = full_img.size
+                max_w = 600
+                if w > max_w:
+                    h = int(h * (max_w / float(w)))
+                    w = max_w
+                    resized = full_img.resize((w, h), Image.Resampling.LANCZOS)
+                else:
+                    resized = full_img.copy()
+
+                self._modal_photo = ImageTk.PhotoImage(resized)
+                resized.close()
+
+            canvas = tk.Canvas(modal, bg="#13151f", highlightthickness=0)
+            v_scroll = ttk.Scrollbar(modal, orient="vertical", command=canvas.yview)
+            h_scroll = ttk.Scrollbar(modal, orient="horizontal", command=canvas.xview)
+
+            canvas.configure(yscrollcommand=v_scroll.set, xscrollcommand=h_scroll.set)
+
+            v_scroll.pack(side="right", fill="y")
+            h_scroll.pack(side="bottom", fill="x")
+            canvas.pack(side="left", fill="both", expand=True)
+
+            canvas.create_image(0, 0, image=self._modal_photo, anchor="nw")
+            canvas.config(scrollregion=(0, 0, w, h))
+
+            # Bind mousewheel scrolling
+            canvas.bind_all(
+                "<MouseWheel>",
+                lambda e: canvas.yview_scroll(int(-1 * (e.delta / 120)), "units"),
+            )
+        except Exception as err:
+            print(f"[Error] Modal image preview error: {err}")
+
+    def _auto_fit_window_geometry(self):
+        if not self.window.winfo_exists():
+            return
+
+        self.window.update_idletasks()
+        req_w = 460
+        req_h = self.card_frame.winfo_reqheight() + 28
+        screen_h = self.window.winfo_screenheight()
+        target_h = min(req_h, screen_h - 100)
+
+        curr_x = self.window.winfo_x()
+        curr_y = self.window.winfo_y()
+        if curr_x <= 0 and curr_y <= 0:
+            curr_x, curr_y = 50, 50
+
+        self.window.geometry(f"{req_w}x{target_h}+{curr_x}+{curr_y}")
 
     def hide_window(self):
         if self.window.winfo_exists():
@@ -400,15 +677,41 @@ class AnswerOverlay:
             self.window.deiconify()
             self.window.attributes("-topmost", True)
 
+    def show_loading(self):
+        if not self.window.winfo_exists():
+            return
+
+        self.spinner.pack(before=self.label_question, pady=(8, 4))
+        self.spinner.start()
+
+        self.label_question.config(text="Question: ⏳ Capturing ROI & executing OCR...")
+        self.label_answer.config(text="⚡ Scanning in progress...", fg="#ffb74d")
+
+        if self.last_telemetry_str:
+            self.label_telemetry.config(
+                text=f"🔄 Active | Last: {self.last_telemetry_str}"
+            )
+        else:
+            self.label_telemetry.config(
+                text="⏱️ Measuring: Capture ➔ Preprocess ➔ Neural OCR ➔ Match"
+            )
+
+        self.show_window()
+        self._auto_fit_window_geometry()
+
     def update_display(
         self,
         question_text: str,
         answer_text: str,
         raw_question: str = "",
         image_path: str = "",
+        telemetry: Optional[Dict[str, float]] = None,
     ):
         if not self.window.winfo_exists():
             return
+
+        self.spinner.stop()
+        self.spinner.pack_forget()
 
         clean_ans = (
             re.sub(
@@ -418,27 +721,46 @@ class AnswerOverlay:
         )
 
         self.current_question_text = raw_question if raw_question else question_text
+        self.current_image_path = image_path
         self.label_question.config(text=f"Detected Question: {question_text}")
-        self.label_answer.config(text=f"Answer: {clean_ans}")
+        self.label_answer.config(text=f"Answer: {clean_ans}", fg="#00e676")
+
+        if telemetry:
+            total_ms = telemetry.get("total_ms", 0)
+            cap_ms = telemetry.get("capture_ms", 0)
+            prep_ms = telemetry.get("prep_ms", 0)
+            ocr_ms = telemetry.get("ocr_ms", 0)
+            match_ms = telemetry.get("match_ms", 0)
+            self.last_telemetry_str = (
+                f"⚡ Total: {total_ms:.0f}ms | Cap: {cap_ms:.0f}ms | Prep: {prep_ms:.0f}ms | "
+                f"OCR: {ocr_ms:.0f}ms | Match: {match_ms:.0f}ms"
+            )
+            self.label_telemetry.config(text=self.last_telemetry_str)
+        elif self.last_telemetry_str:
+            self.label_telemetry.config(text=self.last_telemetry_str)
+        else:
+            self.label_telemetry.config(text="")
 
         if HAS_PIL and image_path and os.path.exists(image_path):
             try:
                 with Image.open(image_path) as pil_img:
                     w, h = pil_img.size
                     max_w = 400
-                    if w > max_w:
-                        h = int(h * (max_w / w))
-                        w = max_w
-                        resized_img = pil_img.resize((w, h), Image.Resampling.LANCZOS)
-                    else:
-                        resized_img = pil_img.copy()
+                    max_h = 180
 
+                    scale = min(max_w / float(w), max_h / float(h), 1.0)
+                    new_w = max(10, int(w * scale))
+                    new_h = max(10, int(h * scale))
+
+                    resized_img = pil_img.resize(
+                        (new_w, new_h), Image.Resampling.LANCZOS
+                    )
                     self._current_photo = ImageTk.PhotoImage(resized_img)
                     resized_img.close()
 
                 self.label_image.config(image=self._current_photo)
-                self.label_proof_title.pack(before=self.btn_copy, pady=(6, 2))
-                self.label_image.pack(before=self.btn_copy, pady=(2, 6), padx=10)
+                self.label_proof_title.pack(before=self.btn_copy, pady=(4, 2))
+                self.label_image.pack(before=self.btn_copy, pady=(2, 4), padx=10)
             except Exception as img_err:
                 print(f"[Warning] Proof image render error: {img_err}")
                 self.label_proof_title.pack_forget()
@@ -448,6 +770,7 @@ class AnswerOverlay:
             self.label_image.pack_forget()
 
         self.show_window()
+        self._auto_fit_window_geometry()
 
     def copy_to_clipboard(self):
         if self.current_question_text and self.window.winfo_exists():
@@ -576,11 +899,31 @@ class ROHelperApp:
     def _normalize_q(text: str) -> str:
         if not text:
             return ""
+
+        # Step 1: Normalize Unicode representations (NFC)
+        text = unicodedata.normalize("NFC", text)
+
+        # Step 2: Strip leading noise, symbols, and isolated non-alphanumeric artifacts (e.g. "_ 3< ", "1.", "Q:")
+        text = re.sub(r"^[\s\W_0-9]+", "", text)
+
+        # Step 3: Remove standard question prefix keywords
         clean = re.sub(
-            r"^(?:Question|Q)\s*\.?\d*[\.\:\s]*", "", text, flags=re.IGNORECASE
+            r"^(?:Question|Q|ข้อที่|ข้อ)\s*\.?\d*[\.\:\s]*",
+            "",
+            text,
+            flags=re.IGNORECASE,
         )
-        clean = re.sub(r"[^\w\s]", "", clean)
-        return " ".join(clean.lower().split())
+
+        # Step 4: Retain alphanumeric characters, Thai Unicode block (\u0E00-\u0E7F), and spaces
+        clean = re.sub(r"[^\w\s\u0E00-\u0E7F]", " ", clean)
+
+        # Step 5: Remove floating single non-Thai characters caused by noise artifacts
+        clean = re.sub(r"\b[a-zA-Z]\b", " ", clean)
+
+        # Step 6: Collapse whitespace
+        clean = " ".join(clean.lower().split())
+
+        return clean
 
     def _build_normalized_cache(self):
         self.normalized_db_cache = {}
@@ -798,7 +1141,9 @@ class ROHelperApp:
             return windows[0]
         return None
 
-    def get_absolute_roi_for_category(self, category_name: str) -> Optional[Dict[str, int]]:
+    def get_absolute_roi_for_category(
+        self, category_name: str
+    ) -> Optional[Dict[str, int]]:
         win = self.get_game_window()
         if not win or category_name not in self.roi_presets:
             return None
@@ -874,6 +1219,47 @@ class ROHelperApp:
 
             threading.Thread(target=auto_loop, daemon=True).start()
 
+    def _preprocess_roi_image(
+        self, img_bgra: np.ndarray
+    ) -> Tuple[np.ndarray, np.ndarray]:
+        """
+        Transforms screen capture ROI into a high-contrast grayscale image optimized
+        for fast sub-500ms EasyOCR neural recognition, preserving fine Thai tone marks.
+        Returns a tuple of (enhanced_grayscale, adaptive_binary_fallback).
+        """
+        if len(img_bgra.shape) == 3 and img_bgra.shape[2] == 4:
+            gray = cv2.cvtColor(img_bgra, cv2.COLOR_BGRA2GRAY)
+        elif len(img_bgra.shape) == 3 and img_bgra.shape[2] == 3:
+            gray = cv2.cvtColor(img_bgra, cv2.COLOR_BGR2GRAY)
+        else:
+            gray = img_bgra.copy()
+
+        # Optimal x1.5 Bicubic scaling: sharpens Thai glyphs without creating giant PyTorch tensors
+        h, w = gray.shape[:2]
+        scaled_gray = cv2.resize(
+            gray, (int(w * 1.5), int(h * 1.5)), interpolation=cv2.INTER_CUBIC
+        )
+
+        # CLAHE (Contrast Limited Adaptive Histogram Equalization) for dark game UI backgrounds
+        clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
+        enhanced_gray = clahe.apply(scaled_gray)
+
+        # Unsharp Masking kernel to accentuate thin Thai vowels/tone marks
+        gaussian = cv2.GaussianBlur(enhanced_gray, (0, 0), sigmaX=1.5)
+        sharpened_gray = cv2.addWeighted(enhanced_gray, 1.5, gaussian, -0.5, 0)
+
+        # Fast Adaptive Thresholding for fallback pass
+        adaptive_bin = cv2.adaptiveThreshold(
+            sharpened_gray,
+            255,
+            cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
+            cv2.THRESH_BINARY,
+            19,
+            3,
+        )
+
+        return sharpened_gray, adaptive_bin
+
     def _execute_scan(self, selected_lang: str, selected_cat: str, silent: bool):
         if not self._scan_lock.acquire(blocking=False):
             return
@@ -901,6 +1287,29 @@ class ROHelperApp:
                     )
                 return
 
+            t_start_total = time.perf_counter()
+
+            # Stage 1: Fast Screen Capture
+            t0_cap = time.perf_counter()
+            with mss.mss() as sct:
+                sct_img = sct.grab(roi)
+                img = np.array(sct_img)
+            t_capture_ms = (time.perf_counter() - t0_cap) * 1000.0
+
+            # Stage 2: Optimized Preprocessing
+            t0_prep = time.perf_counter()
+            enhanced_gray, adaptive_bin = self._preprocess_roi_image(img)
+            t_prep_ms = (time.perf_counter() - t0_prep) * 1000.0
+
+            # Skip unchanged frames
+            frame_hash = hash(enhanced_gray.tobytes())
+            if frame_hash == self.last_frame_hash:
+                return
+            self.last_frame_hash = frame_hash
+
+            if not silent:
+                self.scan_queue.put(("loading", None))
+
             def get_cached_tuples(lang_name: str, cat_name: str):
                 lang_cache = self.normalized_db_cache.get(lang_name, {})
                 if cat_name == "ทุกหมวดหมู่" or cat_name not in lang_cache:
@@ -912,54 +1321,81 @@ class ROHelperApp:
 
             primary_tuples = get_cached_tuples(selected_lang, selected_cat)
 
-            with mss.mss() as sct:
-                sct_img = sct.grab(roi)
-                img = np.array(sct_img)
-
-            gray = cv2.cvtColor(img, cv2.COLOR_BGRA2GRAY)
-            frame_hash = hash(gray.tobytes())
-            if frame_hash == self.last_frame_hash:
-                return
-            self.last_frame_hash = frame_hash
-
-            _, bin_img = cv2.threshold(
-                gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU
-            )
-            h, w = bin_img.shape
-            scaled = cv2.resize(bin_img, (w * 2, h * 2), interpolation=cv2.INTER_CUBIC)
-
+            # Stage 3: Low-Latency EasyOCR Neural Inference
+            t0_ocr = time.perf_counter()
             reader = self.ocr_manager.get_reader(selected_lang)
-            results = reader.readtext(scaled, detail=0)
+
+            # Key Latency Fix: canvas_size=800 and mag_ratio=1.0 eliminate CPU PyTorch bottlenecks
+            results = reader.readtext(
+                enhanced_gray,
+                detail=0,
+                paragraph=True,
+                canvas_size=800,
+                mag_ratio=1.0,
+                text_threshold=0.5,
+                low_text=0.3,
+                link_threshold=0.4,
+                batch_size=4,
+            )
             captured_text = " ".join(results).strip()
+
+            if len(captured_text) < 3:
+                results_bin = reader.readtext(
+                    adaptive_bin,
+                    detail=0,
+                    paragraph=True,
+                    canvas_size=800,
+                    mag_ratio=1.0,
+                    text_threshold=0.4,
+                    low_text=0.3,
+                    batch_size=4,
+                )
+                captured_text_bin = " ".join(results_bin).strip()
+                if len(captured_text_bin) > len(captured_text):
+                    captured_text = captured_text_bin
+            t_ocr_ms = (time.perf_counter() - t0_ocr) * 1000.0
+
+            # Stage 4: Composite Fuzzy Matcher
+            t0_match = time.perf_counter()
+            best_match = None
+            best_score = 0.0
+            matched_answer = ""
+            matched_img_path = ""
+            matched_lang = selected_lang
 
             if captured_text:
                 norm_captured = self._normalize_q(captured_text)
-                best_match = None
-                best_score = 0
-                matched_answer = ""
-                matched_img_path = ""
-                matched_lang = selected_lang
+                norm_captured_nospace = norm_captured.replace(" ", "")
 
                 def search_pool(tuple_list):
                     nonlocal best_match, best_score, matched_answer, matched_img_path
-                    if not tuple_list:
+                    if not tuple_list or not norm_captured:
                         return
 
-                    norm_questions = [t[1] for t in tuple_list]
-                    match_res = process.extractOne(
-                        norm_captured, norm_questions, scorer=fuzz.token_set_ratio
-                    )
-                    if match_res:
-                        _, score, idx = match_res[0], match_res[1], match_res[2]
-                        if score > best_score:
-                            best_score = score
-                            best_match = tuple_list[idx][0]
-                            matched_answer = tuple_list[idx][2]
-                            matched_img_path = tuple_list[idx][3]
+                    for q_raw, q_norm, a_raw, img_path in tuple_list:
+                        if not q_norm:
+                            continue
+
+                        score_token = fuzz.token_set_ratio(norm_captured, q_norm)
+                        score_wratio = fuzz.WRatio(norm_captured, q_norm)
+                        q_norm_nospace = q_norm.replace(" ", "")
+                        score_partial = (
+                            fuzz.partial_ratio(norm_captured_nospace, q_norm_nospace)
+                            if norm_captured_nospace and q_norm_nospace
+                            else 0
+                        )
+
+                        composite_score = max(score_token, score_wratio, score_partial)
+
+                        if composite_score > best_score:
+                            best_score = composite_score
+                            best_match = q_raw
+                            matched_answer = a_raw
+                            matched_img_path = img_path
 
                 search_pool(primary_tuples)
 
-                if best_score < 70:
+                if best_score < 55:
                     for lang_name in self.normalized_db_cache.keys():
                         if lang_name == selected_lang:
                             continue
@@ -969,43 +1405,54 @@ class ROHelperApp:
                         if best_score > prev_score:
                             matched_lang = lang_name
 
-                if best_match and best_score >= 70:
-                    clean_ans = (
-                        re.sub(
-                            r"^(?:Ans|Answer)\s*[\:\.-]?\s*|^[A-Da-d1-4][\.\)]\s+",
-                            "",
-                            matched_answer,
-                            flags=re.IGNORECASE,
-                        ).strip()
-                        or matched_answer.strip()
-                    )
+            t_match_ms = (time.perf_counter() - t0_match) * 1000.0
+            t_total_ms = (time.perf_counter() - t_start_total) * 1000.0
 
-                    lang_tag = (
-                        f" [{matched_lang}]" if matched_lang != selected_lang else ""
-                    )
-                    self.scan_queue.put(
+            telemetry = {
+                "total_ms": t_total_ms,
+                "capture_ms": t_capture_ms,
+                "prep_ms": t_prep_ms,
+                "ocr_ms": t_ocr_ms,
+                "match_ms": t_match_ms,
+            }
+
+            if best_match and best_score >= 50:
+                clean_ans = (
+                    re.sub(
+                        r"^(?:Ans|Answer)\s*[\:\.-]?\s*|^[A-Da-d1-4][\.\)]\s+",
+                        "",
+                        matched_answer,
+                        flags=re.IGNORECASE,
+                    ).strip()
+                    or matched_answer.strip()
+                )
+
+                lang_tag = f" [{matched_lang}]" if matched_lang != selected_lang else ""
+                self.scan_queue.put(
+                    (
+                        "display",
                         (
-                            "display",
-                            (
-                                f"{best_match} ({best_score:.0f}%){lang_tag}",
-                                clean_ans,
-                                best_match,
-                                matched_img_path,
-                            ),
-                        )
+                            f"{best_match} ({best_score:.0f}%){lang_tag}",
+                            clean_ans,
+                            best_match,
+                            matched_img_path,
+                            telemetry,
+                        ),
                     )
-                else:
-                    self.scan_queue.put(
+                )
+            elif captured_text:
+                self.scan_queue.put(
+                    (
+                        "display",
                         (
-                            "display",
-                            (
-                                f"Scanned: {captured_text}",
-                                "No matching question found.",
-                                captured_text,
-                                "",
-                            ),
-                        )
+                            f"Scanned: {captured_text}",
+                            "No matching question found.",
+                            captured_text,
+                            "",
+                            telemetry,
+                        ),
                     )
+                )
             elif not silent:
                 self.scan_queue.put(
                     (
@@ -1015,6 +1462,7 @@ class ROHelperApp:
                             "Try adjusting ROI or game display resolution.",
                             "",
                             "",
+                            telemetry,
                         ),
                     )
                 )
@@ -1030,9 +1478,18 @@ class ROHelperApp:
         while not self.scan_queue.empty():
             try:
                 msg_type, payload = self.scan_queue.get_nowait()
-                if msg_type == "display":
-                    q_text, a_text, raw_q, img_p = payload
-                    self.overlay.update_display(q_text, a_text, raw_q, img_p)
+                if msg_type == "loading":
+                    self.lbl_status.config(
+                        text="Status: ⏳ Executing OCR & benchmarking..."
+                    )
+                    self.overlay.show_loading()
+                elif msg_type == "display":
+                    q_text, a_text, raw_q, img_p, telemetry = payload
+                    total_ms = telemetry.get("total_ms", 0) if telemetry else 0
+                    self.lbl_status.config(
+                        text=f"Status: Scan finished in {total_ms:.0f}ms"
+                    )
+                    self.overlay.update_display(q_text, a_text, raw_q, img_p, telemetry)
                 elif msg_type == "warning":
                     messagebox.showwarning("Notice", payload)
             except queue.Empty:
